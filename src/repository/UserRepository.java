@@ -1,6 +1,7 @@
 package repository;
 
 import model.Article;
+import model.Notification;
 import model.User;
 
 import java.util.List;
@@ -15,6 +16,10 @@ public class UserRepository {
   }
 
   public List<Article> getUserHome(int userId) {
+    return null;
+  }
+
+  public List<Notification> getNotification(int userId) {
     return null;
   }
 }
