@@ -6,20 +6,34 @@ import model.User;
 
 import java.util.List;
 
-public class UserRepository {
-  public User login(String username, String password) {
+public final class UserRepository {
+  private UserRepository() {
+  }
+
+  public static User login(String username, String password) {
     return null;
   }
 
-  public User register(String name, String username, String password) {
+  public static User register(String name, String username, String password) {
     return null;
   }
 
-  public List<Article> getUserHome(int userId) {
+  public static List<Article> getUserHome(int userId) {
     return null;
   }
 
-  public List<Notification> getNotification(int userId) {
+  public static List<Notification> getNotification(int userId) {
     return null;
   }
+
+
+  public static void toggleLikeArticle(int userId, int articleId) {
+  }
+
+  public static void toggleLikeComment(int userId, int articleId, int commentId) {
+  }
+
+  public static void commentOn(int userId, int articleId, int commentId) {
+  }
+
 }
