@@ -4,7 +4,7 @@ import model.Article;
 
 import java.util.List;
 
-public final class ArticleRepository {
+public final class ArticleRepository extends _BaseRepository {
   private ArticleRepository() {
   }
 

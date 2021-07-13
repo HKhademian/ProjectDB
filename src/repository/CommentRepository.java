@@ -4,7 +4,7 @@ import model.Comment;
 
 import java.util.List;
 
-public final class CommentRepository {
+public final class CommentRepository extends _BaseRepository {
   private CommentRepository() {
   }
 

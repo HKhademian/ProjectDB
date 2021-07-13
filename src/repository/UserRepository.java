@@ -6,7 +6,7 @@ import model.User;
 
 import java.util.List;
 
-public final class UserRepository {
+public final class UserRepository extends _BaseRepository {
   private UserRepository() {
   }
 

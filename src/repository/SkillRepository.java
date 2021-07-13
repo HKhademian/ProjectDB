@@ -4,7 +4,7 @@ import model.Skill;
 
 import java.util.List;
 
-public final class SkillRepository {
+public final class SkillRepository extends _BaseRepository {
   private SkillRepository() {
   }
 

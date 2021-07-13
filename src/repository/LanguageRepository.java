@@ -4,7 +4,7 @@ import model.Language;
 
 import java.util.List;
 
-public final class LanguageRepository {
+public final class LanguageRepository extends _BaseRepository {
   private LanguageRepository() {
   }
 
