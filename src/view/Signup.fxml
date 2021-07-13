@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" style="-fx-background-color: #E9ECEF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="62.0" layoutY="805.0" prefHeight="21.0" prefWidth="143.0" text="You have an account" />
+        <JFXButton fx:id="loginButton" layoutX="205.0" layoutY="800.0" ripplerFill="BLACK" style="-fx-background-color: #ADB5BD;" text="Login" textFill="WHITE">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <TextField fx:id="usernameBox" layoutX="255.0" layoutY="304.0" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #F8F9FA;">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <Label layoutX="181.0" layoutY="308.0" prefHeight="35.0" prefWidth="74.0" text="Username">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="171.0" layoutY="309.0" prefHeight="21.0" prefWidth="10.0" text="*" textFill="#f50000">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <Label layoutX="620.0" layoutY="307.0" prefHeight="35.0" prefWidth="74.0" text="Password">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="610.0" layoutY="309.0" prefHeight="21.0" prefWidth="10.0" text="*" textFill="#f50000">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="passwordBox" layoutX="691.0" layoutY="304.0" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #F8F9FA;">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </PasswordField>
+        <Label fx:id="usernameError" layoutX="255.0" layoutY="351.0" prefHeight="30.0" prefWidth="325.0" textFill="#d31717" />
+        <Label fx:id="passwordError" layoutX="691.0" layoutY="351.0" prefHeight="30.0" prefWidth="350.0" textFill="#d31717" />
+        <Label alignment="CENTER" layoutX="378.0" layoutY="220.0" prefHeight="35.0" prefWidth="404.0" text="SignUp">
+            <font>
+                <Font name="Arial Bold" size="28.0" />
+            </font>
+        </Label>
+        <JFXCheckBox fx:id="privacyBox" layoutX="255.0" layoutY="573.0" prefHeight="21.0" prefWidth="130.0" text="agree with our" />
+        <JFXButton fx:id="signupButton" layoutX="510.0" layoutY="561.0" prefHeight="45.0" prefWidth="182.0" ripplerFill="WHITE" style="-fx-background-color: #212529;" text="SingUp" textFill="WHITE">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+            <font>
+                <Font size="18.0" />
+            </font>
+        </JFXButton>
+        <Label fx:id="privacyError" layoutX="255.0" layoutY="606.0" prefHeight="30.0" prefWidth="293.0" textFill="#d31717" />
+        <ImageView fx:id="showPassword" fitHeight="59.0" fitWidth="38.0" layoutX="950.0" layoutY="307.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/eye.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ImageView fx:id="hidePassword" fitHeight="59.0" fitWidth="38.0" layoutX="950.0" layoutY="307.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/hide.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <TextField fx:id="passwordShowField" layoutX="691.0" layoutY="304.0" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #F8F9FA;">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <Label fx:id="privacy" layoutX="378.0" layoutY="573.0" prefHeight="21.0" prefWidth="130.0" text=" privacy and policy" underline="true">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Label>
+      <Label layoutX="201.0" layoutY="400.0" text="Name" />
+      <TextField fx:id="nameBox" layoutX="253.0" layoutY="391.0" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #F8F9FA;">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Label layoutX="635.0" layoutY="400.0" text="Family" />
+      <TextField fx:id="familyBox" layoutX="687.0" layoutY="391.0" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #F8F9FA;">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Label layoutX="191.0" layoutY="471.0" text="Birthday" />
+      <TextField fx:id="birthdayBox" layoutX="253.0" layoutY="461.0" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #F8F9FA;">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Label layoutX="626.0" layoutY="471.0" text="Location" />
+      <JFXComboBox fx:id="locationBox" editable="true" layoutX="691.0" layoutY="466.0" prefHeight="31.0" prefWidth="250.0" />
+      <Label layoutX="255.0" layoutY="512.0" prefHeight="21.0" prefWidth="250.0" text="for example : 2000-01-25" textFill="#0f7b87" />
+    </children>
+</AnchorPane>
