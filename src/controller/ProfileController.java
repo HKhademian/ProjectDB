@@ -1,8 +1,10 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -51,11 +53,10 @@ public class ProfileController {
     private JFXListView<?> languageList;
 
     @FXML
-    private ImageView featuredAdd;
+    private ImageView skillAdd;
 
     @FXML
-    private JFXListView<?> featuredList;
-
+    private JFXListView<?> SkillList;
 
     @FXML
     private JFXButton saveIntro;
@@ -63,20 +64,47 @@ public class ProfileController {
     @FXML
     private JFXButton saveAbout;
 
-
     @FXML
     private JFXButton cancelIntro;
 
     @FXML
     private JFXButton cancelAbout;
 
-
     @FXML
     private JFXButton logout;
 
+    @FXML
+    private ImageView featureAdd;
+
+    @FXML
+    private JFXListView<?> featureList;
+
+    @FXML
+    private TextField Location;
+
+    @FXML
+    private TextField name;
+
+    @FXML
+    private TextField family;
+
+    @FXML
+    private ImageView editNFL;
+
+    @FXML
+    private JFXButton saveChangeNFL;
+
+    @FXML
+    private JFXButton cancelChangeNFL;
+
+    @FXML
+    private JFXComboBox<?> changeLocation;
+
+
     private String nowIntro;
     private String nowAbout;
-
+    private String nowName;
+    private String nowFamily;
 
     @FXML
     public void initialize(){
@@ -85,9 +113,15 @@ public class ProfileController {
         saveAbout.setVisible(false);
         cancelIntro.setVisible(false);
         cancelAbout.setVisible(false);
+        saveChangeNFL.setVisible(false);
+        cancelChangeNFL.setVisible(false);
+        changeLocation.setVisible(false);
 
+        //get from db
         nowIntro = "";
         nowAbout = "";
+        nowName = "";
+        nowFamily = "";
 
         if(!isOwner()){
             introEdit.setVisible(false);
@@ -95,9 +129,16 @@ public class ProfileController {
             accomplishmentsAdd.setVisible(false);
             backgroundAdd.setVisible(false);
             languageAdd.setVisible(false);
-            featuredAdd.setVisible(false);
+            featureAdd.setVisible(false);
+            editNFL.setVisible(false);
         }
 
+        //Name, Family, Location
+        editNFL.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> changeNFL());
+        saveChangeNFL.setOnAction(event -> saveNFL());
+        cancelChangeNFL.setOnAction(event -> cancelNFL());
+
+        //Intro, About
         introEdit.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {editIntro();});
         aboutEdit.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {editAbout();});
 
@@ -117,11 +158,54 @@ public class ProfileController {
             about.setEditable(false);
         });
 
+        //Background
+        backgroundAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addBackground());
+
+        //Accomplishments
+        accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
+
+        //Language
+        languageAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addLanguage());
+
         logout.setOnAction(event -> logOut());
     }
 
     private boolean isOwner(){
         return true;
+    }
+
+    private void changeNFL(){
+        saveChangeNFL.setVisible(true);
+        cancelChangeNFL.setVisible(true);
+        name.setEditable(true);
+        name.requestFocus();
+        family.setEditable(true);
+        Location.setVisible(false);
+        changeLocation.setVisible(true);
+    }
+
+    private void saveNFL(){
+        nowName = name.getText().trim();
+        nowFamily = family.getText().trim();
+        //get location
+        //add to database
+        saveChangeNFL.setVisible(false);
+        cancelChangeNFL.setVisible(false);
+        name.setEditable(false);
+        family.setEditable(false);
+        Location.setVisible(true);
+        changeLocation.setVisible(false);
+    }
+
+    private void cancelNFL(){
+        name.setText(nowName);
+        family.setText(nowFamily);
+        saveChangeNFL.setVisible(false);
+        cancelChangeNFL.setVisible(false);
+        name.setEditable(false);
+        family.setEditable(false);
+        Location.setVisible(true);
+        changeLocation.setVisible(false);
     }
 
     private void editIntro(){
@@ -157,6 +241,24 @@ public class ProfileController {
     private void logOut(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("../view/Login.fxml", new LoginController(), "Linkedin - Login");
+    }
+
+    private void addBackground(){
+        imagePlace.getScene().getWindow();
+        OpenWindow.openWindowWait("../view/AddBackground.fxml", new AddBackgroundController(),
+                "Background");
+    }
+
+    private void addAccomplishment(){
+        imagePlace.getScene().getWindow();
+        OpenWindow.openWindowWait("../view/AddAccomplishments.fxml", new AddAccomplishmentsController(),
+                "Accomplishment");
+    }
+
+    private void addLanguage(){
+        imagePlace.getScene().getWindow();
+        OpenWindow.openWindowWait("../view/AddSupportedLanguage.fxml", new AddSupportedLanguageController(),
+                "Add Language");
     }
 
 }
