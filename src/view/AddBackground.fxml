@@ -15,12 +15,11 @@
                 <Font size="18.0" />
             </font>
         </TextArea>
-        <Label layoutX="24.0" layoutY="18.0" text="Title : ">
+        <Label layoutX="24.0" layoutY="18.0" text="Title ">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <Label layoutX="77.0" layoutY="21.0" text="(for go to the next line use Enter key)" textFill="#eb3f3f" />
         <Label fx:id="titleError" layoutX="30.0" layoutY="113.0" prefHeight="21.0" prefWidth="339.0" text="Title can not be empty" textFill="#da1919" />
         <JFXButton fx:id="cancelButton" layoutX="215.0" layoutY="281.0" prefHeight="38.0" prefWidth="95.0" style="-fx-background-color: #ADB5BD;" text="Cancel">
             <cursor>
