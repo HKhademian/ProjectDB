@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -100,6 +99,18 @@ public class ProfileController {
     @FXML
     private JFXComboBox<?> changeLocation;
 
+    @FXML
+    private ImageView home;
+
+    @FXML
+    private ImageView network;
+
+    @FXML
+    private ImageView messaging;
+
+    @FXML
+    private ImageView notification;
+
 
     private String nowIntro;
     private String nowAbout;
@@ -166,6 +177,9 @@ public class ProfileController {
 
         //Language
         languageAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addLanguage());
+
+        //Skill
+        skillAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addSkill());
 
         logout.setOnAction(event -> logOut());
     }
@@ -259,6 +273,12 @@ public class ProfileController {
         imagePlace.getScene().getWindow();
         OpenWindow.openWindowWait("../view/AddSupportedLanguage.fxml", new AddSupportedLanguageController(),
                 "Add Language");
+    }
+
+    private void addSkill(){
+        imagePlace.getScene().getWindow();
+        OpenWindow.openWindowWait("../view/AddSkill.fxml", new AddSkillController(),
+                "Add Skill");
     }
 
 }
