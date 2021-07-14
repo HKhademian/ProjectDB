@@ -22,19 +22,7 @@ public final class UserRepository extends _BaseRepository {
       statement.setString(1, username);
       statement.setString(2, password);
       final ResultSet res = statement.executeQuery();
-      if (res.next()) {
-        return new User(
-          res.getInt("userId"),
-          res.getString("username"),
-          res.getString("email"),
-          res.getString("phone"),
-          res.getString("name"),
-          res.getString("intro"),
-          res.getString("about"),
-          res.getBytes("avatar"),
-          new Date(res.getInt("birthday"))
-        );
-      }
+      if (res.next()) return User.from(res);
       return null;
     });
   }

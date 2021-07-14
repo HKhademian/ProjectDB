@@ -1,8 +1,9 @@
 package app.model;
 
+import java.sql.ResultSet;
 import java.util.Date;
 
-public class User {
+public class User extends _BaseModel {
   public int userId;
   public String username;
   public String email;
@@ -25,4 +26,17 @@ public class User {
     this.birthday = birthday;
   }
 
+  public static User from(ResultSet res) {
+    return new User(
+      tryInt(res, "userId", 0),
+      tryString(res, "username"),
+      tryString(res, "email"),
+      tryString(res, "phone"),
+      tryString(res, "name"),
+      tryString(res, "intro"),
+      tryString(res, "about"),
+      tryByteArray(res, "avatar"),
+      new Date(tryInt(res, "birthday", 0))
+    );
+  }
 }
