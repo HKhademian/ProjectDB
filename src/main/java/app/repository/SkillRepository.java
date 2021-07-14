@@ -1,6 +1,6 @@
-package repository;
+package app.repository;
 
-import model.Skill;
+import app.model.Skill;
 
 import java.util.List;
 

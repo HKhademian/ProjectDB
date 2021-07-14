@@ -1,8 +1,10 @@
+package app;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
-import controller.OpenWindow;
-import controller.ProfileController;
-import repository.Database;
+import app.controller.OpenWindow;
+import app.controller.ProfileController;
+import app.repository.Database;
 
 public class Main extends Application {
 

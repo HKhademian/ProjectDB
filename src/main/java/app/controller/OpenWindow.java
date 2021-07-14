@@ -1,4 +1,4 @@
-package controller;
+package app.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +12,7 @@ public class OpenWindow {
 
     private static Stage loader(String path, Object controller, String title){
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(OpenWindow.class.getResource(path));
+        loader.setLocation(OpenWindow.class.getClassLoader().getResource(path));
         loader.setController(controller);
         try {
             loader.load();

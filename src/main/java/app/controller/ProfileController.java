@@ -1,4 +1,4 @@
-package controller;
+package app.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;

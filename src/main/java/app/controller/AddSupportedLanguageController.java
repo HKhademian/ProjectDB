@@ -1,14 +1,10 @@
-package controller;
+package app.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class AddSkillController {
-
-    @FXML
-    private JFXComboBox<?> skills;
+public class AddSupportedLanguageController {
 
     @FXML
     private JFXButton cancelButton;
@@ -17,11 +13,11 @@ public class AddSkillController {
     private JFXButton addButton;
 
     @FXML
-    private Label skillError;
+    private Label languageError;
 
     @FXML
     public void initialize(){
-        skillError.setVisible(false);
+        languageError.setVisible(false);
 
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
         addButton.setOnAction(event -> saveBackground());
@@ -29,7 +25,7 @@ public class AddSkillController {
 
     private void saveBackground(){
         boolean valid = true;
-        //check skill an add it
+        //check language an add it
         addButton.getScene().getWindow().hide();
     }
 }

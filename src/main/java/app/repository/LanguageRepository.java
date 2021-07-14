@@ -1,6 +1,6 @@
-package repository;
+package app.repository;
 
-import model.Language;
+import app.model.Language;
 
 import java.util.List;
 

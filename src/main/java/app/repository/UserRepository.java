@@ -1,8 +1,8 @@
-package repository;
+package app.repository;
 
-import model.Article;
-import model.Notification;
-import model.User;
+import app.model.Article;
+import app.model.Notification;
+import app.model.User;
 
 import java.util.List;
 

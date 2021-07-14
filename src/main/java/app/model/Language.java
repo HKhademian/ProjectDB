@@ -1,4 +1,4 @@
-package model;
+package app.model;
 
 public class Language {
   public String code;

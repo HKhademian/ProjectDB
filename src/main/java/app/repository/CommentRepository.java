@@ -1,6 +1,6 @@
-package repository;
+package app.repository;
 
-import model.Comment;
+import app.model.Comment;
 
 import java.util.List;
 
