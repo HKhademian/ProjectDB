@@ -18,21 +18,21 @@ public final class Database {
   }
 
   public static void connect() {
-    try {
-      connection = DriverManager.getConnection(DB_URL);
-      System.out.println("Connection to SQLite has been established.");
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        if (connection != null) {
-          connection.close();
-          connection = null;
-        }
-      } catch (SQLException ex) {
-        ex.printStackTrace();
-      }
-    }
+//    try {
+//      connection = DriverManager.getConnection(DB_URL);
+//      System.out.println("Connection to SQLite has been established.");
+//    } catch (SQLException e) {
+//      e.printStackTrace();
+//    } finally {
+//      try {
+//        if (connection != null) {
+//          connection.close();
+//          connection = null;
+//        }
+//      } catch (SQLException ex) {
+//        ex.printStackTrace();
+//      }
+//    }
   }
 
   public static void disconnect() {

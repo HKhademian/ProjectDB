@@ -13,7 +13,8 @@ public class OpenWindow {
     private static Stage loader(String path, Object controller, String title){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(OpenWindow.class.getClassLoader().getResource(path));
-        loader.setController(controller);
+        if(controller!=null)
+          loader.setController(controller);
         try {
             loader.load();
         } catch (IOException e) {

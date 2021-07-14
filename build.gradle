@@ -5,7 +5,7 @@ plugins {
 
 mainClassName = 'app.Main'
 def platform = 'linux'
-def javafx_version = '11+'
+def javafx_version = '16+'
 
 java {
   modularity.inferModulePath.set(true)
