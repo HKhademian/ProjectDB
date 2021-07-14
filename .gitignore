@@ -4,4 +4,4 @@ out/
 build/
 lib/
 Project.pdf
-project.iml
+*.iml
