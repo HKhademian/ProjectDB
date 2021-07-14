@@ -1,8 +1,18 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 apply plugin: 'application'
+// https://newbedev.com/how-to-get-javafx-and-java-11-working-in-intellij-idea
 
 mainClassName = 'app.Main'
-def platform = 'linux'
 def javafx_version = '16+'
+def platform = 'linux'
+
+if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+  println "*** Windows ***"
+  platform = 'win'
+} else {
+  println "*** Linux ***"
+}
 
 java {
   modularity.inferModulePath.set(true)
