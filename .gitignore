@@ -1,5 +1,7 @@
+.gradle/
 .idea/
 out/
+build/
 lib/
 Project.pdf
 project.iml
