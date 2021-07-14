@@ -4,7 +4,10 @@ import app.model.Article;
 import app.model.Notification;
 import app.model.User;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public final class UserRepository extends _BaseRepository {
@@ -12,9 +15,9 @@ public final class UserRepository extends _BaseRepository {
   }
 
   public static User login(String username, String password) {
-    final var QUERY = "select * from `User` where `username`=? and `password`=?";
+    final var SQL = "select * from `User` where `username`=? and `password`=?";
     return connect(connection -> {
-      final var statement = connection.prepareStatement(QUERY);
+      final var statement = connection.prepareStatement(SQL);
       statement.setString(1, username);
       statement.setString(2, password);
       final var res = statement.executeQuery();
@@ -36,9 +39,9 @@ public final class UserRepository extends _BaseRepository {
   }
 
   public static User register(String username, String password, String name, String email, String phone, String intro, String about, byte[] avatar, Date birthday, String location) {
-    final var QUERY = "INSERT INTO `User` VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?);";
+    final var SQL = "INSERT INTO `User` VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?);";
     return connect(connection -> {
-      final var statement = connection.prepareStatement(QUERY);
+      final var statement = connection.prepareStatement(SQL);
       statement.setString(1, username);
       statement.setString(2, password);
       statement.setString(3, name);
@@ -56,7 +59,16 @@ public final class UserRepository extends _BaseRepository {
   }
 
   public static List<Article> getUserHome(int userId) {
-    return null;
+    final var SQL = "SELECT * from Article where articleId in (select articleId from Home where userId=? order by time desc)";
+    return connect(connection -> {
+      final var statement = connection.prepareStatement(SQL);
+      statement.setInt(1, userId);
+      final var res = statement.executeQuery();
+      final var result = new ArrayList<Article>();
+      while (res.next())
+        result.add(Article.from(res));
+      return result;
+    });
   }
 
   public static List<Notification> getNotification(int userId) {

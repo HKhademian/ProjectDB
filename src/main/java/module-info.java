@@ -1,4 +1,4 @@
-module com.your.module {
+module ProjectDB {
 
   requires java.sql;
 
