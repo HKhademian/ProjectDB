@@ -5,6 +5,7 @@ import app.model.Notification;
 import app.model.User;
 
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -75,14 +76,59 @@ public final class UserRepository extends _BaseRepository {
     return null;
   }
 
+  public static void toggleLike(int userId, int articleId, int commentId) {
+    final var SQL1 = "SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?";
+    final var SQL2 = "DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?";
+    final var SQL3 = "INSERT into `User_Like` VALUES (?,?,?,?,0)";
+    connect(connection -> {
+      final var statement1 = connection.prepareStatement(SQL1);
+      statement1.setInt(1, userId);
+      statement1.setInt(2, articleId);
+      if (commentId > 0)
+        statement1.setInt(3, articleId);
+      else
+        statement1.setNull(3, Types.INTEGER);
+      final var res1 = statement1.executeQuery();
 
-  public static void toggleLikeArticle(int userId, int articleId) {
+      if (res1.next() && res1.getInt(1) > 0) {
+        final var statement2 = connection.prepareStatement(SQL2);
+        statement2.setInt(1, userId);
+        statement2.setInt(2, articleId);
+        if (commentId > 0)
+          statement2.setInt(3, articleId);
+        else
+          statement2.setNull(3, Types.INTEGER);
+        statement2.executeUpdate();
+      } else {
+        final var statement3 = connection.prepareStatement(SQL3);
+        statement3.setInt(1, userId);
+        statement3.setInt(2, articleId);
+        if (commentId > 0)
+          statement3.setInt(3, articleId);
+        else
+          statement3.setNull(3, Types.INTEGER);
+        statement3.setLong(4, System.currentTimeMillis());
+        statement3.executeUpdate();
+      }
+      return null;
+    });
   }
 
-  public static void toggleLikeComment(int userId, int articleId, int commentId) {
-  }
-
-  public static void commentOn(int userId, int articleId, int commentId) {
+  public static void commentOn(int userId, int articleId, int replyCommentId, String content) {
+    final var SQL = "INSERT INTO Comment VALUES (null,?,?,?,?,?,0)";
+    connect(connection -> {
+      final var statement = connection.prepareStatement(SQL);
+      statement.setInt(1, articleId);
+      if (replyCommentId > 0)
+        statement.setInt(2, replyCommentId);
+      else
+        statement.setNull(2, Types.INTEGER);
+      statement.setInt(3, userId);
+      statement.setString(4, content);
+      statement.setLong(5, System.currentTimeMillis());
+      statement.executeUpdate();
+      return null;
+    });
   }
 
 }
