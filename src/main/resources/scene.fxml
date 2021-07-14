@@ -6,4 +6,5 @@
 <VBox maxHeight="+Infinity" maxWidth="+Infinity" minHeight="100.0" minWidth="100.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
   <Label fx:id="label" text="Label" />
   <Button fx:id="btn" mnemonicParsing="false" prefHeight="30.0" prefWidth="132.0" text="test" />
+   <TextArea fx:id="text" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
 </VBox>

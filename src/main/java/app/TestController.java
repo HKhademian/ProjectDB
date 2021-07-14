@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 public class TestController implements Initializable {
 
@@ -17,6 +18,9 @@ public class TestController implements Initializable {
   @FXML
   private Button btn;
 
+  @FXML
+  private TextArea text;
+
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     String javaVersion = System.getProperty("java.version");
@@ -25,7 +29,7 @@ public class TestController implements Initializable {
 
     btn.setText("Hello");
     btn.setOnMouseClicked(event -> {
-      label.setText("" + UserRepository.login("admin", "admin"));
+      text.setText("" + UserRepository.login("admin", "admin"));
     });
   }
 }
