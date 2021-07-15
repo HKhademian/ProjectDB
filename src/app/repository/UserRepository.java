@@ -60,42 +60,46 @@ public final class UserRepository extends _BaseRepository {
     return null;
   }
 
-  public static void toggleLike(int userId, int articleId, int commentId) {
-    final String SQL1 = "SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?";
-    final String SQL2 = "DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?";
-    final String SQL3 = "INSERT into `User_Like` VALUES (?,?,?,?,0)";
-    connect(connection -> {
+  public static boolean toggleLike(int userId, int articleId, int commentId) {
+    final String SQL1;
+    final String SQL2;
+    final String SQL3;
+    if (commentId > 0) {
+      SQL1 = "SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;";
+      SQL2 = "DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;";
+      SQL3 = "INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,?,0);";
+    } else {
+      SQL1 = "SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;";
+      SQL2 = "DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;";
+      SQL3 = "INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,null,0);";
+    }
+    Boolean res = connect(connection -> {
       final PreparedStatement statement1 = connection.prepareStatement(SQL1);
       statement1.setInt(1, userId);
       statement1.setInt(2, articleId);
       if (commentId > 0)
-        statement1.setInt(3, articleId);
-      else
-        statement1.setNull(3, Types.INTEGER);
+        statement1.setInt(3, commentId);
       final ResultSet res1 = statement1.executeQuery();
-
       if (res1.next() && res1.getInt(1) > 0) {
         final PreparedStatement statement2 = connection.prepareStatement(SQL2);
         statement2.setInt(1, userId);
         statement2.setInt(2, articleId);
         if (commentId > 0)
-          statement2.setInt(3, articleId);
-        else
-          statement2.setNull(3, Types.INTEGER);
+          statement2.setInt(3, commentId);
         statement2.executeUpdate();
+        return true;
       } else {
         final PreparedStatement statement3 = connection.prepareStatement(SQL3);
         statement3.setInt(1, userId);
         statement3.setInt(2, articleId);
+        statement3.setLong(3, System.currentTimeMillis());
         if (commentId > 0)
-          statement3.setInt(3, articleId);
-        else
-          statement3.setNull(3, Types.INTEGER);
-        statement3.setLong(4, System.currentTimeMillis());
+          statement3.setInt(4, commentId);
         statement3.executeUpdate();
+        return true;
       }
-      return null;
     });
+    return res != null && res;
   }
 
 }

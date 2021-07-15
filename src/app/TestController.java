@@ -28,6 +28,8 @@ public class TestController implements Initializable {
   private Button btnLogin;
   @FXML
   private Button btnRegister;
+  @FXML
+  private Button btnToggleLike;
 
 
   @FXML
@@ -93,7 +95,7 @@ public class TestController implements Initializable {
     });
 
     btnLogin.setOnMouseClicked(event -> {
-      Object res = loggedUser = UserRepository.login("admin", "admin");
+      Object res = loggedUser = UserRepository.login(id.getText(), code.getText());
       text.setText("login res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
     btnRegister.setOnMouseClicked(event -> {
@@ -104,6 +106,10 @@ public class TestController implements Initializable {
         "900-" + index, null, null, null, null, null
       );
       text.setText("register res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+    });
+    btnToggleLike.setOnMouseClicked(event -> {
+      Object res = UserRepository.toggleLike(loggedUser.getUserId(), Integer.parseInt(id.getText()), Integer.parseInt(code.getText()));
+      text.setText("toggleLike res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
 
     btnAddSkill.setOnMouseClicked(event -> {

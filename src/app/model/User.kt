@@ -6,14 +6,13 @@ import java.util.*
 data class User(
   var userId: Int,
   var username: String,
-  var email: String,
-  var phone: String,
-  var name: String,
-  var intro: String,
-  var about: String,
-  var avatar: ByteArray,
-  var birthday: Date,
+  var firstname: String?,
+  var lastname: String?,
+  var intro: String?,
+  var about: String?,
+  var birthday: Date?,
 ) : _BaseModel() {
+  var avatar: ByteArray? = null
 
   companion object {
     @JvmStatic
@@ -21,14 +20,14 @@ data class User(
       return User(
         tryInt(res, "userId") ?: 0,
         tryString(res, "username") ?: "",
-        tryString(res, "email") ?: "",
-        tryString(res, "phone") ?: "",
-        tryString(res, "name") ?: "",
-        tryString(res, "intro") ?: "",
-        tryString(res, "about") ?: "",
-        tryByteArray(res, "avatar") ?: byteArrayOf(),
-        Date(tryLong(res, "birthday") ?: 0)
-      )
+        tryString(res, "firstname"),
+        tryString(res, "lastname"),
+        tryString(res, "intro"),
+        tryString(res, "about"),
+        tryLong(res, "birthday")?.let { Date(it) }
+      ).apply {
+        avatar = tryByteArray(res, "avatar")
+      }
     }
   }
 

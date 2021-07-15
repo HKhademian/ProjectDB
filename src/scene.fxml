@@ -14,6 +14,8 @@
   <HBox>
     <Button fx:id="btnLogin" text="Login"/>
     <Button fx:id="btnRegister" text="Register"/>
+    <Pane prefWidth="10"/>
+    <Button fx:id="btnToggleLike" text="Toggle Like Article #id Comment #code"/>
   </HBox>
 
   <HBox>
