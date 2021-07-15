@@ -12,6 +12,7 @@ public class _BaseRepository {
     final String db = "jdbc:sqlite:" + DB_NAME;
     try (Connection connection = DriverManager.getConnection(db)) {
       lastError = null;
+      connection.createStatement().execute("PRAGMA foreign_keys=ON;");
       return action.run(connection);
     } catch (SQLException ex) {
       lastError = ex;
