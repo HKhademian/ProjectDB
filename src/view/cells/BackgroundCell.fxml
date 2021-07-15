@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="176.0" prefWidth="420.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextArea fx:id="title" editable="false" layoutX="38.0" layoutY="14.0" prefHeight="67.0" prefWidth="344.0" style="-fx-background-color: #F8F9FA;" />
+        <ImageView fx:id="edit" fitHeight="24.0" fitWidth="28.0" layoutX="288.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../assets/edit.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ImageView fx:id="delete" fitHeight="24.0" fitWidth="28.0" layoutX="358.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../assets/delete.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+      <Label fx:id="startDate" layoutX="57.0" layoutY="101.0" prefHeight="21.0" prefWidth="142.0" text="2018-11-13" />
+      <Label layoutX="14.0" layoutY="101.0" text="from : " />
+      <Label layoutX="218.0" layoutY="101.0" text="to : " />
+      <Label fx:id="endDate" layoutX="244.0" layoutY="101.0" prefHeight="21.0" prefWidth="142.0" text="2018-11-13" />
+    </children>
+</AnchorPane>
