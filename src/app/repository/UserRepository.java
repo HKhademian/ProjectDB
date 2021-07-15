@@ -38,7 +38,10 @@ public final class UserRepository extends _BaseRepository {
       statement.setString(6, intro);
       statement.setString(7, about);
       statement.setBytes(8, avatar);
-      statement.setLong(9, birthday.getTime());
+      if (birthday != null)
+        statement.setLong(9, birthday.getTime());
+      else
+        statement.setNull(9, Types.INTEGER);
       statement.setString(10, location);
       final ResultSet res = statement.executeQuery();
       return res.next() ? User.from(res) : null;
