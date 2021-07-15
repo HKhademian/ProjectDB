@@ -22,13 +22,12 @@ public final class UserRepository extends _BaseRepository {
       statement.setString(1, username);
       statement.setString(2, password);
       final ResultSet res = statement.executeQuery();
-      if (res.next()) return User.from(res);
-      return null;
+      return res.next() ? User.from(res) : null;
     });
   }
 
   public static User register(String username, String password, String name, String email, String phone, String intro, String about, byte[] avatar, Date birthday, String location) {
-    final String SQL = "INSERT INTO `User` VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?);";
+    final String SQL = "INSERT INTO `User` VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?) RETURNINT *;";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setString(1, username);
@@ -41,9 +40,8 @@ public final class UserRepository extends _BaseRepository {
       statement.setBytes(8, avatar);
       statement.setLong(9, birthday.getTime());
       statement.setString(10, location);
-      final int res = statement.executeUpdate();
-      if (res > 0) return login(username, password);
-      return null;
+      final ResultSet res = statement.executeQuery();
+      return res.next() ? User.from(res) : null;
     });
   }
 
