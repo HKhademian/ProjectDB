@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.model.User;
+import app.repository.UserRepository;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -9,6 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SignupController {
 
@@ -61,6 +67,11 @@ public class SignupController {
     private JFXComboBox<?> locationBox;
 
     @FXML
+    private Label birthdayError;
+
+    private Date birthday;
+
+    @FXML
     public void initialize(){
         passwordShowField.setVisible(false);
         showPassword.setVisible(false);
@@ -94,12 +105,39 @@ public class SignupController {
     }
 
     private void signUp(){
-        int valid = 1;
-        usernameError.setText("");
-        passwordError.setText("");
-        privacyError.setText("");
 
-        String username = usernameBox.getText().replaceFirst("\\s++$", "");
+        boolean valid = validation();
+
+        if(valid) {
+            String username = usernameBox.getText().trim();
+            String password = getPassword();
+            String name = nameBox.getText().trim();
+            String family = familyBox.getText().trim();
+
+            User user = UserRepository.register(username, password, name + " " + family,
+                    "", "", "","",null,birthday,"");
+
+            if(user == null){
+                usernameError.setText("This username token");
+                return;
+            }
+            signupButton.getScene().getWindow().hide();
+            OpenWindow.openWindow("view/ProfilePage.fxml", new ProfileController(user.getUserId(), user.getUserId()), "Linkedin - Profile");
+        }
+
+    }
+
+    private Date getBirthday() throws ParseException{
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String dateInString = birthdayBox.getText().trim();
+        if(dateInString.isEmpty()){
+            return null;
+        }
+        Date date = formatter.parse(dateInString);
+        return date;
+    }
+
+    private String getPassword(){
         String password;
         if(hidePassword.isVisible()){
             password = passwordBox.getText().replaceFirst("\\s++$", "");
@@ -107,35 +145,39 @@ public class SignupController {
         else{
             password = passwordShowField.getText().replaceFirst("\\s++$", "");
         }
+        return password;
+    }
 
-        /*int validUsername = Validation.usernameValidation(username);
-        if(validUsername == 0){
-            usernameError.setText("Invalid username");
-            valid = 0;
-        }else if(validUsername == 2){
-            usernameError.setText("Length of username must be between 3 and 12");
-            valid = 0;
+    private boolean validation(){
+        boolean valid = true;
+        usernameError.setText("");
+        passwordError.setText("");
+        privacyError.setText("");
+        birthdayError.setText("");
+
+        String username = usernameBox.getText().replaceFirst("\\s++$", "");
+        String password = getPassword();
+
+        if(username.isEmpty()){
+            usernameError.setText("username can not be empty");
+            valid = false;
         }
-
-        int validPassword = Validation.passwordValidation(password);
-        if(validPassword == 0){
-            passwordError.setText("Invalid password");
-            valid = 0;
-        }else if(validPassword == 2){
-            passwordError.setText("Length of your password must be between 6 and 16");
-            valid = 0;
-        }*/
+        if(password.isEmpty()){
+            passwordError.setText("password can not be empty");
+            valid = false;
+        }
 
         if(!privacyBox.isSelected()){
             privacyError.setText("You must agree with our privacy and policy");
-            valid = 0;
+            valid = false;
         }
-
-        if(valid == 1) {
-            //create user
-            //go to profile page
+        try {
+            birthday = getBirthday();
+        } catch (ParseException e) {
+            birthdayError.setText("birthday in not valid");
+            valid = false;
         }
-
+        return valid;
     }
 
     private void login(){
