@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Article extends _BaseModel {
   public int articleId;
-  public int writeUserId;
+  public int writerUserId;
   public String title;
   public String content;
   public Date time;
@@ -13,9 +13,9 @@ public class Article extends _BaseModel {
   public int likeCount;
   public int commentCount;
 
-  public Article(int articleId, int writeUserId, String title, String content, Date time, boolean featured, int likeCount, int commentCount) {
+  public Article(int articleId, int writerUserId, String title, String content, Date time, boolean featured, int likeCount, int commentCount) {
     this.articleId = articleId;
-    this.writeUserId = writeUserId;
+    this.writerUserId = writerUserId;
     this.title = title;
     this.content = content;
     this.time = time;

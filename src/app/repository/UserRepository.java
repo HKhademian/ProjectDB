@@ -48,19 +48,6 @@ public final class UserRepository extends _BaseRepository {
     });
   }
 
-  public static List<Article> getUserHome(int userId) {
-    final String SQL = "SELECT * from `Article` where `articleId` in (select `articleId` from Home where `userId`=? order by `time` desc)";
-    return connect(connection -> {
-      final PreparedStatement statement = connection.prepareStatement(SQL);
-      statement.setInt(1, userId);
-      final ResultSet res = statement.executeQuery();
-      final List<Article> result = new ArrayList<>();
-      while (res.next())
-        result.add(Article.from(res));
-      return result;
-    });
-  }
-
   public static List<Notification> getNotification(int userId) {
     return null;
   }

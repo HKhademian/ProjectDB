@@ -4,10 +4,8 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
-import app.repository.LanguageRepository;
-import app.repository.SkillRepository;
-import app.repository.UserRepository;
-import app.repository._BaseRepository;
+import app.model.Article;
+import app.repository.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -27,6 +25,9 @@ public class TestController implements Initializable {
   private TextArea text;
 
   @FXML
+  public TextField id;
+
+  @FXML
   public TextField code;
 
   @FXML
@@ -37,6 +38,15 @@ public class TestController implements Initializable {
 
   @FXML
   public Button btnAddLanguage;
+
+  @FXML
+  public Button btnGetArticle;
+  @FXML
+  public Button btnSaveArticle1;
+  @FXML
+  public Button btnSaveArticle2;
+  @FXML
+  public Button btnDeleteArticle;
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -60,12 +70,39 @@ public class TestController implements Initializable {
 
     btnAddSkill.setOnMouseClicked(event -> {
       Object res = SkillRepository.addSkill(title.getText());
-      text.setText("res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("addSkill res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
 
     btnAddLanguage.setOnMouseClicked(event -> {
       Object res = LanguageRepository.addLanguage(code.getText(), title.getText());
-      text.setText("res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("addLanguage res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+    });
+
+
+    btnGetArticle.setOnMouseClicked(event -> {
+      Object res = ArticleRepository.getArticle(Integer.parseInt(id.getText()));
+      text.setText("getArticle res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+    });
+
+    btnSaveArticle1.setOnMouseClicked(event -> {
+      final Article article = new Article(
+        Integer.parseInt(id.getText()), 1, "test article", "this is a content", null, true, 0, 0
+      );
+      Object res = ArticleRepository.saveArticle(article);
+      text.setText("saveArticle `edit` res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+    });
+
+    btnSaveArticle2.setOnMouseClicked(event -> {
+      final Article article = new Article(
+        0, 1, "test article", "this is a content", null, true, 0, 0
+      );
+      Object res = ArticleRepository.saveArticle(article);
+      text.setText("saveArticle `new` res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+    });
+
+    btnDeleteArticle.setOnMouseClicked(event -> {
+      Object res = ArticleRepository.deleteArticle(Integer.parseInt(id.getText()));
+      text.setText("deleteArticle res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
   }
 }
