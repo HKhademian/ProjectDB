@@ -79,7 +79,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <JFXListView fx:id="postList" layoutX="331.0" layoutY="134.0" prefHeight="737.0" prefWidth="578.0" style="-fx-background-color: #F8F9FA;" />
+      <JFXListView fx:id="articleList" layoutX="331.0" layoutY="134.0" prefHeight="737.0" prefWidth="602.0" style="-fx-background-color: #F8F9FA;" />
       <JFXComboBox fx:id="sortedByComboBox" layoutX="331.0" layoutY="92.0" prefHeight="31.0" prefWidth="107.0" />
       <JFXButton fx:id="sortedByButton" layoutX="453.0" layoutY="92.0" prefHeight="31.0" prefWidth="90.0" ripplerFill="BLACK" style="-fx-background-color: #ADB5BD;" text="Sorted by">
          <cursor>
