@@ -11,7 +11,7 @@ public final class ArticleRepository extends _BaseRepository {
   }
 
   public static Article getArticle(int articleId) {
-    final String SQL = "SELECT * from `ArticleCounted` where `articleId`=?";
+    final String SQL = "SELECT * from `ArticleCounted` where `articleId`=?;";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setInt(1, articleId);
@@ -21,7 +21,7 @@ public final class ArticleRepository extends _BaseRepository {
   }
 
   public static List<Article> getUserArticles(int userId) {
-    final String SQL = "SELECT * from `ArticleCounted` where `writer_userId`=?";
+    final String SQL = "SELECT * from `ArticleCounted` where `writer_userId`=?;";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setInt(1, userId);
@@ -67,7 +67,7 @@ public final class ArticleRepository extends _BaseRepository {
   }
 
   public static List<Article> getUserHome(int userId) {
-    final String SQL = "SELECT * from `Article` where `articleId` in (select `articleId` from Home where `userId`=? order by `time` desc)";
+    final String SQL = "SELECT * from `Article` where `articleId` in (select `articleId` from Home where `userId`=? order by `time` desc);";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setInt(1, userId);

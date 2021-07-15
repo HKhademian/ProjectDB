@@ -5,8 +5,8 @@
 
 <VBox
   fx:controller="app.TestController"
-  maxHeight="+Infinity" maxWidth="+Infinity" minHeight="100.0" minWidth="100.0" prefHeight="600.0" prefWidth="600.0"
-  xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+  maxHeight="+Infinity" maxWidth="+Infinity" minHeight="100.0" minWidth="100.0" prefHeight="600.0" prefWidth="800.0"
+  xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
   <Label fx:id="label" prefHeight="95.0" prefWidth="600.0" text="Label" wrapText="true"/>
   <Button fx:id="btn" mnemonicParsing="false" prefHeight="28.0" prefWidth="617.0" text="test"/>
   <TextArea fx:id="text" prefHeight="112.0" wrapText="true"/>
@@ -38,6 +38,14 @@
     <Button fx:id="btnSaveArticle1" text="Edit Article #id"/>
     <Button fx:id="btnSaveArticle2" text="New Article"/>
     <Button fx:id="btnDeleteArticle" text="Delete Article #id"/>
+  </HBox>
+
+  <HBox>
+    <Button fx:id="btnGetComment" text="Get Comment #id"/>
+    <Button fx:id="btnListComment" text="Get Comments of Article #id"/>
+    <Button fx:id="btnDeleteComment" text="Delete Comment #id"/>
+    <Button fx:id="btnSendComment" text="Send Comment on Article #id"/>
+    <Button fx:id="btnSendReply" text="Send Reply on Comment #id"/>
   </HBox>
 
 
