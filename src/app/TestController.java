@@ -2,6 +2,7 @@ package app;
 
 import java.net.URL;
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import app.model.Article;
@@ -73,10 +74,17 @@ public class TestController implements Initializable {
       res.next();
       return res.getString(1);
     });
+    String sqliteForeign = _BaseRepository.connect(conn -> {
+      ResultSet res = conn.createStatement().executeQuery("PRAGMA foreign_keys;");
+      res.next();
+      return res.getString(1);
+    });
     label.setText("Hello, JavaFX " + javafxVersion +
       "\nRunning on Java " + javaVersion
       + "\nCur Dir" + System.getProperty("user.dir")
-      + "\n SQlite Version:" + sqliteVersion);
+      + "\n SQlite Version:" + sqliteVersion
+      + "\n SQlite foreign:" + sqliteForeign
+    );
 
 
     btn.setText("Check Logged User");
@@ -114,14 +122,14 @@ public class TestController implements Initializable {
     });
     btnSaveArticle1.setOnMouseClicked(event -> {
       final Article article = new Article(
-        Integer.parseInt(id.getText()), 1, "test article", "this is a content", null, true, 0, 0
+        Integer.parseInt(id.getText()), loggedUser.getUserId(), title.getText(), text.getText(), new Date(), true, 0, 0
       );
       Object res = ArticleRepository.saveArticle(article);
       text.setText("saveArticle `edit` res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
     btnSaveArticle2.setOnMouseClicked(event -> {
       final Article article = new Article(
-        0, 1, "test article", "this is a content", null, true, 0, 0
+        0, loggedUser.getUserId(), title.getText(), text.getText(), new Date(), true, 0, 0
       );
       Object res = ArticleRepository.saveArticle(article);
       text.setText("saveArticle `new` res: " + res + "\nLastErr:" + _BaseRepository.lastError);

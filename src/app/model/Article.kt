@@ -1,39 +1,33 @@
-package app.model;
+package app.model
 
-import java.sql.ResultSet;
-import java.util.Date;
+import app.model._BaseModel
+import java.sql.ResultSet
+import app.model.Article
+import java.util.*
 
-public class Article extends _BaseModel {
-  public int articleId;
-  public int writerUserId;
-  public String title;
-  public String content;
-  public Date time;
-  public boolean featured;
-  public int likeCount;
-  public int commentCount;
-
-  public Article(int articleId, int writerUserId, String title, String content, Date time, boolean featured, int likeCount, int commentCount) {
-    this.articleId = articleId;
-    this.writerUserId = writerUserId;
-    this.title = title;
-    this.content = content;
-    this.time = time;
-    this.featured = featured;
-    this.likeCount = likeCount;
-    this.commentCount = commentCount;
-  }
-
-  public static Article from(ResultSet res) {
-    return new Article(
-      tryInt(res, "articleId", 0),
-      tryInt(res, "writeUserId", 0),
-      tryString(res, "title"),
-      tryString(res, "content"),
-      new Date(tryLong(res, "time", 0)),
-      tryInt(res, "featured", 0) != 0,
-      tryInt(res, "like_count", 0),
-      tryInt(res, "comment_count", 0)
-    );
+data class Article(
+  var articleId: Int,
+  var writerUserId: Int,
+  var title: String,
+  var content: String,
+  var time: Date,
+  var featured: Boolean,
+  var likeCount: Int,
+  var commentCount: Int,
+) : _BaseModel() {
+  companion object {
+    @JvmStatic
+    fun from(res: ResultSet?): Article {
+      return Article(
+        tryInt(res, "articleId", 0),
+        tryInt(res, "writeUserId", 0),
+        tryString(res, "title", ""),
+        tryString(res, "content", ""),
+        Date(tryLong(res, "time", 0)),
+        tryInt(res, "featured", 0) != 0,
+        tryInt(res, "like_count", 0),
+        tryInt(res, "comment_count", 0)
+      )
+    }
   }
 }

@@ -38,18 +38,18 @@ public final class ArticleRepository extends _BaseRepository {
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
 
-      if (article.articleId > 0)
-        statement.setInt(1, article.articleId);
+      if (article.getArticleId() > 0)
+        statement.setInt(1, article.getArticleId());
       else
         statement.setNull(1, Types.INTEGER);
-      statement.setInt(2, article.writerUserId);
-      statement.setString(3, article.title);
-      statement.setString(4, article.content);
-      if (article.time != null)
-        statement.setLong(5, article.time.getTime());
+      statement.setInt(2, article.getWriterUserId());
+      statement.setString(3, article.getTitle());
+      statement.setString(4, article.getContent());
+      if (article.getTime() != null)
+        statement.setLong(5, article.getTime().getTime());
       else
         statement.setLong(5, System.currentTimeMillis());
-      statement.setInt(6, article.featured ? 1 : 0);
+      statement.setInt(6, article.getFeatured() ? 1 : 0);
 
       final ResultSet res = statement.executeQuery();
       return res.next() ? Article.from(res) : null;
