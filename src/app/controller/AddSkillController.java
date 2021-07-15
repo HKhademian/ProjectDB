@@ -7,6 +7,12 @@ import javafx.scene.control.Label;
 
 public class AddSkillController {
 
+    private int userId;
+
+    public AddSkillController(int userId) {
+        this.userId = userId;
+    }
+
     @FXML
     private JFXComboBox<?> skills;
 

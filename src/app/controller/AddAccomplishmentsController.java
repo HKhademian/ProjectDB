@@ -7,6 +7,12 @@ import javafx.scene.control.TextArea;
 
 public class AddAccomplishmentsController {
 
+    private int userId;
+
+    public AddAccomplishmentsController(int userIdd){
+        this.userId = userId;
+    }
+
     @FXML
     private TextArea titleBox;
 

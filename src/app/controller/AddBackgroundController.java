@@ -9,6 +9,12 @@ import javafx.scene.control.TextField;
 
 public class AddBackgroundController {
 
+    private int userId;
+
+    public AddBackgroundController(int userId) {
+        this.userId = userId;
+    }
+
     @FXML
     private TextArea titleBox;
 

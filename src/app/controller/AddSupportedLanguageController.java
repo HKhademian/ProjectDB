@@ -1,10 +1,20 @@
 package app.controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class AddSupportedLanguageController {
+
+    private int userId;
+
+    public AddSupportedLanguageController(int userId) {
+        this.userId = userId;
+    }
+
+    @FXML
+    private JFXComboBox<?> languages;
 
     @FXML
     private JFXButton cancelButton;
