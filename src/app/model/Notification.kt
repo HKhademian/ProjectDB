@@ -1,37 +1,32 @@
-package app.model;
+package app.model
 
-import java.util.Date;
+import java.util.Date
 
-public class Notification {
-  public int byUserId;
-  public Date time;
-
-  private Notification() {
-  }
-
-  public static class BirthdayNotification extends Notification {
-  }
-
-  public static class LikeArticleNotification extends Notification {
-    public int articleId;
-  }
-
-  public static class LikeCommentNotification extends Notification {
-    public int commentId;
-  }
-
-  public static class CommentNotification extends Notification {
-    public int commentId;
-  }
-
-  public static class ReplyCommentNotification extends Notification {
-    public int commentId;
-  }
-
-  public static class SkillEndorseNotification extends Notification {
-    public int skillId;
-  }
-
-  public static class ProfileVisitNotification extends Notification {
-  }
+sealed class Notification private constructor() {
+    var byUserId = 0
+    var time: Date? = null
 }
+
+class BirthdayNotification : Notification()
+
+class LikeArticleNotification : Notification() {
+    var articleId = 0
+}
+
+class LikeCommentNotification : Notification() {
+    var commentId = 0
+}
+
+class CommentNotification : Notification() {
+    var commentId = 0
+}
+
+class ReplyCommentNotification : Notification() {
+    var commentId = 0
+}
+
+class SkillEndorseNotification : Notification() {
+    var skillId = 0
+}
+
+class ProfileVisitNotification : Notification()

@@ -1,9 +1,7 @@
 package app.model
 
-import app.model._BaseModel
 import java.sql.ResultSet
-import app.model.Article
-import java.util.*
+import java.util.Date
 
 data class Article(
   var articleId: Int,
@@ -14,20 +12,22 @@ data class Article(
   var featured: Boolean,
   var likeCount: Int,
   var commentCount: Int,
-) : _BaseModel() {
+) {
+
   companion object {
     @JvmStatic
-    fun from(res: ResultSet?): Article {
+    fun from(res: ResultSet): Article {
       return Article(
-        tryInt(res, "articleId", 0),
-        tryInt(res, "writeUserId", 0),
-        tryString(res, "title", ""),
-        tryString(res, "content", ""),
-        Date(tryLong(res, "time", 0)),
-        tryInt(res, "featured", 0) != 0,
-        tryInt(res, "like_count", 0),
-        tryInt(res, "comment_count", 0)
+        res.tryInt("articleId") ?: 0,
+        res.tryInt("writeUserId") ?: 0,
+        res.tryString("title") ?: "",
+        res.tryString("content") ?: "",
+        res.tryDate("time") ?: Date(0),
+        (res.tryInt("featured") ?: 0) != 0,
+        res.tryInt("like_count") ?: 0,
+        res.tryInt("comment_count") ?: 0,
       )
     }
   }
+
 }

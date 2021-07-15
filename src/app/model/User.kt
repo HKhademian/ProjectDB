@@ -11,22 +11,22 @@ data class User(
   var intro: String?,
   var about: String?,
   var birthday: Date?,
-) : _BaseModel() {
+) {
   var avatar: ByteArray? = null
 
   companion object {
     @JvmStatic
-    fun from(res: ResultSet?): User {
+    fun from(res: ResultSet): User {
       return User(
-        tryInt(res, "userId") ?: 0,
-        tryString(res, "username") ?: "",
-        tryString(res, "firstname"),
-        tryString(res, "lastname"),
-        tryString(res, "intro"),
-        tryString(res, "about"),
-        tryLong(res, "birthday")?.let { Date(it) }
+        res.tryInt("userId") ?: 0,
+        res.tryString("username") ?: "",
+        res.tryString("firstname"),
+        res.tryString("lastname"),
+        res.tryString("intro"),
+        res.tryString("about"),
+        res.tryDate("birthday")
       ).apply {
-        avatar = tryByteArray(res, "avatar")
+        avatar = res.tryByteArray("avatar")
       }
     }
   }

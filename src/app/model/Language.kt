@@ -1,20 +1,20 @@
-package app.model;
+package app.model
 
-import java.sql.ResultSet;
+import java.sql.ResultSet
 
-public class Language extends _BaseModel {
-  public String code;
-  public String title;
+class Language(
+  var code: String,
+  var title: String,
+) {
 
-  public Language(String code, String title) {
-    this.code = code;
-    this.title = title;
+  companion object {
+    @JvmStatic
+    fun from(res: ResultSet): Language {
+      return Language(
+        res.tryString("langCode") ?: "",
+        res.tryString("title") ?: "",
+      )
+    }
   }
 
-  public static Language from(ResultSet res) {
-    return new Language(
-      tryString(res, "langCode"),
-      tryString(res, "title")
-    );
-  }
 }

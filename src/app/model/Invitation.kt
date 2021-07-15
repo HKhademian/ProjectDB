@@ -1,11 +1,28 @@
-package app.model;
+package app.model
 
-import java.util.Date;
+import java.sql.ResultSet
+import java.util.*
 
-public class Invitation {
-  public int userId;
-  public int fromUserId;
-  public Date time;
-  public String message;
-  public int status;
+class Invitation(
+  var userId: Int,
+  var fromUserId: Int,
+  var time: Date,
+  var message: String,
+  var status: Int,
+) {
+
+  companion object {
+    @JvmStatic
+    fun from(res: ResultSet): Invitation {
+      return Invitation(
+        res.tryInt("userId") ?: 0,
+        res.tryInt("from_userId") ?: 0,
+        res.tryDate("time") ?: Date(0),
+        res.tryString("message") ?: "",
+        res.tryInt("status") ?: 0,
+      )
+    }
+  }
+
 }
+
