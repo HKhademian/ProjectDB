@@ -117,12 +117,13 @@ public class SignupController {
             User user = UserRepository.register(username, password, name , family,
                     "", "", null,birthday,"");
 
-            if(user == null){
-                usernameError.setText("This username token");
+            if(user==null){
+                usernameError.setText("this username is taken");
                 return;
             }
+
             signupButton.getScene().getWindow().hide();
-            OpenWindow.openWindow("view/ProfilePage.fxml", new ProfileController(user.getUserId(), user.getUserId()), "Linkedin - Profile");
+            OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, user), "Linkedin - Profile");
         }
 
     }

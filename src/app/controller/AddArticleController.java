@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.User;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,12 +12,12 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
-public class CreateArticleController {
+public class AddArticleController {
 
-    private int userId;
+    private User user;
 
-    public CreateArticleController(int userId) {
-        this.userId = userId;
+    public AddArticleController(User user) {
+        this.user = user;
     }
 
     @FXML

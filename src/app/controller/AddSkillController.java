@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.User;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
@@ -7,10 +8,10 @@ import javafx.scene.control.Label;
 
 public class AddSkillController {
 
-    private int userId;
+    private User user;
 
-    public AddSkillController(int userId) {
-        this.userId = userId;
+    public AddSkillController(User user) {
+        this.user = user;
     }
 
     @FXML

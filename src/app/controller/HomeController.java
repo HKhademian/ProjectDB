@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.User;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -11,9 +12,9 @@ import javafx.scene.shape.Circle;
 
 public class HomeController {
 
-    private int userId;
-    public HomeController(int userId){
-        this.userId = userId;
+    private User user;
+    public HomeController(User user){
+        this.user = user;
     }
 
     @FXML
@@ -64,6 +65,9 @@ public class HomeController {
     @FXML
     public void initialize(){
 
+        name.setText(user.getFirstname());
+        family.setText(user.getLastname());
+
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
 
@@ -80,13 +84,13 @@ public class HomeController {
 
     private void profilePage(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Profile.fxml", new ProfileController(userId, userId),
+        OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, user),
                 "Profile");
     }
 
     private void createArticle(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(userId),
+        OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(user),
                 "Create Article");
     }
 

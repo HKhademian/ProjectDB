@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.User;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -7,10 +8,10 @@ import javafx.scene.control.TextArea;
 
 public class AddAccomplishmentsController {
 
-    private int userId;
+    private User user;
 
-    public AddAccomplishmentsController(int userIdd){
-        this.userId = userId;
+    public AddAccomplishmentsController(User user){
+        this.user = user;
     }
 
     @FXML

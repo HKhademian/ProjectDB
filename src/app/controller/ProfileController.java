@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.model.User;
+import app.repository.UserRepository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -12,11 +14,12 @@ import javafx.scene.shape.Circle;
 
 public class ProfileController {
 
-    private int userId;
-    private int ownerId;
-    public ProfileController(int userId, int ownerId) {
-        this.userId = userId;
-        this.ownerId = ownerId;
+    private User owner;
+    private User user;
+
+    public ProfileController(User owner, User user) {
+        this.user = user;
+        this.owner = owner;
     }
 
     @FXML
@@ -86,7 +89,7 @@ public class ProfileController {
     private JFXListView<?> featureList;
 
     @FXML
-    private TextField Location;
+    private TextField locationProfile;
 
     @FXML
     private TextField name;
@@ -129,6 +132,9 @@ public class ProfileController {
     @FXML
     public void initialize(){
 
+        name.setText(owner.getFirstname());
+        family.setText(owner.getLastname());
+
         saveIntro.setVisible(false);
         saveAbout.setVisible(false);
         cancelIntro.setVisible(false);
@@ -137,11 +143,10 @@ public class ProfileController {
         cancelChangeNFL.setVisible(false);
         changeLocation.setVisible(false);
 
-        //get from db
-        nowIntro = "";
-        nowAbout = "";
-        nowName = "";
-        nowFamily = "";
+        nowIntro = owner.getIntro();
+        nowAbout = owner.getAbout();
+        nowName = owner.getFirstname();
+        nowFamily = owner.getLastname();
 
         if(!isOwner()){
             introEdit.setVisible(false);
@@ -197,7 +202,7 @@ public class ProfileController {
     }
 
     private boolean isOwner(){
-        return true;
+        return owner.getUserId()==user.getUserId();
     }
 
     private void changeNFL(){
@@ -206,7 +211,7 @@ public class ProfileController {
         name.setEditable(true);
         name.requestFocus();
         family.setEditable(true);
-        Location.setVisible(false);
+        locationProfile.setVisible(false);
         changeLocation.setVisible(true);
     }
 
@@ -219,7 +224,7 @@ public class ProfileController {
         cancelChangeNFL.setVisible(false);
         name.setEditable(false);
         family.setEditable(false);
-        Location.setVisible(true);
+        locationProfile.setVisible(true);
         changeLocation.setVisible(false);
     }
 
@@ -230,7 +235,7 @@ public class ProfileController {
         cancelChangeNFL.setVisible(false);
         name.setEditable(false);
         family.setEditable(false);
-        Location.setVisible(true);
+        locationProfile.setVisible(true);
         changeLocation.setVisible(false);
     }
 
@@ -271,31 +276,31 @@ public class ProfileController {
 
     private void addBackground(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("view/AddBackground.fxml", new AddBackgroundController(userId),
+        OpenWindow.openWindowWait("view/AddBackground.fxml", new AddBackgroundController(owner),
                 "Background");
     }
 
     private void addAccomplishment(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("view/AddAccomplishments.fxml", new AddAccomplishmentsController(userId),
+        OpenWindow.openWindowWait("view/AddAccomplishments.fxml", new AddAccomplishmentsController(owner),
                 "Accomplishment");
     }
 
     private void addLanguage(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("view/AddSupportedLanguage.fxml", new AddSupportedLanguageController(userId),
+        OpenWindow.openWindowWait("view/AddSupportedLanguage.fxml", new AddSupportedLanguageController(owner),
                 "Add Language");
     }
 
     private void addSkill(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("view/AddSkill.fxml", new AddSkillController(userId),
+        OpenWindow.openWindowWait("view/AddSkill.fxml", new AddSkillController(owner),
                 "Add Skill");
     }
 
     private void homePage(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Home.fxml", new HomeController(userId),
+        OpenWindow.openWindow("view/Home.fxml", new HomeController(owner),
                 "Home");
     }
 

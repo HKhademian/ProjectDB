@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.User;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -9,10 +10,10 @@ import javafx.scene.control.TextField;
 
 public class AddBackgroundController {
 
-    private int userId;
+    private User user;
 
-    public AddBackgroundController(int userId) {
-        this.userId = userId;
+    public AddBackgroundController(User user) {
+        this.user = user;
     }
 
     @FXML

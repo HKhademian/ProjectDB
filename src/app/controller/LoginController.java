@@ -80,7 +80,7 @@ public class LoginController {
         }
         else{
             loginButton.getScene().getWindow().hide();
-            OpenWindow.openWindow("view/Home.fxml", new HomeController(user.getUserId()),
+            OpenWindow.openWindow("view/Home.fxml", new HomeController(user),
                     "Linkedin - Home");
         }
 

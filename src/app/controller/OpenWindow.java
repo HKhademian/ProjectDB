@@ -14,7 +14,7 @@ public class OpenWindow {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(OpenWindow.class.getClassLoader().getResource(path));
         if(controller!=null)
-          loader.setController(controller);
+            loader.setController(controller);
         try {
             loader.load();
         } catch (IOException e) {
