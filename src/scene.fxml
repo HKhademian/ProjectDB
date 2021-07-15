@@ -7,6 +7,8 @@
   fx:controller="app.TestController"
   maxHeight="+Infinity" maxWidth="+Infinity" minHeight="100.0" minWidth="100.0" prefHeight="600.0" prefWidth="800.0"
   xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+  <Button fx:id="test" mnemonicParsing="false" prefHeight="28.0" prefWidth="617.0" text="test"/>
+
   <Label fx:id="label" prefHeight="95.0" prefWidth="600.0" text="Label" wrapText="true"/>
   <Button fx:id="btn" mnemonicParsing="false" prefHeight="28.0" prefWidth="617.0" text="test"/>
   <TextArea fx:id="text" prefHeight="112.0" wrapText="true"/>

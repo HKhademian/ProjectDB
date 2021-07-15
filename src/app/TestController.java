@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import app.controller.OpenWindow;
+import app.controller.SignupController;
 import app.model.Article;
 import app.model.User;
 import app.repository.*;
@@ -16,6 +18,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class TestController implements Initializable {
+  @FXML
+  private Button test;
 
   @FXML
   private Label label;
@@ -88,6 +92,10 @@ public class TestController implements Initializable {
       + "\n SQlite foreign:" + sqliteForeign
     );
 
+    test.setOnMouseClicked(event -> {
+      OpenWindow.openWindow("view/Signup.fxml", new SignupController(), "Signup");
+    });
+
 
     btn.setText("Check Logged User");
     btn.setOnMouseClicked(event -> {
@@ -102,8 +110,8 @@ public class TestController implements Initializable {
       int index = (int) (Math.random() * 500 + 500);
       Object res = loggedUser = UserRepository.register(
         "user" + index, "user",
-        "fUser #" + index,"lUser #" + index,
-         null, null, null, null, null
+        "fUser #" + index, "lUser #" + index,
+        null, null, null, null, null
       );
       text.setText("register res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
