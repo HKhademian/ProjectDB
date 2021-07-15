@@ -12,6 +12,11 @@ import javafx.scene.shape.Circle;
 
 public class ProfileController {
 
+    private int userId;
+    public ProfileController(int userId){
+        this.userId = userId;
+    }
+
     @FXML
     private Circle imagePlace;
 
@@ -111,6 +116,8 @@ public class ProfileController {
     @FXML
     private ImageView notification;
 
+    @FXML
+    private ImageView profile;
 
     private String nowIntro;
     private String nowAbout;
@@ -180,6 +187,9 @@ public class ProfileController {
 
         //Skill
         skillAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addSkill());
+
+        //Home icon
+        home.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> homePage());
 
         logout.setOnAction(event -> logOut());
     }
@@ -254,31 +264,37 @@ public class ProfileController {
 
     private void logOut(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("../view/Login.fxml", new LoginController(), "Linkedin - Login");
+        OpenWindow.openWindow("view/Login.fxml", new LoginController(), "Linkedin - Login");
     }
 
     private void addBackground(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("../view/AddBackground.fxml", new AddBackgroundController(),
+        OpenWindow.openWindowWait("view/AddBackground.fxml", new AddBackgroundController(userId),
                 "Background");
     }
 
     private void addAccomplishment(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("../view/AddAccomplishments.fxml", new AddAccomplishmentsController(),
+        OpenWindow.openWindowWait("view/AddAccomplishments.fxml", new AddAccomplishmentsController(userId),
                 "Accomplishment");
     }
 
     private void addLanguage(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("../view/AddSupportedLanguage.fxml", new AddSupportedLanguageController(),
+        OpenWindow.openWindowWait("view/AddSupportedLanguage.fxml", new AddSupportedLanguageController(userId),
                 "Add Language");
     }
 
     private void addSkill(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("../view/AddSkill.fxml", new AddSkillController(),
+        OpenWindow.openWindowWait("view/AddSkill.fxml", new AddSkillController(userId),
                 "Add Skill");
+    }
+
+    private void homePage(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Home.fxml", new HomeController(userId),
+                "Home");
     }
 
 }

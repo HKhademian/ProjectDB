@@ -85,7 +85,7 @@ public class LoginController {
     private void signup(){
         signupButton.getScene().getWindow().hide();
 
-        OpenWindow.openWindow("../view/Signup.fxml",new SignupController(), "Linkedin - Signup Page");
+        OpenWindow.openWindow("view/Signup.fxml",new SignupController(), "Linkedin - Signup Page");
     }
 
 
