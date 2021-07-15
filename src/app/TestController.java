@@ -17,25 +17,26 @@ public class TestController implements Initializable {
 
   @FXML
   private Label label;
-
   @FXML
   private Button btn;
-
   @FXML
   private TextArea text;
 
   @FXML
-  public TextField id;
+  private Button btnLogin;
+  @FXML
+  private Button btnRegister;
+
 
   @FXML
+  public TextField id;
+  @FXML
   public TextField code;
-
   @FXML
   public TextField title;
 
   @FXML
   public Button btnAddSkill;
-
   @FXML
   public Button btnAddLanguage;
 
@@ -66,6 +67,20 @@ public class TestController implements Initializable {
     btn.setText("Hello");
     btn.setOnMouseClicked(event -> {
       text.setText("" + UserRepository.login("admin", "admin"));
+    });
+
+    btnLogin.setOnMouseClicked(event -> {
+      Object res = UserRepository.login("admin", "admin");
+      text.setText("login res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+    });
+    btnRegister.setOnMouseClicked(event -> {
+      int index = (int) (Math.random() * 500 + 500);
+      Object res = UserRepository.register(
+        "user" + index, "user",
+        "User #" + index, "u" + index + "@u.u",
+        "900-" + index, null, null, null, null, null
+      );
+      text.setText("register res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
 
     btnAddSkill.setOnMouseClicked(event -> {

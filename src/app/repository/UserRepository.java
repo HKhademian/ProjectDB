@@ -35,7 +35,7 @@ public final class UserRepository extends _BaseRepository {
   }
 
   public static User register(String username, String password, String name, String email, String phone, String intro, String about, byte[] avatar, Date birthday, String location) {
-    final String SQL = "INSERT INTO `User` VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?) RETURNINT *;";
+    final String SQL = "INSERT INTO `User` VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?) RETURNING *;";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setString(1, username);
@@ -94,23 +94,6 @@ public final class UserRepository extends _BaseRepository {
         statement3.setLong(4, System.currentTimeMillis());
         statement3.executeUpdate();
       }
-      return null;
-    });
-  }
-
-  public static void commentOn(int userId, int articleId, int replyCommentId, String content) {
-    final String SQL = "INSERT INTO `Comment` VALUES (null,?,?,?,?,?,0)";
-    connect(connection -> {
-      final PreparedStatement statement = connection.prepareStatement(SQL);
-      statement.setInt(1, articleId);
-      if (replyCommentId > 0)
-        statement.setInt(2, replyCommentId);
-      else
-        statement.setNull(2, Types.INTEGER);
-      statement.setInt(3, userId);
-      statement.setString(4, content);
-      statement.setLong(5, System.currentTimeMillis());
-      statement.executeUpdate();
       return null;
     });
   }

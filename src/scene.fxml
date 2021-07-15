@@ -10,6 +10,12 @@
   <Label fx:id="label" prefHeight="95.0" prefWidth="600.0" text="Label" wrapText="true"/>
   <Button fx:id="btn" mnemonicParsing="false" prefHeight="28.0" prefWidth="617.0" text="test"/>
   <TextArea fx:id="text" prefHeight="112.0" wrapText="true"/>
+
+  <HBox>
+    <Button fx:id="btnLogin" text="Login"/>
+    <Button fx:id="btnRegister" text="Register"/>
+  </HBox>
+
   <HBox>
     <Label text="ID"/>
     <TextField fx:id="id" HBox.hgrow="ALWAYS"/>
