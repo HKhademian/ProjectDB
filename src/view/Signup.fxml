@@ -57,8 +57,8 @@
                 <Font name="Arial Bold" size="28.0" />
             </font>
         </Label>
-        <JFXCheckBox fx:id="privacyBox" layoutX="255.0" layoutY="573.0" prefHeight="21.0" prefWidth="130.0" text="agree with our" />
-        <JFXButton fx:id="signupButton" layoutX="510.0" layoutY="561.0" prefHeight="45.0" prefWidth="182.0" ripplerFill="WHITE" style="-fx-background-color: #212529;" text="SingUp" textFill="WHITE">
+        <JFXCheckBox fx:id="privacyBox" layoutX="253.0" layoutY="588.0" prefHeight="21.0" prefWidth="130.0" text="agree with our" />
+        <JFXButton fx:id="signupButton" layoutX="759.0" layoutY="576.0" prefHeight="45.0" prefWidth="182.0" ripplerFill="WHITE" style="-fx-background-color: #212529;" text="SingUp" textFill="WHITE">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
@@ -88,7 +88,7 @@
                 <Font size="18.0" />
             </font>
         </TextField>
-        <Label fx:id="privacy" layoutX="378.0" layoutY="573.0" prefHeight="21.0" prefWidth="130.0" text=" privacy and policy" underline="true">
+        <Label fx:id="privacy" layoutX="376.0" layoutY="588.0" prefHeight="21.0" prefWidth="130.0" text=" privacy and policy" underline="true">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
@@ -113,6 +113,7 @@
       </TextField>
       <Label layoutX="626.0" layoutY="471.0" text="Location" />
       <JFXComboBox fx:id="locationBox" editable="true" layoutX="691.0" layoutY="466.0" prefHeight="31.0" prefWidth="250.0" />
-      <Label layoutX="255.0" layoutY="512.0" prefHeight="21.0" prefWidth="250.0" text="for example : 2000-01-25" textFill="#0f7b87" />
+      <Label layoutX="255.0" layoutY="512.0" prefHeight="21.0" prefWidth="250.0" text="for example : 25-01-2000" textFill="#0f7b87" />
+      <Label fx:id="birthdayError" layoutX="255.0" layoutY="533.0" prefHeight="21.0" prefWidth="250.0" textFill="#e43131" />
     </children>
 </AnchorPane>
