@@ -102,8 +102,8 @@ public class TestController implements Initializable {
       int index = (int) (Math.random() * 500 + 500);
       Object res = loggedUser = UserRepository.register(
         "user" + index, "user",
-        "User #" + index, "u" + index + "@u.u",
-        "900-" + index, null, null, null, null, null
+        "fUser #" + index,"lUser #" + index,
+         null, null, null, null, null
       );
       text.setText("register res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });

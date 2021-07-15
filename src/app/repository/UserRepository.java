@@ -34,23 +34,22 @@ public final class UserRepository extends _BaseRepository {
     });
   }
 
-  public static User register(String username, String password, String name, String email, String phone, String intro, String about, byte[] avatar, Date birthday, String location) {
-    final String SQL = "INSERT INTO `User` VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?) RETURNING *;";
+  public static User register(String username, String password, String firstname, String lastname, String intro, String about, byte[] avatar, Date birthday, String location) {
+    final String SQL = "INSERT INTO `User` (userId, username, password, firstname, lastname, intro, about, avatar, accomp, birthday, location) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?) RETURNING *;";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setString(1, username);
       statement.setString(2, password);
-      statement.setString(3, name);
-      statement.setString(4, email);
-      statement.setString(5, phone);
-      statement.setString(6, intro);
-      statement.setString(7, about);
-      statement.setBytes(8, avatar);
+      statement.setString(3, firstname);
+      statement.setString(4, lastname);
+      statement.setString(5, intro);
+      statement.setString(6, about);
+      statement.setBytes(7, avatar);
       if (birthday != null)
-        statement.setLong(9, birthday.getTime());
+        statement.setLong(8, birthday.getTime());
       else
-        statement.setNull(9, Types.INTEGER);
-      statement.setString(10, location);
+        statement.setNull(8, Types.INTEGER);
+      statement.setString(9, location);
       final ResultSet res = statement.executeQuery();
       return res.next() ? User.from(res) : null;
     });

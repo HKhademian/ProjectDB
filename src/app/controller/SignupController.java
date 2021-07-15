@@ -114,8 +114,8 @@ public class SignupController {
             String name = nameBox.getText().trim();
             String family = familyBox.getText().trim();
 
-            User user = UserRepository.register(username, password, name + " " + family,
-                    "", "", "","",null,birthday,"");
+            User user = UserRepository.register(username, password, name , family,
+                    "", "", null,birthday,"");
 
             if(user == null){
                 usernameError.setText("This username token");
