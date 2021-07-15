@@ -1,11 +1,13 @@
 package app.repository;
 
+import app.model.Article;
 import app.model.Notification;
 import app.model.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public final class UserRepository extends _BaseRepository {
   }
 
   public static User getUser(int userId) {
-    final String SQL = "SELECT * from `User` where `userId`=?";
+    final String SQL = "SELECT * from `User` where `userId`=?;";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setInt(1, userId);
@@ -24,7 +26,7 @@ public final class UserRepository extends _BaseRepository {
   }
 
   public static User login(String username, String password) {
-    final String SQL = "select * from `User` where `username`=? and `password`=?";
+    final String SQL = "select * from `User` where `username`=? and `password`=?;";
     return connect(connection -> {
       final PreparedStatement statement = connection.prepareStatement(SQL);
       statement.setString(1, username);
@@ -53,10 +55,6 @@ public final class UserRepository extends _BaseRepository {
       final ResultSet res = statement.executeQuery();
       return res.next() ? User.from(res) : null;
     });
-  }
-
-  public static List<Notification> getNotification(int userId) {
-    return null;
   }
 
   public static boolean toggleLike(int userId, int articleId, int commentId) {
@@ -99,6 +97,19 @@ public final class UserRepository extends _BaseRepository {
       }
     });
     return res != null && res;
+  }
+
+  public static List<Notification> getNotification(int userId) {
+    final String SQL = "select * from `Notification` where `userId`=?;";
+    return connect(connection -> {
+      final PreparedStatement statement = connection.prepareStatement(SQL);
+      statement.setInt(1, userId);
+      final ResultSet res = statement.executeQuery();
+      final List<Notification> result = new ArrayList<>();
+      while (res.next())
+        result.add(Notification.from(res));
+      return result;
+    });
   }
 
 }
