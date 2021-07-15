@@ -1,5 +1,7 @@
 package app.model;
 
+import com.sun.istack.internal.NotNull;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,7 +30,7 @@ public class _BaseModel {
     }
   }
 
-  protected static Long tryLong(ResultSet res, String column, long defVal) {
+  protected static long tryLong(ResultSet res, String column, long defVal) {
     try {
       return res.getLong(column);
     } catch (SQLException ex) {
@@ -44,7 +46,8 @@ public class _BaseModel {
     }
   }
 
-  protected static String tryString(ResultSet res, String column, String defVal) {
+  protected static @NotNull
+  String tryString(ResultSet res, String column, @NotNull String defVal) {
     try {
       return res.getString(column);
     } catch (SQLException ex) {
@@ -60,7 +63,8 @@ public class _BaseModel {
     }
   }
 
-  protected static byte[] tryByteArray(ResultSet res, String column, byte[] defVal) {
+  protected static @NotNull
+  byte[] tryByteArray(ResultSet res, String column, @NotNull byte[] defVal) {
     try {
       return res.getBytes(column);
     } catch (SQLException ex) {
