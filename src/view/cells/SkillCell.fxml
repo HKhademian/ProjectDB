@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="108.0" prefWidth="428.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fx:id="edit" fitHeight="24.0" fitWidth="28.0" layoutX="295.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../assets/edit.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ImageView fx:id="delete" fitHeight="24.0" fitWidth="28.0" layoutX="371.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../assets/delete.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <TextField fx:id="skill" layoutX="14.0" layoutY="21.0" style="-fx-background-color: #F8F9FA;" />
+      <Label fx:id="endorseNumber" layoutX="208.0" layoutY="27.0" text="endorse" />
+      <JFXButton fx:id="endorseButton" layoutX="14.0" layoutY="63.0" prefHeight="31.0" prefWidth="92.0" style="-fx-background-color: #000000;" text="Endorse" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+    </children>
+</AnchorPane>
