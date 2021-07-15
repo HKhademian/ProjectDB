@@ -13,8 +13,10 @@ import javafx.scene.shape.Circle;
 public class ProfileController {
 
     private int userId;
-    public ProfileController(int userId){
+    private int ownerId;
+    public ProfileController(int userId, int ownerId) {
         this.userId = userId;
+        this.ownerId = ownerId;
     }
 
     @FXML

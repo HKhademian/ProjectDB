@@ -80,13 +80,13 @@ public class HomeController {
 
     private void profilePage(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Profile.fxml", new ProfileController(userId),
+        OpenWindow.openWindow("view/Profile.fxml", new ProfileController(userId, userId),
                 "Profile");
     }
 
     private void createPost(){
         imagePlace.getScene().getWindow();
-        OpenWindow.openWindowWait("view/CreateArticle.fxml", new CreateArticleController(userId),
+        OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(userId),
                 "Create Article");
     }
 
