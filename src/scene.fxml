@@ -11,8 +11,13 @@
   <Button fx:id="btn" mnemonicParsing="false" prefHeight="28.0" prefWidth="617.0" text="test"/>
   <TextArea fx:id="text" prefHeight="112.0" wrapText="true"/>
   <HBox>
-    <Label text="Skill Title"/>
-    <TextField fx:id="title" HBox.hgrow="ALWAYS"/>
-    <Button fx:id="btnAdd" text="Add"/>
+    <Label text="Code"/>
+    <TextField fx:id="code" HBox.hgrow="ALWAYS"/>
   </HBox>
+  <HBox>
+    <Label text="Title"/>
+    <TextField fx:id="title" HBox.hgrow="ALWAYS"/>
+  </HBox>
+  <Button fx:id="btnAddSkill" text="Add Skill"/>
+  <Button fx:id="btnAddLanguage" text="Add Language"/>
 </VBox>

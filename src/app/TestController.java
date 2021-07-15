@@ -4,7 +4,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
-import app.model._BaseModel;
+import app.repository.LanguageRepository;
 import app.repository.SkillRepository;
 import app.repository.UserRepository;
 import app.repository._BaseRepository;
@@ -27,10 +27,16 @@ public class TestController implements Initializable {
   private TextArea text;
 
   @FXML
+  public TextField code;
+
+  @FXML
   public TextField title;
 
   @FXML
-  public Button btnAdd;
+  public Button btnAddSkill;
+
+  @FXML
+  public Button btnAddLanguage;
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -52,8 +58,13 @@ public class TestController implements Initializable {
       text.setText("" + UserRepository.login("admin", "admin"));
     });
 
-    btnAdd.setOnMouseClicked(event -> {
+    btnAddSkill.setOnMouseClicked(event -> {
       Object res = SkillRepository.addSkill(title.getText());
+      text.setText("res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+    });
+
+    btnAddLanguage.setOnMouseClicked(event -> {
+      Object res = LanguageRepository.addLanguage(code.getText(), title.getText());
       text.setText("res: " + res + "\nLastErr:" + _BaseRepository.lastError);
     });
   }
