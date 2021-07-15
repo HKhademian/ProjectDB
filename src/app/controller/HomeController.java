@@ -47,13 +47,13 @@ public class HomeController {
     private ImageView profile;
 
     @FXML
-    private JFXButton addPostButton;
+    private JFXButton addArticleButton;
 
     @FXML
     private JFXButton logout;
 
     @FXML
-    private JFXListView<?> postList;
+    private JFXListView<?> articleList;
 
     @FXML
     private JFXComboBox<?> sortedByComboBox;
@@ -68,7 +68,7 @@ public class HomeController {
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
 
         //createPost
-        addPostButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> createPost());
+        addArticleButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> createArticle());
 
         logout.setOnAction(event -> logOut());
     }
@@ -84,7 +84,7 @@ public class HomeController {
                 "Profile");
     }
 
-    private void createPost(){
+    private void createArticle(){
         imagePlace.getScene().getWindow();
         OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(userId),
                 "Create Article");
