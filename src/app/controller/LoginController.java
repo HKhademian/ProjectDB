@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.model.User;
+import app.repository.UserRepository;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -72,13 +74,15 @@ public class LoginController {
             password = passwordShowField.getText().replaceFirst("\\s++$", "");
         }
 
-        /*User user = User.login(username, password);
+        User user = UserRepository.login(username, password);
         if(user == null){
             incorrectLabel.setText("Incorrect username or password");
         }
         else{
-            profilePage(user);
-        }*/
+            loginButton.getScene().getWindow().hide();
+            OpenWindow.openWindow("view/HomePage.fxml", new HomeController(user.getUserId()),
+                    "Linkedin - Home");
+        }
 
     }
 
