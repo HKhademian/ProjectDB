@@ -1,16 +1,14 @@
 package app.controller;
 
+import app.model.Article;
 import app.model.User;
+import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
 
-import java.io.File;
+import java.util.Date;
 
 public class AddArticleController {
 
@@ -60,7 +58,8 @@ public class AddArticleController {
             titleError.setText("Title must be write");
         }
         else{
-            //add to database
+            String text = textBox.getText().trim();
+            Repository.saveArticle(new Article(-1, user.getUserId(), title, text, new Date(), false, 0 ,0));
             postButton.getScene().getWindow().hide();
         }
     }
