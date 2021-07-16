@@ -4,7 +4,7 @@ import app.model.Notification
 import app.model.User
 import java.sql.Connection
 import java.sql.Types
-import java.util.*
+import java.util.Date
 
 object UserRepository {
 	fun getUser(userId: Int): User? {
@@ -12,8 +12,8 @@ object UserRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, userId)
-			val res = statement.executeQuery()
-			if (res.next()) User.from(res) else null
+			statement.executeQuery()
+				.tryRead<User>()
 		}
 	}
 
@@ -24,8 +24,8 @@ object UserRepository {
 			val statement = connection.prepareStatement(SQL)
 			statement.setString(1, username)
 			statement.setString(2, password)
-			val res = statement.executeQuery()
-			if (res.next()) User.from(res) else null
+			statement.executeQuery()
+				.tryRead<User>()
 		}
 	}
 
@@ -62,8 +62,8 @@ object UserRepository {
 				statement.setLong(8, user.birthday!!.time)
 			else statement.setNull(8, Types.INTEGER)
 			statement.setString(9, user.location)
-			val res = statement.executeQuery()
-			if (res.next()) User.from(res) else null
+			statement.executeQuery()
+				.tryRead<User>()
 		}
 	}
 
@@ -112,10 +112,8 @@ object UserRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, userId)
-			val res = statement.executeQuery()
-			generateSequence {
-				if (res.next()) Notification.from(res) else null
-			}.toList()
+			statement.executeQuery()
+				.list<Notification>()
 		}!!
 	}
 }

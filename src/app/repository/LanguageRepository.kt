@@ -2,17 +2,14 @@ package app.repository
 
 import app.model.Language
 import java.sql.Connection
-import java.util.ArrayList
 
 object LanguageRepository {
 	fun listLanguages(): List<Language> {
 		val SQL = "SELECT * from `Language`;"
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
-			val res = statement.executeQuery()
-			val result: MutableList<Language> = ArrayList()
-			while (res.next()) result.add(Language.from(res))
-			result
+			statement.executeQuery()
+				.list<Language>()
 		}!!
 	}
 
@@ -21,8 +18,8 @@ object LanguageRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setString(1, langCode)
-			val res = statement.executeQuery()
-			if (res.next()) Language.from(res) else null
+			statement.executeQuery()
+				.tryRead<Language>()
 		}
 	}
 
@@ -33,8 +30,8 @@ object LanguageRepository {
 			val statement = connection.prepareStatement(SQL)
 			statement.setString(1, langCode)
 			statement.setString(2, title)
-			val res = statement.executeQuery()
-			if (res.next()) Language.from(res) else null
+			statement.executeQuery()
+				.tryRead<Language>()
 		}
 	}
 }

@@ -3,7 +3,6 @@ package app.repository
 import app.model.Article
 import java.sql.Connection
 import java.sql.Types
-import java.util.ArrayList
 
 object ArticleRepository {
 	@JvmStatic
@@ -12,8 +11,8 @@ object ArticleRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, articleId)
-			val res = statement.executeQuery()
-			if (res.next()) Article.from(res) else null
+			statement.executeQuery()
+				.tryRead<Article>()
 		}
 	}
 
@@ -22,10 +21,8 @@ object ArticleRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, userId)
-			val res = statement.executeQuery()
-			val result: MutableList<Article> = ArrayList()
-			while (res.next()) result.add(Article.from(res))
-			result
+			statement.executeQuery()
+				.list<Article>()
 		}!!
 	}
 
@@ -45,8 +42,8 @@ object ArticleRepository {
 				statement.setLong(5, article.time.time)
 			else statement.setLong(5, System.currentTimeMillis())
 			statement.setInt(6, if (article.featured) 1 else 0)
-			val res = statement.executeQuery()
-			if (res.next()) Article.from(res) else null
+			statement.executeQuery()
+				.tryRead<Article>()
 		}
 	}
 
@@ -56,21 +53,19 @@ object ArticleRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, articleId)
-			val res = statement.executeQuery()
-			if (res.next()) Article.from(res) else null
+			statement.executeQuery()
+				.tryRead<Article>()
 		}
 	}
 
 	fun getUserHome(userId: Int): List<Article> {
-		val SQL =
-			"SELECT * from `Article` where `articleId` in (select `articleId` from Home where `userId`=? order by `time` desc);"
+		val SQL = """SELECT * from `Article`
+			 where `articleId` in	(select `articleId` from Home where `userId`=? order by `time` desc);"""
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, userId)
-			val res = statement.executeQuery()
-			val result: MutableList<Article> = ArrayList()
-			while (res.next()) result.add(Article.from(res))
-			result
+			statement.executeQuery()
+				.list<Article>()
 		}!!
 	}
 }

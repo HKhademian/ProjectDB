@@ -28,7 +28,8 @@ object BackgroundRepository {
 				statement.setLong(6, bg.fromTime.time)
 			else
 				statement.setNull(6, Types.INTEGER)
-			statement.executeQuery()?.let { if (it.next()) Background.from(it) else null }
+			statement.executeQuery()
+				.tryRead<Background>()
 		}
 	}
 
@@ -39,7 +40,8 @@ object BackgroundRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, bgId)
-			statement.executeQuery()?.let { if (it.next()) Background.from(it) else null }
+			statement.executeQuery()
+				.tryRead<Background>()
 		}
 	}
 

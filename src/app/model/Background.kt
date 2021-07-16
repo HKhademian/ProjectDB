@@ -1,11 +1,6 @@
 package app.model
 
-import java.sql.ResultSet
-import java.util.*
-
-enum class BgType {
-	Work, Study, Research,
-}
+import java.util.Date
 
 data class Background(
 	var bgId: Int,
@@ -15,20 +10,7 @@ data class Background(
 	var fromTime: Date,
 	var toTime: Date?,
 ) {
-
-	companion object {
-
-		@JvmStatic
-		fun from(res: ResultSet): Background {
-			return Background(
-				res.tryInt("bgId") ?: 0,
-				res.tryInt("userId") ?: 0,
-				res.tryString("title") ?: "",
-				BgType.values()[res.tryInt("type") ?: 0],
-				res.tryDate("fromTime") ?: Date(0),
-				res.tryDate("toTime"),
-			)
-		}
+	enum class BgType {
+		Work, Study, Research,
 	}
-
 }

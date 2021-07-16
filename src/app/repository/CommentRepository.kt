@@ -2,7 +2,6 @@ package app.repository
 
 import app.model.Comment
 import java.sql.Connection
-import java.util.ArrayList
 
 object CommentRepository {
 	@JvmStatic
@@ -11,8 +10,8 @@ object CommentRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, commentId)
-			val res = statement.executeQuery()
-			if (res.next()) Comment.from(res) else null
+			statement.executeQuery()
+				.tryRead<Comment>()
 		}
 	}
 
@@ -25,10 +24,8 @@ object CommentRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, articleId)
-			val res = statement.executeQuery()
-			val result: MutableList<Comment> = ArrayList()
-			while (res.next()) result.add(Comment.from(res))
-			result
+			statement.executeQuery()
+				.list<Comment>()
 		}!!
 	}
 
@@ -38,8 +35,8 @@ object CommentRepository {
 		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, commentId)
-			val res = statement.executeQuery()
-			if (res.next()) Comment.from(res) else null
+			statement.executeQuery()
+				.tryRead<Comment>()
 		}
 	}
 
@@ -60,8 +57,8 @@ object CommentRepository {
 			statement.setString(2, content)
 			statement.setLong(3, System.currentTimeMillis())
 			statement.setInt(4, if (replyCommentId > 0) replyCommentId else articleId)
-			val res = statement.executeQuery()
-			if (res.next()) Comment.from(res) else null
+			statement.executeQuery()
+				.tryRead<Comment>()
 		}
 	}
 }
