@@ -1,7 +1,6 @@
 package app.controller;
 
 import app.model.User;
-import app.repository.UserRepository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;

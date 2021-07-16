@@ -1,7 +1,7 @@
 package app.controller;
 
 import app.model.User;
-import app.repository.UserRepository;
+import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -74,7 +74,7 @@ public class LoginController {
             password = passwordShowField.getText().replaceFirst("\\s++$", "");
         }
 
-        User user = UserRepository.login(username, password);
+        User user = Repository.loginUser(username, password);
         if(user == null){
             incorrectLabel.setText("Incorrect username or password");
         }

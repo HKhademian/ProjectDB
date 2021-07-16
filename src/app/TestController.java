@@ -94,70 +94,70 @@ public class TestController implements Initializable {
     });
 
     btnLogin.setOnMouseClicked(event -> {
-      Object res = loggedUser = UserRepository.login(id.getText(), code.getText());
+      Object res = loggedUser = Repository.loginUser(id.getText(), code.getText());
       text.setText("login res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnRegister.setOnMouseClicked(event -> {
       int index = (int) (Math.random() * 500 + 500);
-      Object res = loggedUser = UserRepository.register(
-        "user" + index, "user",
+      Object res = loggedUser = Repository.registerUser(new User(
+        0, "user" + index,
         "fUser #" + index, "lUser #" + index,
-        null, null, null, null, null
-      );
+        null, null, null, null
+      ), "user");
       text.setText("register res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnToggleLike.setOnMouseClicked(event -> {
-      Object res = UserRepository.toggleLike(loggedUser.getUserId(), Integer.parseInt(id.getText()), Integer.parseInt(code.getText()));
+      Object res = Repository.toggleUserLike(loggedUser.getUserId(), Integer.parseInt(id.getText()), Integer.parseInt(code.getText()));
       text.setText("toggleLike res: " + res + "\nLastErr:" + Database.lastError);
     });
 
     btnAddSkill.setOnMouseClicked(event -> {
-      Object res = SkillRepository.addSkill(title.getText());
+      Object res = Repository.addSkill(title.getText());
       text.setText("addSkill res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnAddLanguage.setOnMouseClicked(event -> {
-      Object res = LanguageRepository.addLanguage(code.getText(), title.getText());
+      Object res = Repository.addLanguage(code.getText(), title.getText());
       text.setText("addLanguage res: " + res + "\nLastErr:" + Database.lastError);
     });
 
 
     btnGetArticle.setOnMouseClicked(event -> {
-      Object res = ArticleRepository.getArticle(Integer.parseInt(id.getText()));
+      Object res = Repository.getArticle(Integer.parseInt(id.getText()));
       text.setText("getArticle res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSaveArticle1.setOnMouseClicked(event -> {
       final Article article = new Article(
         Integer.parseInt(id.getText()), loggedUser.getUserId(), title.getText(), text.getText(), new Date(), true, 0, 0
       );
-      Object res = ArticleRepository.saveArticle(article);
+      Object res = Repository.saveArticle(article);
       text.setText("saveArticle `edit` res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSaveArticle2.setOnMouseClicked(event -> {
       final Article article = new Article(
         0, loggedUser.getUserId(), title.getText(), text.getText(), new Date(), true, 0, 0
       );
-      Object res = ArticleRepository.saveArticle(article);
+      Object res = Repository.saveArticle(article);
       text.setText("saveArticle `new` res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnDeleteArticle.setOnMouseClicked(event -> {
-      Object res = ArticleRepository.deleteArticle(Integer.parseInt(id.getText()));
+      Object res = Repository.deleteArticle(Integer.parseInt(id.getText()));
       text.setText("deleteArticle res: " + res + "\nLastErr:" + Database.lastError);
     });
 
     btnGetComment.setOnMouseClicked(event -> {
-      Object res = CommentRepository.getComment(Integer.parseInt(id.getText()));
+      Object res = Repository.getComment(Integer.parseInt(id.getText()));
       text.setText("getComment res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnListComment.setOnMouseClicked(event -> {
-      Object res = CommentRepository.listComments(Integer.parseInt(id.getText()));
+      Object res = Repository.listComments(Integer.parseInt(id.getText()));
       text.setText("listComments res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnDeleteComment.setOnMouseClicked(event -> {
-      Object res = CommentRepository.deleteComment(Integer.parseInt(id.getText()));
+      Object res = Repository.deleteComment(Integer.parseInt(id.getText()));
       text.setText("deleteComment res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSendComment.setOnMouseClicked(event -> {
-      Object res = CommentRepository.commentOn(
+      Object res = Repository.sendCommentOn(
         loggedUser.getUserId(),
         Integer.parseInt(id.getText()),
         0,
@@ -166,7 +166,7 @@ public class TestController implements Initializable {
       text.setText("commentOn res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSendReply.setOnMouseClicked(event -> {
-      Object res = CommentRepository.commentOn(
+      Object res = Repository.sendCommentOn(
         loggedUser.getUserId(),
         0,
         Integer.parseInt(id.getText()),
