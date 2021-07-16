@@ -10,6 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.util.ArrayList;
+
 public class AddSkillController {
 
     private User user;
@@ -19,7 +21,7 @@ public class AddSkillController {
     }
 
     @FXML
-    private JFXComboBox<Skill> skills;
+    private JFXComboBox<String> skills;
 
     @FXML
     private JFXButton cancelButton;
@@ -33,16 +35,22 @@ public class AddSkillController {
     @FXML
     public void initialize(){
 
-        ObservableList<Skill> skillList = FXCollections.observableArrayList(Repository.listSkills());
+        ArrayList<String> skill = new ArrayList<>();
+        ArrayList<Integer> id = new ArrayList<>();
+        for(Skill skill1: Repository.listSkills()){
+            skill.add(skill1.getTitle());
+            id.add(skill1.getSkillId());
+        }
+        ObservableList<String> skillList = FXCollections.observableArrayList(skill);
         skills.setItems(skillList);
 
         skillError.setVisible(false);
 
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
-        addButton.setOnAction(event -> saveBackground());
+        addButton.setOnAction(event -> saveSkill());
     }
 
-    private void saveBackground(){
+    private void saveSkill(){
         boolean valid = true;
         //check skill an add it
         addButton.getScene().getWindow().hide();
