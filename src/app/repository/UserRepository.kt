@@ -89,6 +89,45 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 	} == true
 }
 
+@kotlin.ExperimentalStdlibApi
+fun updateUserPersonalInfo(
+	userId: Int,
+	firstName: String?,
+	lastName: String?,
+	intro: String?,
+	about: String?,
+	avatar: ByteArray?,
+	accomp: String?,
+	birthday: Date?,
+	location: String?,
+): Boolean =
+	connect {
+		val sql = "UPDATE `User` SET " + buildList {
+			if (firstName != null) add("firstname=?")
+			if (lastName != null) add("lastname=?")
+			if (intro != null) add("intro=?")
+			if (about != null) add("about=?")
+			if (avatar != null) add("avatar=?")
+			if (accomp != null) add("accomp=?")
+			if (birthday != null) add("birthday=?")
+			if (location != null) add("location=?")
+		}.joinToString(",") + " WHERE `userId`=?;"
+
+		var i = 0
+		val stmt = it.prepareStatement(sql)
+		if (firstName != null) stmt.setString(++i, firstName)
+		if (lastName != null) stmt.setString(++i, lastName)
+		if (intro != null) stmt.setString(++i, intro)
+		if (about != null) stmt.setString(++i, about)
+		if (avatar != null) stmt.setBytes(++i, avatar)
+		if (accomp != null) stmt.setString(++i, accomp)
+		if (birthday != null) stmt.setLong(++i, birthday.time)
+		if (location != null) stmt.setString(++i, location)
+		stmt.setInt(++i, userId)
+
+		stmt.executeUpdate() > 0
+	} == true
+
 //TODO: updateAvatar(int userId, byte[] avatar)
 
 //TODO: updatePersonalInfo(int userId, String firstName, String lastName, String location)

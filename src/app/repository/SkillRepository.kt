@@ -37,7 +37,7 @@ fun addSkill(title: String?): Skill? {
 
 
 fun listUserSkill(userId: Int): List<Skill> {
-	val SQL = "SELECT S.* from `Skill` S JOIN 'User_Skill' US where US.`userId`=?;"
+	val SQL = "SELECT S.* from `Skill` S JOIN 'User_Skill' US ON S.skillId=US.skillId where US.`userId`=?;"
 	return connect { connection: Connection ->
 		val statement = connection.prepareStatement(SQL)
 		statement.setInt(1, userId)
