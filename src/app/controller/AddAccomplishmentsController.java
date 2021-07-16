@@ -32,10 +32,10 @@ public class AddAccomplishmentsController {
         titleError.setVisible(false);
 
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
-        saveButton.setOnAction(event -> saveBackground());
+        saveButton.setOnAction(event -> saveAccomplishment());
     }
 
-    private void saveBackground(){
+    private void saveAccomplishment(){
         boolean valid = true;
         if(titleBox.getText().trim().isEmpty()){
             titleError.setVisible(true);
