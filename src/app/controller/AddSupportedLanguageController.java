@@ -1,8 +1,12 @@
 package app.controller;
 
+import app.model.Language;
 import app.model.User;
+import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -15,7 +19,7 @@ public class AddSupportedLanguageController {
     }
 
     @FXML
-    private JFXComboBox<?> languages;
+    private JFXComboBox<Language> languages;
 
     @FXML
     private JFXButton cancelButton;
@@ -28,6 +32,10 @@ public class AddSupportedLanguageController {
 
     @FXML
     public void initialize(){
+
+        ObservableList<Language> languagesList = FXCollections.observableArrayList(Repository.listLanguages());
+        languages.setItems(languagesList);
+
         languageError.setVisible(false);
 
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
