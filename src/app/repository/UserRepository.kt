@@ -64,7 +64,7 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 		SQL2 = "DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;"
 		SQL3 = "INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,null,0);"
 	}
-	val res = connect { connection: Connection ->
+	return connect { connection: Connection ->
 		val statement1 = connection.prepareStatement(SQL1)
 		statement1.setInt(1, userId)
 		statement1.setInt(2, articleId)
