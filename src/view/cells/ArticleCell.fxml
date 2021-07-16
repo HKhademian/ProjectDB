@@ -6,12 +6,13 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="rootAnchorPane" prefHeight="532.0" prefWidth="598.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootAnchorPane" prefHeight="520.0" prefWidth="598.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <TextArea fx:id="title" editable="false" layoutX="22.0" layoutY="14.0" prefHeight="67.0" prefWidth="557.0" style="-fx-background-color: #F8F9FA;" />
-      <TextArea fx:id="content" layoutX="22.0" layoutY="94.0" prefHeight="294.0" prefWidth="557.0" style="-fx-background-color: #F8F9FA;" />
-      <ImageView fitHeight="41.0" fitWidth="31.0" layoutX="22.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+        <TextArea fx:id="title" editable="false" layoutX="21.0" layoutY="85.0" prefHeight="67.0" prefWidth="557.0" style="-fx-background-color: #F8F9FA;" />
+      <TextArea fx:id="content" layoutX="21.0" layoutY="165.0" prefHeight="294.0" prefWidth="557.0" style="-fx-background-color: #F8F9FA;" />
+      <ImageView fx:id="like" fitHeight="41.0" fitWidth="31.0" layoutX="21.0" layoutY="471.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/thumb-up.png" />
          </image>
@@ -19,11 +20,46 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fitHeight="41.0" fitWidth="31.0" layoutX="77.0" layoutY="438.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="unlike" fitHeight="41.0" fitWidth="31.0" layoutX="21.0" layoutY="471.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/like.png" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
-      <Label layoutX="60.0" layoutY="405.0" text="Like" />
+      <Label layoutX="59.0" layoutY="476.0" text="Like" />
+      <ImageView fx:id="comment" fitHeight="38.0" fitWidth="40.0" layoutX="127.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/comment.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="share" fitHeight="39.0" fitWidth="31.0" layoutX="258.0" layoutY="471.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/share.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <Label fx:id="commentLabel" layoutX="173.0" layoutY="476.0" text="Comment">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Label>
+      <Label fx:id="shareLabel" layoutX="298.0" layoutY="477.0" text="Share">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Label>
+      <Circle fx:id="imagePlace" fill="#c9c9c9" layoutX="52.0" layoutY="40.0" radius="26.0" stroke="#c9c9c9" strokeType="INSIDE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Circle>
+      <Label fx:id="time" layoutX="92.0" layoutY="30.0" prefHeight="21.0" prefWidth="227.0" textFill="#7213ee" />
     </children>
 </AnchorPane>
