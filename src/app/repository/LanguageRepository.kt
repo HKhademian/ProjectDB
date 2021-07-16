@@ -12,10 +12,10 @@ fun listLanguages(): List<Language> {
 		val statement = connection.prepareStatement(SQL)
 		statement.executeQuery()
 			.list<Language>()
-	}!!
+	} ?: emptyList()
 }
 
-fun getLanguage(langCode: String): Language? {
+fun getLanguageById(langCode: String): Language? {
 	val SQL = "SELECT * from `Language` where `langCode`=?;"
 	return connect { connection: Connection ->
 		val statement = connection.prepareStatement(SQL)
@@ -34,4 +34,24 @@ fun addLanguage(langCode: String, title: String): Language? {
 		statement.executeQuery()
 			.tryRead<Language>()
 	}
+}
+
+fun addUserLanguage(userId: Int, langCode: String): Boolean {
+	val SQL = "INSERT INTO `User_Lang` (`userId`, `langCode`) VALUES (?,?);"
+	return connect { connection: Connection ->
+		val statement = connection.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.setString(2, langCode)
+		statement.executeUpdate() > 0
+	} == true
+}
+
+fun removeUserLanguage(userId: Int, langCode: String): Boolean {
+	val SQL = "DELETE FROM `User_Lang` WHERE `userId`=? AND `langCode`=?;"
+	return connect { connection: Connection ->
+		val statement = connection.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.setString(2, langCode)
+		statement.executeUpdate() > 0
+	} == true
 }

@@ -145,7 +145,7 @@ public class TestController implements Initializable {
     });
 
     btnGetComment.setOnMouseClicked(event -> {
-      Object res = Repository.getComment(Integer.parseInt(id.getText()));
+      Object res = Repository.getCommentById(Integer.parseInt(id.getText()));
       text.setText("getComment res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnListComment.setOnMouseClicked(event -> {

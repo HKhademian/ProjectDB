@@ -3,11 +3,9 @@
 
 package app.repository
 
-import app.model.Notification
 import app.model.User
 import java.sql.Connection
 import java.sql.Types
-import java.util.Date
 
 fun getUserById(userId: Int): User? {
 	val SQL = "SELECT * from `User` where `userId`=?;"
@@ -88,58 +86,5 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 			statement3.executeUpdate()
 			return@connect true
 		}
-	}
-	return res != null && res
-}
-
-fun getUserNotification(userId: Int): List<Notification> {
-	val SQL = "select * from `Notification` where `userId`=?;"
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
-		statement.setInt(1, userId)
-		statement.executeQuery()
-			.list<Notification>()
-	}!!
-}
-
-fun addUserSkill(userId: Int, skillId: Int, level: Int): Boolean {
-	val SQL = "INSERT INTO `User_Skill` (`userId`, `skillId`, `level`, `time`) VALUES (?,?,?,?);"
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
-		statement.setInt(1, userId)
-		statement.setInt(2, skillId)
-		statement.setInt(3, level)
-		statement.setLong(4, System.currentTimeMillis())
-		statement.executeUpdate() > 0
-	} == true
-}
-
-fun removeUserSkill(userId: Int, skillId: Int): Boolean {
-	val SQL = "DELETE FROM `User_Skill` WHERE `userId`=? AND `skillId`=?;"
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
-		statement.setInt(1, userId)
-		statement.setInt(2, skillId)
-		statement.executeUpdate() > 0
-	} == true
-}
-
-fun addUserLanguage(userId: Int, langCode: String): Boolean {
-	val SQL = "INSERT INTO `User_Lang` (`userId`, `langCode`) VALUES (?,?);"
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
-		statement.setInt(1, userId)
-		statement.setString(2, langCode)
-		statement.executeUpdate() > 0
-	} == true
-}
-
-fun removeUserLanguage(userId: Int, langCode: String): Boolean {
-	val SQL = "DELETE FROM `User_Lang` WHERE `userId`=? AND `langCode`=?;"
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
-		statement.setInt(1, userId)
-		statement.setString(2, langCode)
-		statement.executeUpdate() > 0
 	} == true
 }

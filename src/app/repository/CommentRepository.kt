@@ -6,7 +6,7 @@ package app.repository
 import app.model.Comment
 import java.sql.Connection
 
-fun getComment(commentId: Int): Comment? {
+fun getCommentById(commentId: Int): Comment? {
 	val SQL = "SELECT * from `CommentCounted` where `commentId`=?;"
 	return connect { connection: Connection ->
 		val statement = connection.prepareStatement(SQL)
@@ -26,7 +26,7 @@ fun listComments(articleId: Int): List<Comment> {
 		statement.setInt(1, articleId)
 		statement.executeQuery()
 			.list<Comment>()
-	}!!
+	} ?: emptyList()
 }
 
 fun deleteComment(commentId: Int): Comment? {
@@ -50,7 +50,9 @@ fun sendCommentOn(userId: Int, articleId: Int, replyCommentId: Int, content: Str
 			(`userId`, `content`, `time`, `notified`, `articleId`, `reply_commentId`)
 			SELECT ?,?,?,0,`articleId`,`commentId` from `Comment` where `commentId`=? RETURNING *;"""
 	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(if (replyCommentId > 0) SQL_R else SQL_C)
+		val statement = if (replyCommentId > 0)
+			connection.prepareStatement(SQL_R)
+		else connection.prepareStatement(SQL_C)
 		statement.setInt(1, userId)
 		statement.setString(2, content)
 		statement.setLong(3, System.currentTimeMillis())

@@ -12,10 +12,10 @@ fun listSkills(): List<Skill> {
 		val statement = connection.prepareStatement(SQL)
 		statement.executeQuery()
 			.list<Skill>()
-	}!!
+	} ?: emptyList()
 }
 
-fun getSkill(skillId: Int): Skill? {
+fun getSkillById(skillId: Int): Skill? {
 	val SQL = "SELECT * from `Skill` where `skillId`=?;"
 	return connect { connection: Connection ->
 		val statement = connection.prepareStatement(SQL)
@@ -35,25 +35,35 @@ fun addSkill(title: String?): Skill? {
 	}
 }
 
-fun addSkillEndorse(byUserId: Int, userId: Int, skillId: Int): Boolean {
-	val SQL = "INSERT INTO `Skill_Endorse` (`by_userId`, `userId`, `skillId`, `time`, `notified`) VALUES (?,?,?,?,0);"
+
+fun listUserSkill(userId: Int): List<Skill> {
+	val SQL = "SELECT S.* from `Skill` S JOIN 'User_Skill' US where US.`userId`=?;"
 	return connect { connection: Connection ->
 		val statement = connection.prepareStatement(SQL)
-		statement.setInt(1, byUserId)
-		statement.setInt(2, userId)
-		statement.setInt(3, skillId)
+		statement.setInt(1, userId)
+		statement.executeQuery()
+			.list<Skill>()
+	} ?: emptyList()
+}
+
+fun addUserSkill(userId: Int, skillId: Int, level: Int): Boolean {
+	val SQL = "INSERT INTO `User_Skill` (`userId`, `skillId`, `level`, `time`) VALUES (?,?,?,?);"
+	return connect { connection: Connection ->
+		val statement = connection.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.setInt(2, skillId)
+		statement.setInt(3, level)
 		statement.setLong(4, System.currentTimeMillis())
 		statement.executeUpdate() > 0
 	} == true
 }
 
-fun removeSkillEndorse(byUserId: Int, userId: Int, skillId: Int): Boolean {
-	val SQL = "DELETE FROM `Skill_Endorse` WHERE `by_userId`=? AND `userId`=? AND `skillId`=?;"
+fun removeUserSkill(userId: Int, skillId: Int): Boolean {
+	val SQL = "DELETE FROM `User_Skill` WHERE `userId`=? AND `skillId`=?;"
 	return connect { connection: Connection ->
 		val statement = connection.prepareStatement(SQL)
-		statement.setInt(1, byUserId)
-		statement.setInt(2, userId)
-		statement.setInt(3, skillId)
+		statement.setInt(1, userId)
+		statement.setInt(2, skillId)
 		statement.executeUpdate() > 0
 	} == true
 }

@@ -23,6 +23,7 @@ inline fun <reified T> ResultSet.read(): T =
 		Notification::class -> readNotification() as T
 		Skill::class -> readSkill() as T
 		User::class -> readUser() as T
+		SkillEndorse::class -> readSkillEndorse() as T
 		else -> throw RuntimeException("must not happened")
 	}
 
@@ -112,6 +113,14 @@ fun ResultSet.readUser(): User =
 	).apply {
 		avatar = tryByteArray("avatar")
 	}
+
+fun ResultSet.readSkillEndorse(): SkillEndorse =
+	SkillEndorse(
+		tryInt("byUserId") ?: 0,
+		tryInt("userId") ?: 0,
+		tryInt("skillId") ?: 0,
+		tryDate("time") ?: Date(0),
+	)
 
 fun ResultSet.tryInt(column: String?): Int? =
 	try {

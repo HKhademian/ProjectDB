@@ -22,7 +22,7 @@ fun <T> connect(action: (Connection) -> T?): T? {
 		DriverManager.getConnection(db, properties).use { connection ->
 			lastError = null
 			// connection.createStatement().execute("PRAGMA foreign_keys=ON;")
-			return action(connection)
+			return action(connection) as T?
 		}
 	} catch (ex: SQLException) {
 		lastError = ex
@@ -32,7 +32,7 @@ fun <T> connect(action: (Connection) -> T?): T? {
 }
 
 fun scalarQuery(sql: String): String? =
-	connect {
+	connect<String?> {
 		val res: ResultSet = it.createStatement().executeQuery(sql)
 		res.next()
 		res.getString(1)

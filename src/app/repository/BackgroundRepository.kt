@@ -7,7 +7,26 @@ import app.model.Background
 import java.sql.Connection
 import java.sql.Types
 
-fun saveBG(bg: Background): Background? {
+fun suggestBackground(): List<Background> {
+	val SQL = """SELECT * from `SuggestionBackground`;"""
+	return connect { connection: Connection ->
+		val statement = connection.prepareStatement(SQL)
+		statement.executeQuery()
+			.list<Background>()
+	} ?: emptyList()
+}
+
+fun listUserBackground(userId: Int): List<Background> {
+	val SQL = """SELECT * from `User_Background` WHERE `userId`=?;"""
+	return connect { connection: Connection ->
+		val statement = connection.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.executeQuery()
+			.list<Background>()
+	} ?: emptyList()
+}
+
+fun saveUserBackground(bg: Background): Background? {
 	val SQL = """
 		INSERT OR REPLACE INTO `User_Background`
 		(`bgId`, `userId`, `type`, `title`, `fromTime`, `toTime`)
@@ -33,7 +52,7 @@ fun saveBG(bg: Background): Background? {
 	}
 }
 
-fun deleteBG(bgId: Int): Background? {
+fun deleteUserBackground(bgId: Int): Background? {
 	val SQL = """DELETE FROM `User_Background` WHERE `bgId`=? RETURNING *;"""
 
 	return connect { connection: Connection ->
