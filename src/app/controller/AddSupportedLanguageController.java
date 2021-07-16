@@ -39,10 +39,10 @@ public class AddSupportedLanguageController {
         languageError.setVisible(false);
 
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
-        addButton.setOnAction(event -> saveBackground());
+        addButton.setOnAction(event -> saveLanguage());
     }
 
-    private void saveBackground(){
+    private void saveLanguage(){
         boolean valid = true;
         //check language an add it
         addButton.getScene().getWindow().hide();
