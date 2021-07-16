@@ -14,7 +14,7 @@ object BackgroundRepository {
 		VALUES (?,?,?,?,?,?) RETURNING *;
 		"""
 
-		return _BaseRepository.connect { connection: Connection ->
+		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			if (bg.bgId > 0)
 				statement.setInt(1, bg.bgId)
@@ -36,7 +36,7 @@ object BackgroundRepository {
 	fun deleteBG(bgId: Int): Background? {
 		val SQL = """DELETE FROM `User_Background` WHERE `bgId`=? RETURNING *;"""
 
-		return _BaseRepository.connect { connection: Connection ->
+		return connect { connection: Connection ->
 			val statement = connection.prepareStatement(SQL)
 			statement.setInt(1, bgId)
 			statement.executeQuery()?.let { if (it.next()) Background.from(it) else null }

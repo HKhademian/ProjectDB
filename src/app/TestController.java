@@ -1,7 +1,6 @@
 package app;
 
 import java.net.URL;
-import java.sql.ResultSet;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -75,16 +74,8 @@ public class TestController implements Initializable {
 
     String javaVersion = System.getProperty("java.version");
     String javafxVersion = System.getProperty("javafx.version");
-    String sqliteVersion = _BaseRepository.connect(conn -> {
-      ResultSet res = conn.createStatement().executeQuery("select sqlite_version();");
-      res.next();
-      return res.getString(1);
-    });
-    String sqliteForeign = _BaseRepository.connect(conn -> {
-      ResultSet res = conn.createStatement().executeQuery("PRAGMA foreign_keys;");
-      res.next();
-      return res.getString(1);
-    });
+    String sqliteVersion = Database.scalarQuery("select sqlite_version();");
+    String sqliteForeign = Database.scalarQuery("PRAGMA foreign_keys;");
     label.setText("Hello, JavaFX " + javafxVersion +
       "\nRunning on Java " + javaVersion
       + "\nCur Dir" + System.getProperty("user.dir")
@@ -104,7 +95,7 @@ public class TestController implements Initializable {
 
     btnLogin.setOnMouseClicked(event -> {
       Object res = loggedUser = UserRepository.login(id.getText(), code.getText());
-      text.setText("login res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("login res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnRegister.setOnMouseClicked(event -> {
       int index = (int) (Math.random() * 500 + 500);
@@ -113,57 +104,57 @@ public class TestController implements Initializable {
         "fUser #" + index, "lUser #" + index,
         null, null, null, null, null
       );
-      text.setText("register res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("register res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnToggleLike.setOnMouseClicked(event -> {
       Object res = UserRepository.toggleLike(loggedUser.getUserId(), Integer.parseInt(id.getText()), Integer.parseInt(code.getText()));
-      text.setText("toggleLike res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("toggleLike res: " + res + "\nLastErr:" + Database.lastError);
     });
 
     btnAddSkill.setOnMouseClicked(event -> {
       Object res = SkillRepository.addSkill(title.getText());
-      text.setText("addSkill res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("addSkill res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnAddLanguage.setOnMouseClicked(event -> {
       Object res = LanguageRepository.addLanguage(code.getText(), title.getText());
-      text.setText("addLanguage res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("addLanguage res: " + res + "\nLastErr:" + Database.lastError);
     });
 
 
     btnGetArticle.setOnMouseClicked(event -> {
       Object res = ArticleRepository.getArticle(Integer.parseInt(id.getText()));
-      text.setText("getArticle res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("getArticle res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSaveArticle1.setOnMouseClicked(event -> {
       final Article article = new Article(
         Integer.parseInt(id.getText()), loggedUser.getUserId(), title.getText(), text.getText(), new Date(), true, 0, 0
       );
       Object res = ArticleRepository.saveArticle(article);
-      text.setText("saveArticle `edit` res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("saveArticle `edit` res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSaveArticle2.setOnMouseClicked(event -> {
       final Article article = new Article(
         0, loggedUser.getUserId(), title.getText(), text.getText(), new Date(), true, 0, 0
       );
       Object res = ArticleRepository.saveArticle(article);
-      text.setText("saveArticle `new` res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("saveArticle `new` res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnDeleteArticle.setOnMouseClicked(event -> {
       Object res = ArticleRepository.deleteArticle(Integer.parseInt(id.getText()));
-      text.setText("deleteArticle res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("deleteArticle res: " + res + "\nLastErr:" + Database.lastError);
     });
 
     btnGetComment.setOnMouseClicked(event -> {
       Object res = CommentRepository.getComment(Integer.parseInt(id.getText()));
-      text.setText("getComment res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("getComment res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnListComment.setOnMouseClicked(event -> {
       Object res = CommentRepository.listComments(Integer.parseInt(id.getText()));
-      text.setText("listComments res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("listComments res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnDeleteComment.setOnMouseClicked(event -> {
       Object res = CommentRepository.deleteComment(Integer.parseInt(id.getText()));
-      text.setText("deleteComment res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("deleteComment res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSendComment.setOnMouseClicked(event -> {
       Object res = CommentRepository.commentOn(
@@ -172,7 +163,7 @@ public class TestController implements Initializable {
         0,
         text.getText()
       );
-      text.setText("commentOn res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("commentOn res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSendReply.setOnMouseClicked(event -> {
       Object res = CommentRepository.commentOn(
@@ -181,7 +172,7 @@ public class TestController implements Initializable {
         Integer.parseInt(id.getText()),
         text.getText()
       );
-      text.setText("replyOn res: " + res + "\nLastErr:" + _BaseRepository.lastError);
+      text.setText("replyOn res: " + res + "\nLastErr:" + Database.lastError);
     });
   }
 }

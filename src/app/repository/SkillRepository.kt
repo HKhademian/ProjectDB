@@ -1,46 +1,38 @@
-package app.repository;
+package app.repository
 
-import app.model.Skill;
+import app.model.Skill
+import java.sql.Connection
+import java.util.ArrayList
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+object SkillRepository {
+	fun listSkills(): List<Skill> {
+		val SQL = "SELECT * from `Skill`;"
+		return connect { connection: Connection ->
+			val statement = connection.prepareStatement(SQL)
+			val res = statement.executeQuery()
+			val result: MutableList<Skill> = ArrayList()
+			while (res.next()) result.add(Skill.from(res))
+			result
+		}!!
+	}
 
-public final class SkillRepository extends _BaseRepository {
-  private SkillRepository() {
-  }
+	fun getSkill(skillId: Int): Skill? {
+		val SQL = "SELECT * from `Skill` where `skillId`=?;"
+		return connect { connection: Connection ->
+			val statement = connection.prepareStatement(SQL)
+			val res = statement.executeQuery()
+			if (res.next()) Skill.from(res) else null
+		}
+	}
 
-  public static List<Skill> listSkills() {
-    final String SQL = "SELECT * from `Skill`;";
-    return connect(connection -> {
-      final PreparedStatement statement = connection.prepareStatement(SQL);
-      final ResultSet res = statement.executeQuery();
-      final List<Skill> result = new ArrayList<>();
-      while (res.next())
-        result.add(Skill.from(res));
-      return result;
-    });
-  }
-
-  public static Skill getSkill(int skillId) {
-    final String SQL = "SELECT * from `Skill` where `skillId`=?;";
-    return connect(connection -> {
-      final PreparedStatement statement = connection.prepareStatement(SQL);
-      final ResultSet res = statement.executeQuery();
-      return res.next() ? Skill.from(res) : null;
-    });
-  }
-
-  public static Skill addSkill(String title) {
-    final String SQL = "INSERT INTO `Skill` VALUES (null,?) RETURNING *;";
-    return connect(connection -> {
-      final PreparedStatement statement = connection.prepareStatement(SQL);
-      statement.setString(1, title);
-      final ResultSet res = statement.executeQuery();
-      return res.next() ? Skill.from(res) : null;
-    });
-  }
-
-
+	@JvmStatic
+	fun addSkill(title: String?): Skill? {
+		val SQL = "INSERT INTO `Skill` VALUES (null,?) RETURNING *;"
+		return connect { connection: Connection ->
+			val statement = connection.prepareStatement(SQL)
+			statement.setString(1, title)
+			val res = statement.executeQuery()
+			if (res.next()) Skill.from(res) else null
+		}
+	}
 }

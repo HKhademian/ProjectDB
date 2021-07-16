@@ -1,27 +1,39 @@
-package app.repository;
+@file:JvmName("Database")
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+package app.repository
 
-public class _BaseRepository {
-  private static final String DB_NAME = "db.sqlite";
-  public static Throwable lastError = null;
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.util.*
 
-  public static <T> T connect(final Command<T> action) {
-    final String db = "jdbc:sqlite:" + DB_NAME;
-    try (Connection connection = DriverManager.getConnection(db)) {
-      lastError = null;
-      connection.createStatement().execute("PRAGMA foreign_keys=ON;");
-      return action.run(connection);
-    } catch (SQLException ex) {
-      lastError = ex;
-      ex.printStackTrace();
-      return null;
-    }
-  }
 
-  public static interface Command<T> {
-    T run(Connection connection) throws SQLException;
-  }
+private const val DB_NAME = "db.sqlite"
+
+@JvmField
+var lastError: Throwable? = null
+
+fun <T> connect(action: (Connection) -> T?): T? {
+	val db = "jdbc:sqlite:$DB_NAME"
+	try {
+		val properties = Properties()
+		properties.setProperty("foreign_keys", "true")
+		DriverManager.getConnection(db, properties).use { connection ->
+			lastError = null
+			// connection.createStatement().execute("PRAGMA foreign_keys=ON;")
+			return action(connection)
+		}
+	} catch (ex: SQLException) {
+		lastError = ex
+		ex.printStackTrace()
+		return null
+	}
 }
+
+fun scalarQuery(sql: String): String? =
+	connect {
+		val res: ResultSet = it.createStatement().executeQuery(sql)
+		res.next()
+		res.getString(1)
+	}
