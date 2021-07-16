@@ -88,3 +88,11 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 		}
 	} == true
 }
+
+//TODO: updateAvatar(int userId, byte[] avatar)
+
+//TODO: updatePersonalInfo(int userId, String firstName, String lastName, String location)
+
+//TODO: updateInfo(int userId, String info)
+
+//TODO: updateAbout(int userId, String about)
