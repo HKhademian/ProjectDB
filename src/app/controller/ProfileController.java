@@ -1,15 +1,29 @@
 package app.controller;
 
+import app.controller.cells.BackgroundCellController;
+import app.model.Background;
 import app.model.User;
+import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
 public class ProfileController {
 
@@ -43,7 +57,7 @@ public class ProfileController {
     private TextArea about;
 
     @FXML
-    private JFXListView<?> backgroundList;
+    private JFXListView<Background> backgroundList;
 
     @FXML
     private ImageView backgroundAdd;
@@ -127,12 +141,16 @@ public class ProfileController {
     private String nowAbout;
     private String nowName;
     private String nowFamily;
+    private ObservableList<Background> backgrounds;
 
     @FXML
     public void initialize(){
 
         name.setText(owner.getFirstname());
         family.setText(owner.getLastname());
+        setImage();
+        intro.setText(user.getIntro());
+        about.setText(user.getAbout());
 
         saveIntro.setVisible(false);
         saveAbout.setVisible(false);
@@ -156,6 +174,9 @@ public class ProfileController {
             featureAdd.setVisible(false);
             editNFL.setVisible(false);
         }
+
+        //Image
+        changeImage.setOnAction(event -> imageChange());
 
         //Name, Family, Location
         editNFL.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> changeNFL());
@@ -184,6 +205,10 @@ public class ProfileController {
 
         //Background
         backgroundAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addBackground());
+        /*backgrounds = FXCollections.observableArrayList();
+        backgrounds.addAll(Repository.listUserBackground(user.getUserId()));
+        backgroundList.setItems(backgrounds);
+        backgroundList.setCellFactory(BackgroundCellController -> new BackgroundCellController(owner));*/
 
         //Accomplishments
         accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
@@ -204,6 +229,49 @@ public class ProfileController {
         return owner.getUserId()==user.getUserId();
     }
 
+    private void setImage() {
+        if(user.getAvatar()!=null) {
+            InputStream is = new ByteArrayInputStream(user.getAvatar());
+            BufferedImage bf=null;
+            try {
+                bf = ImageIO.read(is);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            WritableImage wr = null;
+            if (bf != null) {
+                wr = new WritableImage(bf.getWidth(), bf.getHeight());
+                PixelWriter pw = wr.getPixelWriter();
+                for (int x = 0; x < bf.getWidth(); x++) {
+                    for (int y = 0; y < bf.getHeight(); y++) {
+                        pw.setArgb(x, y, bf.getRGB(x, y));
+                    }
+                }
+            }
+            imagePlace.setFill(new ImagePattern(wr));
+        }
+    }
+
+    private void imageChange(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image File","*.png","*.jpg"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if(selectedFile != null) {
+            try {
+                BufferedImage bi = ImageIO.read(new File(selectedFile.getAbsolutePath()));
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(bi, "jpg", baos);
+                byte[] bytes = baos.toByteArray();
+                //UserRepository.updateAvatar(user.getUserId(), bytes);
+                user.setAvatar(bytes);
+                setImage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void changeNFL(){
         saveChangeNFL.setVisible(true);
         cancelChangeNFL.setVisible(true);
@@ -218,7 +286,9 @@ public class ProfileController {
         nowName = name.getText().trim();
         nowFamily = family.getText().trim();
         //get location
-        //add to database
+        //UserRepository.updatePersonalInfo(user.getUserId(), nowName, nowFamily, "");
+        user.setFirstname(nowName);
+        user.setLastname(nowFamily);
         saveChangeNFL.setVisible(false);
         cancelChangeNFL.setVisible(false);
         name.setEditable(false);
@@ -257,7 +327,8 @@ public class ProfileController {
         cancelIntro.setVisible(false);
         intro.setEditable(false);
         nowIntro = intro.getText();
-        //save to database
+        //UserRepository.updateIntro(user.getUserId(), nowIntro);
+        user.setIntro(nowIntro);
     }
 
     private void changeAbout(){
@@ -265,7 +336,8 @@ public class ProfileController {
         cancelAbout.setVisible(false);
         about.setEditable(false);
         nowAbout = about.getText();
-        //save to database
+        //UserRepository.updateAbout(user.getUserId(), nowAbout);
+        user.setAbout(nowAbout);
     }
 
     private void logOut(){
