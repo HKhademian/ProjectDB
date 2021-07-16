@@ -7,11 +7,11 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.Date
 
-inline fun <reified T> ResultSet.list(): List<T> =
+inline fun <reified T> ResultSet?.list(): List<T> =
 	generateSequence { tryRead<T>() }.toList()
 
-inline fun <reified T> ResultSet.tryRead(): T? =
-	if (next()) read<T>() else null
+inline fun <reified T> ResultSet?.tryRead(): T? =
+	if (this != null && next()) read<T>() else null
 
 inline fun <reified T> ResultSet.read(): T =
 	when (T::class) {
