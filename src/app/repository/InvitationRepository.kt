@@ -7,7 +7,8 @@ import app.model.Invitation
 
 fun listInvitation(userId: Int): List<Invitation> =
 	connect {
-		val stmt = it.prepareStatement("SELECT * FROM `Network_Invitation` WHERE `userId`=? OR `by_userId`=?;")
+		val SQL = """SELECT * FROM `Network_Invitation` WHERE `userId`=? OR `by_userId`=?;"""
+		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
 		stmt.setInt(2, userId)
 		stmt.executeQuery()

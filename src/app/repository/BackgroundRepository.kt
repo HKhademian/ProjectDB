@@ -4,37 +4,33 @@
 package app.repository
 
 import app.model.Background
-import java.sql.Connection
 import java.sql.Types
 
-fun suggestBackground(): List<Background> {
-	val SQL = """SELECT * from `SuggestionBackground`;"""
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
+fun suggestBackground(): List<Background> =
+	connect {
+		val SQL = """SELECT * from `SuggestionBackground`;"""
+		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
 			.list<Background>()
 	} ?: emptyList()
-}
 
-fun listUserBackground(userId: Int): List<Background> {
-	val SQL = """SELECT * from `User_Background` WHERE `userId`=?;"""
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
+fun listUserBackground(userId: Int): List<Background> =
+	connect {
+		val SQL = """SELECT * from `User_Background` WHERE `userId`=?;"""
+		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
 			.list<Background>()
 	} ?: emptyList()
-}
 
-fun saveUserBackground(bg: Background): Background? {
-	val SQL = """
+fun saveUserBackground(bg: Background): Background? =
+	connect {
+		val SQL = """
 		INSERT OR REPLACE INTO `User_Background`
 		(`bgId`, `userId`, `type`, `title`, `fromTime`, `toTime`)
 		VALUES (?,?,?,?,?,?) RETURNING *;
 		"""
-
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
+		val statement = it.prepareStatement(SQL)
 		if (bg.bgId > 0)
 			statement.setInt(1, bg.bgId)
 		else
@@ -50,15 +46,12 @@ fun saveUserBackground(bg: Background): Background? {
 		statement.executeQuery()
 			.tryRead<Background>()
 	}
-}
 
-fun deleteUserBackground(bgId: Int): Background? {
-	val SQL = """DELETE FROM `User_Background` WHERE `bgId`=? RETURNING *;"""
-
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
+fun deleteUserBackground(bgId: Int): Background? =
+	connect {
+		val SQL = """DELETE FROM `User_Background` WHERE `bgId`=? RETURNING *;"""
+		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, bgId)
 		statement.executeQuery()
 			.tryRead<Background>()
 	}
-}

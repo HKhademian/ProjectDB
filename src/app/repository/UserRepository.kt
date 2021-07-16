@@ -1,40 +1,39 @@
 @file:JvmName("Repository")
 @file:JvmMultifileClass
+@file:OptIn(ExperimentalStdlibApi::class)
 
 package app.repository
 
 import app.model.User
-import java.sql.Connection
 import java.sql.Types
+import java.util.Date
 
-fun getUserById(userId: Int): User? {
-	val SQL = "SELECT * from `User` where `userId`=?;"
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
+fun getUserById(userId: Int): User? =
+	connect {
+		val SQL = """SELECT * from `User` where `userId`=?;"""
+		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
 			.tryRead<User>()
 	}
-}
 
-fun loginUser(username: String?, password: String?): User? {
-	val SQL = "select * from `User` where `username`=? and `password`=?;"
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
+fun loginUser(username: String?, password: String?): User? =
+	connect {
+		val SQL = """select * from `User` where `username`=? and `password`=?;"""
+		val statement = it.prepareStatement(SQL)
 		statement.setString(1, username)
 		statement.setString(2, password)
 		statement.executeQuery()
 			.tryRead<User>()
 	}
-}
 
-fun registerUser(user: User, password: String): User? {
-	val SQL = """INSERT INTO `User`
+fun registerUser(user: User, password: String): User? =
+	connect {
+		val SQL = """INSERT INTO `User`
 			(`userId`, `username`, `password`, `firstname`, `lastname`, `intro`, `about`, `avatar`, `accomp`, `birthday`, `location`)
 			VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)
 			RETURNING *;"""
-	return connect { connection: Connection ->
-		val statement = connection.prepareStatement(SQL)
+		val statement = it.prepareStatement(SQL)
 		statement.setString(1, user.username)
 		statement.setString(2, password)
 		statement.setString(3, user.firstname)
@@ -49,36 +48,36 @@ fun registerUser(user: User, password: String): User? {
 		statement.executeQuery()
 			.tryRead<User>()
 	}
-}
 
-fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
-	val SQL1: String
-	val SQL2: String
-	val SQL3: String
-	if (commentId > 0) {
-		SQL1 = "SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;"
-		SQL2 = "DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;"
-		SQL3 = "INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,?,0);"
-	} else {
-		SQL1 = "SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;"
-		SQL2 = "DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;"
-		SQL3 = "INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,null,0);"
-	}
-	return connect { connection: Connection ->
-		val statement1 = connection.prepareStatement(SQL1)
+fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean =
+	connect {
+		val SQL1: String
+		val SQL2: String
+		val SQL3: String
+		if (commentId > 0) {
+			SQL1 = """SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;"""
+			SQL2 = """DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;"""
+			SQL3 = """INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,?,0);"""
+		} else {
+			SQL1 = """SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;"""
+			SQL2 = """DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;"""
+			SQL3 =
+				"""INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,null,0);"""
+		}
+		val statement1 = it.prepareStatement(SQL1)
 		statement1.setInt(1, userId)
 		statement1.setInt(2, articleId)
 		if (commentId > 0) statement1.setInt(3, commentId)
 		val res1 = statement1.executeQuery()
 		if (res1.next() && res1.getInt(1) > 0) {
-			val statement2 = connection.prepareStatement(SQL2)
+			val statement2 = it.prepareStatement(SQL2)
 			statement2.setInt(1, userId)
 			statement2.setInt(2, articleId)
 			if (commentId > 0) statement2.setInt(3, commentId)
 			statement2.executeUpdate()
 			return@connect true
 		} else {
-			val statement3 = connection.prepareStatement(SQL3)
+			val statement3 = it.prepareStatement(SQL3)
 			statement3.setInt(1, userId)
 			statement3.setInt(2, articleId)
 			statement3.setLong(3, System.currentTimeMillis())
@@ -87,9 +86,7 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 			return@connect true
 		}
 	} == true
-}
 
-@kotlin.ExperimentalStdlibApi
 fun updateUserPersonalInfo(
 	userId: Int,
 	firstName: String?,
@@ -129,9 +126,17 @@ fun updateUserPersonalInfo(
 	} == true
 
 //TODO: updateAvatar(int userId, byte[] avatar)
+fun updateAvatar(userId: Int, avatar: ByteArray) =
+	updateUserPersonalInfo(userId, null, null, null, null, avatar, null, null, null)
 
 //TODO: updatePersonalInfo(int userId, String firstName, String lastName, String location)
+fun updateAvatar(userId: Int, firstName: String, lastName: String, location: String) =
+	updateUserPersonalInfo(userId, firstName, lastName, null, null, null, null, null, location)
 
 //TODO: updateInfo(int userId, String info)
+fun updateInfo(userId: Int, info: String) =
+	updateUserPersonalInfo(userId, null, null, info, null, null, null, null, null)
 
 //TODO: updateAbout(int userId, String about)
+fun updateAbout(userId: Int, about: String) =
+	updateUserPersonalInfo(userId, null, null, null, about, null, null, null, null)
