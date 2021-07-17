@@ -4,6 +4,7 @@
 package app.repository
 
 import app.model.Article
+import app.model.HomeArticle
 import java.sql.Types
 
 fun getArticle(articleId: Int): Article? =
@@ -49,6 +50,15 @@ fun deleteArticle(articleId: Int): Article? =
 		statement.executeQuery()
 			.tryRead<Article>()
 	}
+
+fun getUserHome(userId: Int): List<HomeArticle> =
+	connect {
+		val SQL = """SELECT * from `HomeArticle` where home_userId=?;"""
+		val statement = it.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.executeQuery()
+			.list<HomeArticle>()
+	} ?: emptyList()
 
 fun getUserHomeArticles(userId: Int): List<Article> =
 	connect {

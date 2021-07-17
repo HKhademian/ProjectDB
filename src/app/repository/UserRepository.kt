@@ -4,6 +4,7 @@
 
 package app.repository
 
+import app.model.MyNetwork
 import app.model.User
 import java.sql.Types
 import java.util.Date

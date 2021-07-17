@@ -120,11 +120,33 @@ fun ResultSet.readUser(): User =
 
 fun ResultSet.readSkillEndorse(): SkillEndorse =
 	SkillEndorse(
-		tryInt("byUserId") ?: 0,
+		tryInt("by_userId") ?: 0,
 		tryInt("userId") ?: 0,
 		tryInt("skillId") ?: 0,
 		tryDate("time") ?: Date(0),
 	)
+
+fun ResultSet.readHomeArticle(): HomeArticle =
+	HomeArticle(
+		tryInt("home_userId") ?: 0,
+		tryDate("home_time") ?: Date(0),
+		tryInt("home_count") ?: 0,
+		readArticle(),
+	)
+
+fun ResultSet.readMyNetwork(): MyNetwork {
+	val type = tryString("type")
+	val mutualCount = tryInt("mutual_count") ?: 0
+	val user = readUser()
+
+	return when (type) {
+		"may_know" -> MyNetwork.MayKnowNetwork(user, mutualCount)
+		"requested" -> MyNetwork.RequestedNetwork(user, mutualCount)
+		"invited" -> MyNetwork.InvitedNetwork(user, mutualCount)
+		else -> throw RuntimeException("must not happened")
+	}
+}
+
 
 fun ResultSet.tryInt(column: String?): Int? =
 	try {
