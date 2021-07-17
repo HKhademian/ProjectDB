@@ -301,10 +301,10 @@ CREATE VIEW MyNetwork as
          select MK.from_userId as from_userId, MK.to_userId as to_userId, 'may_know' as type
          from MayKnow MK
          UNION
-         select I.userId as from_userId, I.by_userId as to_userId, 'requested' as type
+         select I.to_userId as from_userId, I.from_userId as to_userId, 'requested' as type
          from Invitation I
          UNION
-         select I.by_userId as from_userId, I.userId as to_userId, 'invited' as type
+         select I.from_userId as from_userId, I.to_userId as to_userId, 'invited' as type
          from Invitation I
     ) MN
     left join MutualConnection MC on MC.from_userId=MN.from_userId and MC.to_userId=MN.to_userId
@@ -319,8 +319,8 @@ CREATE VIEW Notification as
     join User U on UN.to_userId = U.userId
     where strftime('%d-%m', date(U.birthday, 'unixepoch')) = strftime('%d-%m', 'now')
     UNION
-    select PV.userId as userId, 'visit' as event, PV.by_userId as by_userId, null as targetId
-    from "Event_ProfileVisit" PV
+    select PV.profile_userId as userId, 'visit' as event, PV.by_userId as by_userId, null as targetId
+    from Event_ProfileVisit PV
     where PV.notified = 0
     UNION
     select A.writer_userId as userId, 'like_article' as event, UL.userId as by_userId, null as targetId
