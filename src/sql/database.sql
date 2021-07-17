@@ -1,3 +1,6 @@
+
+-- Base Tables --
+
 create table Language (
     langCode text primary key,
     title text not null
@@ -112,6 +115,8 @@ create table User_Like (
     primary key (userId, articleId, commentId)
 );
 
+-- Network Tables --
+
 create table Invitation (
     to_userId INTEGER not null
         references User(userId)
@@ -147,4 +152,172 @@ create table Event_ProfileVisit (
     notified INTEGER default 0 not null,
     primary key (by_userId, profile_userId, time)
 );
+
+-- Base Views --
+
+CREATE VIEW Count_Article_Comment as
+    select A.articleId as articleId , count(C.commentId) as comment_count
+    from Article A
+    left join Comment C on A.articleId=C.articleId and C.reply_commentId is null
+    group by A.articleId
+;
+
+CREATE VIEW Count_Article_Like as
+    select A.articleId as articleId , count(UL.userId) as like_count
+    from Article A
+    left join User_Like UL on A.articleId=UL.articleId and UL.commentId is null
+    group by A.articleId
+;
+
+CREATE VIEW Count_Comment_Like as
+    select C.commentId as commentId , count(UL.userId) as like_count
+    from Comment C
+    left join User_Like UL on C.articleId=UL.articleId and C.commentId=UL.commentId
+    group by C.commentId
+;
+
+CREATE VIEW Count_Comment_Reply as
+    select C.commentId as commentId , count(CR.commentId) as reply_count
+    from Comment C
+    left join Comment CR on C.articleId=CR.articleId and C.commentId=CR.reply_commentId
+    group by C.commentId
+;
+
+CREATE VIEW ArticleCounted as
+    select A.*, CAL.like_count, CAC.comment_count
+    from Article A
+    left join Count_Article_Like CAL on A.articleId = CAL.articleId
+    left join Count_Article_Comment CAC on A.articleId = CAC.articleId
+    order by A.time, CAL.like_count+CAC.comment_count desc
+;
+
+CREATE VIEW CommentCounted as
+    select C.*, CCL.like_count as like_count, CCR.reply_count as reply_count
+    from Comment C
+    left join Count_Comment_Like CCL on C.commentId = CCL.commentId
+    left join Count_Comment_Reply CCR on C.commentId = CCR.commentId
+    order by C.time, CCL.like_count + CCR.reply_count desc
+;
+
+CREATE VIEW SuggestBackground as
+    select distinct UB.title
+    from User_Background UB
+    group by UB.title
+    order by count(UB.userId) desc
+;
+
+CREATE VIEW SuggestLocation as
+    select distinct U.location
+    from User U
+    group by U.location
+    order by count(U.userId) desc
+;
+
+
+-- Network Views --
+
+CREATE VIEW MutualConnection as
+    select U1.userId as from_userId, U2.userId as to_userId, U3.userId as mutual_userId
+    from User U1, User U2, User U3
+    where 1
+      and U1.userId != U2.userId
+      and U1.userId != U3.userId
+      and U2.userId != U3.userId
+      and EXISTS( select * from Connection C where C.from_userId=U1.userId and C.to_userId=U3.userId  )
+      and EXISTS( select * from Connection C where C.from_userId=U2.userId and C.to_userId=U3.userId  )
+    order by U1.userId, U2.userId, U3.userId
+;
+
+
+CREATE VIEW MayKnow as
+    select MC.from_userId as from_userId, MC.to_userId as to_userId, 'mutual' as type, MC.mutual_userId as target
+    from MutualConnection MC
+    UNION
+    select U1.userId as from_userId, U2.userId as to_userId, 'skill' as type, S.skillId as target
+    from User U1, User U2, Skill S
+    where U1.userId != U2.userId
+      and exists(select * from User_Skill US where US.userId=U1.userId and US.skillId=S.skillId)
+      and exists(select * from User_Skill US where US.userId=U2.userId and US.skillId=S.skillId)
+    UNION
+    select U1.userId as from_userId, U2.userId as to_userId, 'location' as type, U1.location as target
+    from User U1, User U2, Skill S
+    where U1.userId != U2.userId AND U1.location=U2.location
+;
+
+CREATE VIEW MyNetwork as
+    select MN.from_userId as from_userId, MN.to_userId as to_userId, MN.type as type, count(distinct MC.mutual_userId) as mutual_count
+    from (
+         select MK.from_userId as from_userId, MK.to_userId as to_userId, 'may_know' as type
+         from MayKnow MK
+         UNION
+         select I.userId as from_userId, I.by_userId as to_userId, 'requested' as type
+         from Invitation I
+         UNION
+         select I.by_userId as from_userId, I.userId as to_userId, 'invited' as type
+         from Invitation I
+    ) MN
+    left join MutualConnection MC on MC.from_userId=MN.from_userId and MC.to_userId=MN.to_userId
+    where not exists(select * from Connection C where C.from_userId=MN.from_userId and C.to_userId=MN.to_userId)
+    group by MC.from_userId,MC.to_userId
+    order by MC.from_userId, count(distinct MC.mutual_userId) desc
+;
+
+CREATE VIEW Notification as
+    select UN.from_userId as userId, 'birth' as event, UN.to_userId as by_userId, null as targetId
+    from Connection UN
+    join User U on UN.to_userId = U.userId
+    where strftime('%d-%m', date(U.birthday, 'unixepoch')) = strftime('%d-%m', 'now')
+    UNION
+    select PV.userId as userId, 'visit' as event, PV.by_userId as by_userId, null as targetId
+    from "Event_ProfileVisit" PV
+    where PV.notified = 0
+    UNION
+    select A.writer_userId as userId, 'like_article' as event, UL.userId as by_userId, null as targetId
+    from User_Like UL
+    join Article A on UL.articleId = A.articleId and UL.commentId is null
+    where UL.notified = 0
+    UNION
+    select C.userId as userId, 'like_comment' as event, UL.userId as by_userId, null as targetId
+    from User_Like UL
+    join Comment C on UL.commentId = C.commentId
+    where UL.notified = 0
+    UNION
+    select A.writer_userId as userId, 'comment' as event, C.userId as by_userId, C.articleId as targetId
+    from Comment C
+    join Article A on C.articleId = A.articleId and C.reply_commentId is null
+    where C.notified=0
+    UNION
+    select C2.userId as userId, 'reply' as event, C1.userId as by_userId,  C1.commentId as targetId
+    from Comment C1
+    join Comment C2 on C1.reply_commentId = C2.commentId
+    where C1.notified=0
+    UNION
+    select SE.userId as userId, 'endorse' as event, SE.by_userId as by_userId,  SE.skillId as targetId
+    from Skill_Endorse SE
+    where SE.notified=0
+;
+
+CREATE VIEW Home as
+    select CON.from_userId as userId, A.articleId as articleId, A.time as time, 'posted' as type, CON.to_userId as by_useId
+    from Connection CON
+    join Article A on CON.to_userId = A.writer_userId
+    UNION
+    select CON.from_userId as userId, UL.articleId as articleId, UL.time as time, 'liked' as type, CON.to_userId as by_useId
+    from Connection CON
+    join User_Like UL on CON.to_userId = UL.userId and UL.commentId is null
+    UNION
+    select CON.from_userId as userId, C.articleId as articleId, C.time as time, 'commented' as type, CON.to_userId as by_useId
+    from Connection CON
+    join Comment C on CON.to_userId = C.userId and C.reply_commentId is null
+;
+
+CREATE VIEW HomeArticle as
+    select H.userId as home_userId, MAX(H.time) as home_time, count(*) as home_count, AC.*
+    from Home H
+    JOIN ArticleCounted AC ON H.articleId=AC.articleId
+    group by H.userId, H.articleId
+    order by H.userId, MAX(H.time) DESC
+;
+
+
 
