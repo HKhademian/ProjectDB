@@ -169,7 +169,7 @@ create table Chat_User (
     userId INTEGER not null
         references User(userId)
             on update cascade on delete cascade,
-    joinTime INTEGER not null,
+    joinTime INTEGER default 0 not null,
     isAdmin INTEGER default 0 not null,
     isArchived INTEGER default 0 not null,
     isMuted INTEGER default 0 not null,
@@ -180,7 +180,7 @@ create table Message (
     messageId INTEGER primary key,
     chatId INTEGER not null
         references Chat(chatId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     sender_userId INTEGER not null
         references User(userId)
         on update cascade on delete cascade,
