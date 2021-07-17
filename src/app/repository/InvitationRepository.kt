@@ -7,7 +7,7 @@ import app.model.Invitation
 
 fun listInvitation(userId: Int): List<Invitation> =
 	connect {
-		val SQL = """SELECT * FROM `Network_Invitation` WHERE `userId`=? OR `by_userId`=?;"""
+		val SQL = """SELECT * FROM Invitation WHERE `userId`=? OR `by_userId`=?;"""
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
 		stmt.setInt(2, userId)
@@ -17,7 +17,7 @@ fun listInvitation(userId: Int): List<Invitation> =
 
 fun sendInvitation(userId: Int, byUserId: Int, message: String): Invitation? =
 	connect {
-		val SQL = """INSERT INTO `Network_Invitation`
+		val SQL = """INSERT INTO `Invitation`
 				(`userId`, `by_userId`, `time`, `message`, `status`)
 				VALUES (?,?,?,?,0) RETURNING *;"""
 		val stmt = it.prepareStatement(SQL)
@@ -31,7 +31,7 @@ fun sendInvitation(userId: Int, byUserId: Int, message: String): Invitation? =
 
 fun deleteInvitation(userId: Int, byUserId: Int): Invitation? =
 	connect {
-		val SQL = """DELETE FROM `Network_Invitation` WHERE `userId`=? AND `by_userId`=? RETURNING *;"""
+		val SQL = """DELETE FROM `Invitation` WHERE `userId`=? AND `by_userId`=? RETURNING *;"""
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
 		stmt.setInt(2, byUserId)
@@ -42,8 +42,8 @@ fun deleteInvitation(userId: Int, byUserId: Int): Invitation? =
 fun acceptInvitation(userId: Int, byUserId: Int): Invitation? =
 	connect {
 		val SQL = """
-			INSERT INTO `User_Network` (`userId1`, `userId2`, `time`) VALUES (?,?,?);
-			UPDATE `Network_Invitation` SET `status`=1 WHERE `userId`=? AND `by_userId`=? RETURNING *;
+			INSERT INTO `Connection` (`userId1`, `userId2`, `time`) VALUES (?,?,?);
+			UPDATE `Invitation` SET `status`=1 WHERE `userId`=? AND `by_userId`=? RETURNING *;
 		"""
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
@@ -58,8 +58,8 @@ fun acceptInvitation(userId: Int, byUserId: Int): Invitation? =
 fun rejectInvitation(userId: Int, byUserId: Int): Invitation? =
 	connect {
 		val SQL = """
-			SELECT ?,?,?,?;	--	DELETE FROM `User_Network` WHERE (`user1`=? AND `user2`=?) OR (`user2`=? AND `user1`=?);
-			UPDATE `Network_Invitation` SET `status`=-1 WHERE `userId`=? AND `by_userId`=? RETURNING *;
+			SELECT ?,?,?,?;	--	DELETE FROM `Connection` WHERE (`user1`=? AND `user2`=?) OR (`user2`=? AND `user1`=?);
+			UPDATE `Invitation` SET `status`=-1 WHERE `userId`=? AND `by_userId`=? RETURNING *;
 		"""
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
