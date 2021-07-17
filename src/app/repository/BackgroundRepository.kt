@@ -8,7 +8,7 @@ import java.sql.Types
 
 fun suggestBackground(): List<Background> =
 	connect {
-		val SQL = """SELECT * from `SuggestionBackground`;"""
+		val SQL = """SELECT * from `SuggestBackground`;"""
 		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
 			.list<Background>()

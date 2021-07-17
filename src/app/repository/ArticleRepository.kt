@@ -52,8 +52,7 @@ fun deleteArticle(articleId: Int): Article? =
 
 fun getUserHomeArticles(userId: Int): List<Article> =
 	connect {
-		val SQL = """SELECT * from `Article`
-			 where `articleId` in	(select `articleId` from Home where `userId`=? order by `time` desc);"""
+		val SQL = """SELECT * from `HomeArticle` where home_userId=?;"""
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()

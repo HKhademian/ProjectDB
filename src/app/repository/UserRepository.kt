@@ -8,6 +8,14 @@ import app.model.User
 import java.sql.Types
 import java.util.Date
 
+fun suggestLocation(): List<String> =
+	connect {
+		val SQL = """SELECT * from SuggestLocation;"""
+		val statement = it.prepareStatement(SQL)
+		statement.executeQuery()
+			.list<String>()
+	} ?: emptyList()
+
 fun getUserById(userId: Int): User? =
 	connect {
 		val SQL = """SELECT * from `User` where `userId`=?;"""

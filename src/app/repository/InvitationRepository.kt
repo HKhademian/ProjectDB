@@ -42,7 +42,8 @@ fun deleteInvitation(userId: Int, byUserId: Int): Invitation? =
 fun acceptInvitation(userId: Int, byUserId: Int): Invitation? =
 	connect {
 		val SQL = """
-			INSERT INTO `Connection` (`userId1`, `userId2`, `time`) VALUES (?,?,?);
+			INSERT INTO `Connection` (from_userId, to_userId, `time`) VALUES (?,?,?);
+			INSERT INTO `Connection` (to_userId, from_userId, `time`) VALUES (?,?,?);
 			UPDATE `Invitation` SET `status`=1 WHERE `userId`=? AND `by_userId`=? RETURNING *;
 		"""
 		val stmt = it.prepareStatement(SQL)
@@ -51,6 +52,9 @@ fun acceptInvitation(userId: Int, byUserId: Int): Invitation? =
 		stmt.setLong(3, System.currentTimeMillis())
 		stmt.setInt(4, userId)
 		stmt.setInt(5, byUserId)
+		stmt.setLong(6, System.currentTimeMillis())
+		stmt.setInt(7, userId)
+		stmt.setInt(8, byUserId)
 		stmt.executeQuery()
 			.tryRead<Invitation>()
 	}
