@@ -24,6 +24,10 @@ inline fun <reified T> ResultSet.read(): T =
 		Skill::class -> readSkill() as T
 		User::class -> readUser() as T
 		SkillEndorse::class -> readSkillEndorse() as T
+		HomeArticle::class -> readHomeArticle() as T
+		MyNetwork::class -> readMyNetwork() as T
+		Chat::class -> readChat() as T
+		Message::class -> readMessage() as T
 		Int::class -> getInt(1) as T
 		Long::class -> getLong(1) as T
 		String::class -> getString(1) as T
@@ -146,6 +150,32 @@ fun ResultSet.readMyNetwork(): MyNetwork {
 		else -> throw RuntimeException("must not happened")
 	}
 }
+
+
+fun ResultSet.readChat(): Chat =
+	Chat(
+		tryInt("chatId") ?: 0,
+		tryString("title") ?: "",
+		tryDate("time") ?: Date(0),
+		tryInt("unread_count") ?: 0,
+		tryDate("lastSeen_time") ?: Date(0),
+		tryDate("join_time") ?: Date(0),
+		tryInt("isAdmin") == 1,
+		tryInt("isArchived") == 1,
+		tryInt("isMuted") == 1,
+	)
+
+fun ResultSet.readMessage(): Message =
+	Message(
+		tryInt("messageId") ?: 0,
+		tryInt("chatId") ?: 0,
+		tryInt("userId") ?: 0,
+		tryInt("reply_messageId") ?: 0,
+		tryString("content") ?: "",
+		tryDate("time") ?: Date(0),
+		tryDate("received_time") ?: Date(0),
+		tryDate("seen_time") ?: Date(0),
+	)
 
 
 fun ResultSet.tryInt(column: String?): Int? =

@@ -6,7 +6,7 @@ data class Chat(
 	val chatId: Int,
 	val title: String,
 	val createTime: Date,
-	// each user
+	// each user :
 	val unreadCount: Int,
 	val lastSeenTime: Date,
 	val joinTime: Date,
@@ -17,11 +17,12 @@ data class Chat(
 
 data class Message(
 	val messageId: Int,
+	val chatId: Int,
 	val senderUserId: Int,
 	val replyMessageId: Int,
 	val content: String,
 	val sendTime: Date,
-	val chatId: Int,
+	// for each user
 	val receivedTime: Date,
 	val seenTime: Date,
 ) {
