@@ -40,6 +40,15 @@ fun listUserSkill(userId: Int): List<Skill> =
 			.list<Skill>()
 	} ?: emptyList()
 
+fun getLastUserSkill(userId: Int): Skill? =
+	connect {
+		val SQL = """SELECT * FROM `User_Skill` WHERE `userId`=? ORDER BY ROWID DESC LIMIT 1;"""
+		val statement = it.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.executeQuery()
+			.tryRead<Skill>()
+	}
+
 fun addUserSkill(userId: Int, skillId: Int, level: Int): Boolean =
 	connect {
 		val SQL = """INSERT INTO `User_Skill` (`userId`, `skillId`, `level`, `time`) VALUES (?,?,?,?);"""

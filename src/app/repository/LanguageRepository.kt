@@ -32,6 +32,25 @@ fun addLanguage(langCode: String, title: String): Language? =
 			.tryRead<Language>()
 	}
 
+fun listUserLanguage(userId: Int): List<Language> =
+	connect {
+		val SQL = """SELECT L.* from `Language` L JOIN 'User_Lang' UL ON L.langCode=UL.langCode where UL.`userId`=?;"""
+		val statement = it.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.executeQuery()
+			.list<Language>()
+	} ?: emptyList()
+
+
+fun getLastUserLang(userId: Int): Language? =
+	connect {
+		val SQL = """SELECT * FROM `User_Lang` WHERE `userId`=? ORDER BY ROWID DESC LIMIT 1;"""
+		val statement = it.prepareStatement(SQL)
+		statement.setInt(1, userId)
+		statement.executeQuery()
+			.tryRead<Language>()
+	}
+
 fun addUserLanguage(userId: Int, langCode: String): Boolean =
 	connect {
 		val SQL = """INSERT INTO `User_Lang` (`userId`, `langCode`) VALUES (?,?);"""

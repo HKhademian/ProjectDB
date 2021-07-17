@@ -37,8 +37,8 @@ fun saveUserBackground(bg: Background): Background? =
 			statement.setNull(1, Types.INTEGER)
 		statement.setInt(2, bg.userId)
 		statement.setInt(3, bg.bgType.ordinal)
-		statement.setLong(4, bg.fromTime.time)
-		statement.setString(5, bg.title)
+		statement.setString(4, bg.title)
+		statement.setLong(5, bg.fromTime.time)
 		if (bg.toTime?.time ?: 0 > 0)
 			statement.setLong(6, bg.fromTime.time)
 		else

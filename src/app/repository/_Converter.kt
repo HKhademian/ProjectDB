@@ -24,6 +24,10 @@ inline fun <reified T> ResultSet.read(): T =
 		Skill::class -> readSkill() as T
 		User::class -> readUser() as T
 		SkillEndorse::class -> readSkillEndorse() as T
+		Int::class -> getInt(1) as T
+		Long::class -> getLong(1) as T
+		String::class -> getString(1) as T
+		Date::class -> Date(getLong(1)) as T
 		else -> throw RuntimeException("must not happened")
 	}
 
