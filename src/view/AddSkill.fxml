@@ -19,6 +19,6 @@
             </cursor>
         </JFXButton>
         <JFXComboBox fx:id="skills" editable="true" layoutX="70.0" layoutY="95.0" prefHeight="31.0" prefWidth="189.0" />
-        <Label fx:id="skillError" layoutX="70.0" layoutY="141.0" prefHeight="21.0" prefWidth="189.0" text="Please choose a skill" textFill="#f21c1c" />
+        <Label fx:id="skillError" layoutX="70.0" layoutY="141.0" prefHeight="21.0" prefWidth="322.0" textFill="#f21c1c" />
     </children>
 </AnchorPane>

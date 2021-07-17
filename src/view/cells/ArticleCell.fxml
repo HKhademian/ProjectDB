@@ -8,10 +8,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="rootAnchorPane" prefHeight="520.0" prefWidth="598.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootAnchorPane" prefHeight="520.0" prefWidth="561.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <TextArea fx:id="title" editable="false" layoutX="21.0" layoutY="85.0" prefHeight="67.0" prefWidth="557.0" style="-fx-background-color: #F8F9FA;" />
-      <TextArea fx:id="content" layoutX="21.0" layoutY="165.0" prefHeight="294.0" prefWidth="557.0" style="-fx-background-color: #F8F9FA;" />
+        <TextArea fx:id="title" editable="false" layoutX="21.0" layoutY="85.0" prefHeight="67.0" prefWidth="519.0" style="-fx-background-color: #F8F9FA;" />
+      <TextArea fx:id="content" editable="false" layoutX="21.0" layoutY="165.0" prefHeight="294.0" prefWidth="519.0" style="-fx-background-color: #F8F9FA;" />
       <ImageView fx:id="like" fitHeight="41.0" fitWidth="31.0" layoutX="21.0" layoutY="471.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/thumb-up.png" />
@@ -60,6 +60,6 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Circle>
-      <Label fx:id="time" layoutX="92.0" layoutY="30.0" prefHeight="21.0" prefWidth="227.0" textFill="#7213ee" />
+      <Label fx:id="time" layoutX="92.0" layoutY="30.0" prefHeight="21.0" prefWidth="347.0" textFill="#7213ee" />
     </children>
 </AnchorPane>

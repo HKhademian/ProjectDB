@@ -19,6 +19,6 @@
             </cursor>
         </JFXButton>
       <JFXComboBox fx:id="languages" editable="true" layoutX="70.0" layoutY="95.0" prefHeight="31.0" prefWidth="189.0" />
-      <Label fx:id="languageError" layoutX="70.0" layoutY="141.0" prefHeight="21.0" prefWidth="189.0" text="Please choose a language" textFill="#f21c1c" />
+      <Label fx:id="languageError" layoutX="70.0" layoutY="141.0" prefHeight="21.0" prefWidth="347.0" textFill="#f21c1c" />
     </children>
 </AnchorPane>

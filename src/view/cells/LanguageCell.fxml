@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="rootAnchorPane" prefHeight="76.0" prefWidth="428.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootAnchorPane" prefHeight="76.0" prefWidth="268.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ImageView fx:id="edit" fitHeight="24.0" fitWidth="28.0" layoutX="219.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../assets/edit.png" />
-            </image>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
-        </ImageView>
-        <ImageView fx:id="delete" fitHeight="24.0" fitWidth="28.0" layoutX="280.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../assets/delete.png" />
-            </image>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
-        </ImageView>
-      <TextField fx:id="language" editable="false" layoutX="14.0" layoutY="21.0" style="-fx-background-color: #F8F9FA;" />
+      <TextField fx:id="languageTitle" editable="false" layoutX="14.0" layoutY="21.0" style="-fx-background-color: #F8F9FA;" />
     </children>
 </AnchorPane>
