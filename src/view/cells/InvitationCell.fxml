@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="296.0" prefWidth="397.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Circle fx:id="imagePlace" fill="#c9c9c9" layoutX="76.0" layoutY="87.0" radius="69.0" stroke="#c9c9c9" strokeType="INSIDE">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Circle>
+        <Label fx:id="name" alignment="CENTER" layoutX="60.0" layoutY="168.0" prefHeight="21.0" prefWidth="124.0" text="Name" />
+        <Label fx:id="family" alignment="CENTER" layoutX="184.0" layoutY="168.0" prefHeight="21.0" prefWidth="124.0" text="Family" />
+      <Label fx:id="fromOrTo" layoutX="14.0" layoutY="168.0" text="from" />
+      <JFXButton fx:id="acceptButton" layoutX="279.0" layoutY="236.0" prefHeight="38.0" prefWidth="70.0" style="-fx-background-color: #ADB5BD;" text="Accept">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton fx:id="rejectButton" layoutX="190.0" layoutY="236.0" prefHeight="38.0" prefWidth="70.0" style="-fx-background-color: #000000;" text="Reject" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label fx:id="response" layoutX="19.0" layoutY="236.0" prefHeight="21.0" prefWidth="153.0" text="Wait for response" />
+      <TextArea fx:id="message" editable="false" layoutX="154.0" layoutY="12.0" prefHeight="149.0" prefWidth="230.0" style="-fx-background-color: #F8F9FA;" />
+      <Label fx:id="time" layoutX="13.0" layoutY="200.0" prefHeight="21.0" prefWidth="344.0" text="Label" />
+    </children>
+</AnchorPane>
