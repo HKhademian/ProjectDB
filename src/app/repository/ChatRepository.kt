@@ -24,17 +24,42 @@ fun createChat(userId: Int, title: String): Chat? =
 			.tryRead<Chat>()
 	}
 
-fun archiveChat(chatId: Int, userId: Int): ChatUser? =
+fun updateChat(chatId: Int, userId: Int, isArchived: Boolean, isMuted: Boolean): ChatUser? =
 	connect {
 		val SQL = """
 			begin transaction;
 			INSERT OR REPLACE INTO Chat_User(chatId, userId) VALUES (?,?);
-			UPDATE Chat_User SET isArchived=1 WHERE ROWID=last_insert_rowid() RETURNING *;
+			UPDATE Chat_User SET isArchived=?,isMuted=? WHERE ROWID=last_insert_rowid() RETURNING *;
 			commit;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, chatId)
 		stmt.setInt(2, userId)
+		stmt.setInt(3, if (isArchived) 1 else 0)
+		stmt.setInt(4, if (isMuted) 1 else 0)
 		stmt.executeQuery()
 			.tryRead<ChatUser>()
+	}
+
+fun updateChat(chatId: Int, userId: Int, title: String): Chat? =
+	connect {
+		val SQL = """
+			UPDATE Chat SET title=? WHERE chatId=? RETURNING *;
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		stmt.setString(1, title)
+		stmt.setInt(2, chatId)
+		stmt.executeQuery()
+			.tryRead<Chat>()
+	}
+
+fun deleteChat(chatId: Int): Chat? =
+	connect {
+		val SQL = """
+			DELETE FROM Chat WHERE chatId=? RETURNING *;
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		stmt.setInt(1, chatId)
+		stmt.executeQuery()
+			.tryRead<Chat>()
 	}
