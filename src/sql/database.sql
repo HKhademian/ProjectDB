@@ -28,20 +28,20 @@ create table User (
 create table User_Lang (
     userId INTEGER not null
        references User(userId)
-           on update cascade on delete cascade,
+       on update cascade on delete cascade,
     langCode TEXT not null
        references Language(langCode)
-           on update cascade on delete cascade,
+       on update cascade on delete cascade,
     primary key (userId, langCode)
 );
 
 create table User_Skill (
     userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     skillId INTEGER not null
         references Skill(skillId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     level INTEGER default 0 not null,
     time INTEGER not null,
     primary key (userId, skillId)
@@ -50,13 +50,13 @@ create table User_Skill (
 create table Skill_Endorse (
    userId integer not null
        references User(userId)
-           on update cascade on delete cascade,
+       on update cascade on delete cascade,
    skillId integer not null
        references Skill(skillId)
-           on update cascade on delete cascade,
+       on update cascade on delete cascade,
    by_userId integer not null
        references User(userId)
-           on update cascade on delete cascade,
+       on update cascade on delete cascade,
    time integer not null,
    notified integer default 0 not null,
    primary key (by_userId, userId, skillId)
@@ -66,7 +66,7 @@ create table User_Background (
     bgId INTEGER primary key,
     userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     type INTEGER default 0 not null,
     title text not null,
     fromTime integer not null,
@@ -77,7 +77,7 @@ create table Article (
     articleId INTEGER primary key,
     writer_userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     title text not null,
     content text,
     time INTEGER not null,
@@ -88,13 +88,13 @@ create table Comment (
     commentId INTEGER primary key,
     articleId INTEGER not null
         references Article(articleId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     reply_commentId INTEGER
         references Comment(commentId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     content TEXT not null,
     time INTEGER default -1 not null,
     notified INTEGER default 0 not null
@@ -103,13 +103,13 @@ create table Comment (
 create table User_Like (
     userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     articleId INTEGER not null
         references Article(articleId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     commentId INTEGER
         references Comment(commentId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     time INTEGER not null,
     notified INTEGER default 0 not null,
     primary key (userId, articleId, commentId)
@@ -120,10 +120,10 @@ create table User_Like (
 create table Invitation (
     to_userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     from_userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     time INTEGER not null,
     message text,
     status int default 0 not null,
@@ -133,10 +133,10 @@ create table Invitation (
 create table Connection (
     from_userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     to_userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     time integer not null,
     primary key (from_userId, to_userId)
 );
@@ -144,14 +144,65 @@ create table Connection (
 create table Event_ProfileVisit (
     by_userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     profile_userId INTEGER not null
         references User(userId)
-            on update cascade on delete cascade,
+        on update cascade on delete cascade,
     time integer not null,
     notified INTEGER default 0 not null,
     primary key (by_userId, profile_userId, time)
 );
+
+
+--- Messaging Tables ---
+
+create table Chat (
+    chatId INTEGER primary key,
+    time INTEGER not null,
+    title TEXT
+);
+
+create table Chat_User (
+    chatId INTEGER not null
+        references Chat(chatId)
+            on update cascade on delete cascade,
+    userId INTEGER not null
+        references User(userId)
+            on update cascade on delete cascade,
+    joinTime INTEGER not null,
+    isAdmin INTEGER default 0 not null,
+    isArchived INTEGER default 0 not null,
+    isMuted INTEGER default 0 not null,
+    primary key (chatId, userId)
+);
+
+create table Message (
+    messageId INTEGER primary key,
+    chatId INTEGER not null
+        references Chat(chatId)
+            on update cascade on delete cascade,
+    sender_userId INTEGER not null
+        references User(userId)
+        on update cascade on delete cascade,
+    reply_messageId INTEGER
+        references Message(messageId)
+        on update cascade on delete cascade,
+    content TEXT not null,
+    time INTEGER not null
+);
+
+create table Message_State (
+    messageId INTEGER not null
+        references Message(messageId)
+        on update cascade on delete cascade,
+    userId INTEGER not null
+        references User(userId)
+        on update cascade on delete cascade,
+    receiveTime INTEGER default -1 not null,
+    seenTime INTEGER default -1 not null,
+    primary key (messageId, userId)
+);
+
 
 -- Base Views --
 
@@ -317,6 +368,30 @@ CREATE VIEW HomeArticle as
     JOIN ArticleCounted AC ON H.articleId=AC.articleId
     group by H.userId, H.articleId
     order by H.userId, MAX(H.time) DESC
+;
+
+
+-- Messaging Views --
+
+CREATE VIEW UserMessage as
+    select U.userId, MS.receiveTime, MS.seenTime, M.*
+    from User U, Message M
+    JOIN Chat C ON M.chatId = C.chatId
+    JOIN Chat_User CU ON U.userId = CU.userId
+    LEFT JOIN Message_State MS ON MS.messageId = M.messageId AND MS.userId = U.userId
+;
+
+CREATE VIEW ChatUser as
+    select CU.userId, CU.unread_count, MAX(UM.seenTime) as lastSeen_time, C.*
+    from(
+        select CU.*, count(UM.messageId) as unread_count
+        from Chat_User CU
+        LEFT JOIN UserMessage UM ON CU.chatId = UM.chatId AND CU.userId = UM.userId AND (UM.seenTime is NULL OR UM.seenTime <= 0)
+        group by CU.userId, CU.chatId
+    ) CU
+    JOIN Chat C on CU.chatId = C.chatId
+    LEFT JOIN UserMessage UM ON CU.chatId = UM.chatId AND CU.userId = UM.userId
+    group by CU.userId, CU.chatId
 ;
 
 
