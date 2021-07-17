@@ -3,6 +3,8 @@ package app.controller;
 import app.model.User;
 import com.jfoenix.controls.JFXComboBox;
 import app.repository.Repository;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import com.jfoenix.controls.JFXButton;
@@ -64,7 +66,7 @@ public class SignupController {
     private TextField birthdayBox;
 
     @FXML
-    private JFXComboBox<?> locationBox;
+    private JFXComboBox<String> locationBox;
 
     @FXML
     private Label birthdayError;
@@ -76,8 +78,10 @@ public class SignupController {
         passwordShowField.setVisible(false);
         showPassword.setVisible(false);
 
-        //ObservableList<?> locations = FXCollections.observableArrayList();
-        //locationBox.setItems(locations);
+        //System.out.println(Repository.suggestLocation().size());
+        //ObservableList<String> locations = FXCollections.observableArrayList(Repository.suggestLocation());
+       // locationBox.setItems(locations);
+       // new ComboBoxAutoComplete<>(locationBox);
 
         hidePassword.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showPassword());
 
@@ -123,7 +127,7 @@ public class SignupController {
             }
 
             signupButton.getScene().getWindow().hide();
-            OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, user), "Linkedin - Profile");
+            OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, user), "Profile");
         }
 
     }
@@ -183,7 +187,7 @@ public class SignupController {
 
     private void login(){
         loginButton.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Login.fxml",new LoginController(), "Linkedin - Login Page");
+        OpenWindow.openWindow("view/Login.fxml",new LoginController(), "Login");
     }
 
 

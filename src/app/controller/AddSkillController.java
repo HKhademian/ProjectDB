@@ -32,27 +32,42 @@ public class AddSkillController {
     @FXML
     private Label skillError;
 
+    private ArrayList<String> skillList;
+    private ArrayList<Integer> id;
+
     @FXML
     public void initialize(){
 
-        ArrayList<String> skill = new ArrayList<>();
-        ArrayList<Integer> id = new ArrayList<>();
-        for(Skill skill1: Repository.listSkills()){
-            skill.add(skill1.getTitle());
-            id.add(skill1.getSkillId());
-        }
-        ObservableList<String> skillList = FXCollections.observableArrayList(skill);
-        skills.setItems(skillList);
+        skillList = new ArrayList<>();
+        id = new ArrayList<>();
 
-        skillError.setVisible(false);
+        for(Skill skill: Repository.listSkills()){
+            skillList.add(skill.getTitle());
+            id.add(skill.getSkillId());
+        }
+        ObservableList<String> skillsList = FXCollections.observableArrayList(skillList);
+        skills.setItems(skillsList);
+        new ComboBoxAutoComplete(skills);
+        skills.requestFocus();
 
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
         addButton.setOnAction(event -> saveSkill());
     }
 
     private void saveSkill(){
-        boolean valid = true;
-        //check skill an add it
-        addButton.getScene().getWindow().hide();
+        skillError.setText("");
+        String skill = skills.getSelectionModel().getSelectedItem();
+        if(skill==null){
+            skillError.setText("Please choose a skill");
+            return;
+        }
+        int index = skillList.indexOf(skill);
+        boolean res = Repository.addUserSkill(user.getUserId(), id.get(index), 0);
+        if(res) {
+            addButton.getScene().getWindow().hide();
+        }else{
+            skillError.setText("You add this skill before");
+            return;
+        }
     }
 }

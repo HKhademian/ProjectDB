@@ -1,5 +1,7 @@
 package app.controller.cells;
 
+import app.controller.DeleteWarningController;
+import app.controller.OpenWindow;
 import app.model.Background;
 import app.model.User;
 import com.jfoenix.controls.JFXListCell;
@@ -8,15 +10,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
 public class BackgroundCellController extends JFXListCell<Background> {
 
+    private User owner;
     private User user;
 
-    public BackgroundCellController(User user) {
+    public BackgroundCellController(User owner, User user) {
+        this.owner = owner;
         this.user = user;
     }
 
@@ -25,12 +30,6 @@ public class BackgroundCellController extends JFXListCell<Background> {
 
     @FXML
     private TextArea title;
-
-    @FXML
-    private ImageView edit;
-
-    @FXML
-    private ImageView delete;
 
     @FXML
     private Label startDate;
@@ -56,7 +55,7 @@ public class BackgroundCellController extends JFXListCell<Background> {
             setGraphic(null);
         }else{
             if(fxmlLoader == null){
-                fxmlLoader = new FXMLLoader(getClass().getResource("../../view/cells/BackgroundCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/cells/BackgroundCell.fxml"));
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
@@ -64,11 +63,15 @@ public class BackgroundCellController extends JFXListCell<Background> {
                     e.printStackTrace();
                 }
             }
-
             title.setText(background.getTitle());
             type.setText(background.getBgType().toString());
             startDate.setText(background.getFromTime().toString());
-            endDate.setText(background.getToTime().toString());
+            if(background.getToTime()!=null) {
+                endDate.setText(background.getToTime().toString());
+            }else endDate.setText("");
+
+            setText(null);
+            setGraphic(rootAnchorPane);
         }
     }
 

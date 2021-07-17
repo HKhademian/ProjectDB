@@ -81,7 +81,7 @@ public class LoginController {
         else{
             loginButton.getScene().getWindow().hide();
             OpenWindow.openWindow("view/Home.fxml", new HomeController(user),
-                    "Linkedin - Home");
+                    "Home");
         }
 
     }
@@ -89,7 +89,7 @@ public class LoginController {
     private void signup(){
         signupButton.getScene().getWindow().hide();
 
-        OpenWindow.openWindow("view/Signup.fxml",new SignupController(), "Linkedin - Signup Page");
+        OpenWindow.openWindow("view/Signup.fxml",new SignupController(), "Signup");
     }
 
 

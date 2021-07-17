@@ -23,13 +23,7 @@ public class LanguageCellController extends JFXListCell<Language> {
     private AnchorPane rootAnchorPane;
 
     @FXML
-    private ImageView edit;
-
-    @FXML
-    private ImageView delete;
-
-    @FXML
-    private TextField language;
+    private TextField languageTitle;
 
     private FXMLLoader fxmlLoader;
 
@@ -46,7 +40,7 @@ public class LanguageCellController extends JFXListCell<Language> {
             setGraphic(null);
         }else{
             if(fxmlLoader == null){
-                fxmlLoader = new FXMLLoader(getClass().getResource("../../view/cells/LanguageCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/cells/LanguageCell.fxml"));
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
@@ -54,6 +48,11 @@ public class LanguageCellController extends JFXListCell<Language> {
                     e.printStackTrace();
                 }
             }
+
+            languageTitle.setText(language.getTitle());
+
+            setText(null);
+            setGraphic(rootAnchorPane);
 
         }
     }

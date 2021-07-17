@@ -10,6 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.util.ArrayList;
+
 public class AddSupportedLanguageController {
 
     private User user;
@@ -19,7 +21,7 @@ public class AddSupportedLanguageController {
     }
 
     @FXML
-    private JFXComboBox<Language> languages;
+    private JFXComboBox<String> languages;
 
     @FXML
     private JFXButton cancelButton;
@@ -30,21 +32,43 @@ public class AddSupportedLanguageController {
     @FXML
     private Label languageError;
 
+    private ArrayList<String> languageList;
+    private ArrayList<String> id;
+
     @FXML
     public void initialize(){
 
-        ObservableList<Language> languagesList = FXCollections.observableArrayList(Repository.listLanguages());
-        languages.setItems(languagesList);
+        languageList = new ArrayList<>();
+        id = new ArrayList<>();
 
-        languageError.setVisible(false);
+        for(Language language: Repository.listLanguages()){
+            languageList.add(language.getTitle());
+            id.add(language.getCode());
+        }
+
+        ObservableList<String> languagesList = FXCollections.observableArrayList(languageList);
+        languages.setItems(languagesList);
+        new ComboBoxAutoComplete(languages);
 
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
         addButton.setOnAction(event -> saveLanguage());
     }
 
     private void saveLanguage(){
-        boolean valid = true;
-        //check language an add it
+        languageError.setText("");
+        String language = languages.getSelectionModel().getSelectedItem();
+        if(language==null){
+            languageError.setText("Please choose a language");
+            return;
+        }
+        int index = languageList.indexOf(language);
+        boolean res = Repository.addUserLanguage(user.getUserId(), id.get(index));
+        if(res) {
+            addButton.getScene().getWindow().hide();
+        }else{
+            languageError.setText("You add this language before");
+            return;
+        }
         addButton.getScene().getWindow().hide();
     }
 }

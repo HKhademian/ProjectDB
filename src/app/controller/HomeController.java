@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.controller.cells.ArticleCellController;
 import app.model.Article;
 import app.model.User;
 import app.repository.Repository;
@@ -75,6 +76,8 @@ public class HomeController {
     @FXML
     private JFXButton sortedByButton;
 
+    private ObservableList<Article> articles;
+
     @FXML
     public void initialize(){
 
@@ -82,14 +85,18 @@ public class HomeController {
         family.setText(user.getLastname());
         setImage();
 
-        ObservableList<Article> articles = FXCollections.observableArrayList(Repository.getUserHomeArticles(user.getUserId()));
+        articles = FXCollections.observableArrayList(Repository.getUserArticles(user.getUserId()));
         articleList.setItems(articles);
+        articleList.setCellFactory(ArticleCellController -> new ArticleCellController(user));
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
 
         //createPost
         addArticleButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> createArticle());
+
+        //MyNetwork
+        network.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> myNetwork());
 
         logout.setOnAction(event -> logOut());
     }
@@ -119,7 +126,7 @@ public class HomeController {
 
     private void logOut(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Login.fxml", new LoginController(), "Linkedin - Login");
+        OpenWindow.openWindow("view/Login.fxml", new LoginController(), "Login");
     }
 
     private void profilePage(){
@@ -129,9 +136,25 @@ public class HomeController {
     }
 
     private void createArticle(){
+        int len = articles.size()+1;
         imagePlace.getScene().getWindow();
         OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(user),
                 "Create Article");
+
+        int lenArticle = Repository.getUserArticles(user.getUserId()).size();
+        if(len == lenArticle){
+            for(Article article: Repository.getUserArticles(user.getUserId())){
+                if(!articles.contains(article)){
+                    articles.add(article);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void myNetwork(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Network.fxml", new NetworkController(user), "MyNetwork");
     }
 
 }

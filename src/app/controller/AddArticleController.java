@@ -4,6 +4,7 @@ import app.model.Article;
 import app.model.User;
 import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -40,6 +41,9 @@ public class AddArticleController {
     private JFXButton postButton;
 
     @FXML
+    private JFXCheckBox addFeature;
+
+    @FXML
     public void initialize() {
 
         postButton.setOnAction(event -> {post();});
@@ -59,7 +63,8 @@ public class AddArticleController {
         }
         else{
             String text = textBox.getText().trim();
-            Repository.saveArticle(new Article(-1, user.getUserId(), title, text, new Date(), false, 0 ,0));
+            Repository.saveArticle(new Article(-1, user.getUserId(), title, text, new Date(),
+                    addFeature.isSelected(), 0 ,0));
             postButton.getScene().getWindow().hide();
         }
     }

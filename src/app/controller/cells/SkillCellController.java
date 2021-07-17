@@ -1,5 +1,7 @@
 package app.controller.cells;
 
+import app.controller.DeleteWarningController;
+import app.controller.OpenWindow;
 import app.model.Skill;
 import app.model.User;
 import com.jfoenix.controls.JFXButton;
@@ -9,15 +11,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
 public class SkillCellController extends JFXListCell<Skill> {
 
+    private User owner;
     private User user;
 
-    public SkillCellController(User user) {
+    public SkillCellController(User owner, User user) {
+        this.owner = owner;
         this.user = user;
     }
 
@@ -25,13 +30,7 @@ public class SkillCellController extends JFXListCell<Skill> {
     private AnchorPane rootAnchorPane;
 
     @FXML
-    private ImageView edit;
-
-    @FXML
-    private ImageView delete;
-
-    @FXML
-    private TextField skill;
+    private TextField skillTitle;
 
     @FXML
     private Label endorseNumber;
@@ -46,6 +45,7 @@ public class SkillCellController extends JFXListCell<Skill> {
 
     }
 
+    @Override
     public void updateItem(Skill skill, boolean empty){
         super.updateItem(skill, empty);
 
@@ -54,7 +54,7 @@ public class SkillCellController extends JFXListCell<Skill> {
             setGraphic(null);
         }else{
             if(fxmlLoader == null){
-                fxmlLoader = new FXMLLoader(getClass().getResource("../../view/cells/SkillCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/cells/SkillCell.fxml"));
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
@@ -62,8 +62,16 @@ public class SkillCellController extends JFXListCell<Skill> {
                     e.printStackTrace();
                 }
             }
+            if(owner == user){
+                endorseButton.setVisible(false);
+            }
 
+            skillTitle.setText(skill.getTitle());
+
+            setText(null);
+            setGraphic(rootAnchorPane);
         }
     }
+
 
 }
