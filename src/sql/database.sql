@@ -386,7 +386,7 @@ CREATE VIEW UserMessage as
     LEFT JOIN Message_State MS ON MS.messageId = M.messageId AND MS.userId = U.userId
 ;
 
-CREATE VIEW ChatUser as
+CREATE VIEW UserChat as
     select CU.userId, CU.unread_count, MAX(UM.seenTime) as lastSeen_time, C.*
     from(
         select CU.*, count(UM.messageId) as unread_count

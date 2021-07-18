@@ -9,7 +9,7 @@ import app.model.Message
 fun createChat(userId: Int, title: String): Chat? =
 	connect {
 		val SQL1 = """
-			INSERT INTO Chat (chatId, time, title) VALUES (NULL, ?, ?);
+			INSERT INTO Chat (chatId, time, title) VALUES (NULL,?,?);
 		""".trimIndent()
 		val SQL2 = """
 			INSERT INTO Chat_User(chatId, userId, joinTime) select chatId, ?, ? from Chat where ROWID=last_insert_rowid();
