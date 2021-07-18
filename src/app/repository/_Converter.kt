@@ -44,7 +44,7 @@ internal inline fun <reified T> ResultSet.extract(): T? =
 internal fun ResultSet.extractArticle(): Article =
 	Article(
 		extractInt("articleId") ?: 0,
-		extractInt("writeUserId") ?: 0,
+		extractInt("writer_userId") ?: 0,
 		extractString("title") ?: "",
 		extractString("content") ?: "",
 		extractDate("time") ?: Date(0),

@@ -6,7 +6,7 @@ package app.repository
 import app.model.Article
 import java.sql.Types
 
-fun getArticle(userId: Int, articleId: Int): Article? =
+fun getUserArticle(userId: Int, articleId: Int): Article? =
 	connect {
 		val SQL = """
 			SELECT AST.*, HA.home_userId , HA.home_count, HA.home_time
@@ -21,7 +21,7 @@ fun getArticle(userId: Int, articleId: Int): Article? =
 			.singleOf<Article>()
 	}
 
-fun getUserArticles(writerUserId: Int): List<Article> =
+fun listUserArticles(writerUserId: Int): List<Article> =
 	connect {
 		val SQL = """
 			SELECT * from HomeArticle where home_userId=? AND writer_userId=?;
@@ -33,7 +33,7 @@ fun getUserArticles(writerUserId: Int): List<Article> =
 			.listOf<Article>()
 	} ?: emptyList()
 
-fun getUserHomeArticles(userId: Int): List<Article> =
+fun listHomeUserArticles(userId: Int): List<Article> =
 	connect {
 		val SQL = """
 			SELECT * from HomeArticle where home_userId=?;
@@ -44,43 +44,40 @@ fun getUserHomeArticles(userId: Int): List<Article> =
 			.listOf<Article>()
 	} ?: emptyList()
 
-fun saveArticle(article: Article): Article? =
-	connect {
-		val SQL1 = """
-			INSERT OR REPLACE INTO Article
-				(articleId, writer_userId, title, content, time, featured) VALUES (?,?,?,?,?,?) RETURNING articleId;
+fun saveArticle(article: Article): Article? {
+	val articleId = connect {
+		val SQL_INSERT = """
+			INSERT INTO Article (articleId, title, content, time, featured, writer_userId)
+			VALUES (NULL,?,?,?,?,?) RETURNING articleId;
 	 """.trimIndent()
-		val SQL2 = """
-			SELECT HA.* from HomeArticle HA
-				JOIN Article A on HA.articleId = A.articleId
-				where A.articleId=? AND HA.home_userId=?;
+		val SQL_UPDATE = """
+			UPDATE Article SET title=?, content=?, time=?, featured=?
+			WHERE writer_userId=? AND articleId=? RETURNING articleId;
 	 """.trimIndent()
 
-		val stmt1 = it.prepareStatement(SQL1)
+		val stmt = it.prepareStatement(if (article.articleId > 0) SQL_UPDATE else SQL_INSERT)
+		stmt.setString(1, article.title)
+		stmt.setString(2, article.content)
+		stmt.setLong(3, System.currentTimeMillis())
+		stmt.setInt(4, if (article.featured) 1 else 0)
+		stmt.setInt(5, article.writerUserId)
 		if (article.articleId > 0)
-			stmt1.setInt(1, article.articleId)
-		else
-			stmt1.setNull(1, Types.INTEGER)
-		stmt1.setInt(2, article.writerUserId)
-		stmt1.setString(3, article.title)
-		stmt1.setString(4, article.content)
-		stmt1.setLong(5, article.time.time)
-		stmt1.setInt(6, if (article.featured) 1 else 0)
-		val articleId = stmt1.executeQuery().singleOf<Int>() ?: return@connect null
+			stmt.setInt(6, article.articleId)
 
-		val stmt2 = it.prepareStatement(SQL2)
-		stmt2.setInt(1, articleId)
-		stmt2.setInt(2, article.writerUserId)
-		stmt2.executeQuery()
-			.singleOf<Article>()
-	}
+		stmt.executeQuery()
+			.singleOf<Int>()
+	} ?: return null
 
-fun deleteArticle(articleId: Int): Boolean =
+	return getUserArticle(article.writerUserId, articleId)
+}
+
+fun deleteArticle(userId: Int, articleId: Int): Boolean =
 	connect {
 		val SQL = """
-			DELETE FROM Article WHERE articleId=?;
+			DELETE FROM Article WHERE articleId=? AND writer_userId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, articleId)
+		statement.setInt(2, userId)
 		statement.executeUpdate() > 0
 	} == true

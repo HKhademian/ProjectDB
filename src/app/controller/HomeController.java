@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class HomeController {
 
@@ -85,7 +86,7 @@ public class HomeController {
         family.setText(user.getLastname());
         setImage();
 
-        articles = FXCollections.observableArrayList(Repository.getUserArticles(user.getUserId()));
+        articles = FXCollections.observableArrayList(Repository.listHomeUserArticles(user.getUserId()));
         articleList.setItems(articles);
         articleList.setCellFactory(ArticleCellController -> new ArticleCellController(user));
 
@@ -141,9 +142,9 @@ public class HomeController {
         OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(user),
                 "Create Article");
 
-        int lenArticle = Repository.getUserArticles(user.getUserId()).size();
-        if(len == lenArticle){
-            for(Article article: Repository.getUserArticles(user.getUserId())){
+        List<Article> articles = Repository.listHomeUserArticles(user.getUserId());
+        if(len == articles.size()){
+            for(Article article: articles){
                 if(!articles.contains(article)){
                     articles.add(article);
                     break;

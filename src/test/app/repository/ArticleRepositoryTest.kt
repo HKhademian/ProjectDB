@@ -12,57 +12,57 @@ import java.util.*
 class ArticleRepositoryTest : BaseTest() {
 
 	@Test
-	fun `01- test getArticle exists user1`() {
-		println(getArticle(1, 12))
+	fun `01- test getUserArticle exists user1`() {
+		println(getUserArticle(1, 12))
 	}
 
 	@Test
-	fun `02- test getArticle exists user2`() {
-		println(getArticle(2, 12))
+	fun `02- test getUserArticle exists user2`() {
+		println(getUserArticle(2, 12))
 	}
 
 	@Test
-	fun `03- test getArticle exists user-non`() {
-		println(getArticle(0, 12))
+	fun `03- test getUserArticle exists user-non`() {
+		println(getUserArticle(0, 12))
 	}
 
 	@Test
-	fun `04- test getArticle non-exists`() {
-		println(getArticle(1, 0))
+	fun `04- test getUserArticle non-exists`() {
+		println(getUserArticle(1, 0))
 	}
 
 	@Test
-	fun `05- test getUserArticles user1`() {
-		println(getUserArticles(1))
+	fun `11- test listUserArticles user1`() {
+		println(listUserArticles(1))
 	}
 
 	@Test
-	fun `06- test getUserArticles user2`() {
-		println(getUserArticles(2))
+	fun `12- test listUserArticles user2`() {
+		println(listUserArticles(2))
 	}
 
 	@Test
-	fun `07- test getUserArticles user-non`() {
-		assertEquals(getUserArticles(0).size, 0)
+	fun `13- test listUserArticles user-non`() {
+		println(listUserArticles(0))
 	}
 
 	@Test
-	fun `08- test getUserHomeArticles user1`() {
-		println(getUserHomeArticles(1))
+	fun `21- test listHomeUserArticles user1`() {
+		println(listHomeUserArticles(1))
 	}
 
 	@Test
-	fun `09- test getUserHomeArticles user2`() {
-		println(getUserHomeArticles(2))
+	fun `22- test getUserHomeArticles user2`() {
+		println(listHomeUserArticles(2))
 	}
 
 	@Test
-	fun `10- test getUserHomeArticles user-non`() {
-		assertEquals(getUserHomeArticles(0).size, 0)
+	fun `23- test getUserHomeArticles user-non`() {
+		println(listHomeUserArticles(0))
 	}
 
 	@Test
-	fun `11- test saveArticle new`() {
+	fun `31- test saveArticle new`() {
 		println(
 			saveArticle(
 				Article(
@@ -78,14 +78,31 @@ class ArticleRepositoryTest : BaseTest() {
 	}
 
 	@Test
-	fun `12- test saveArticle edit`() {
+	fun `32- test saveArticle edit nonwriter`() {
 		println(
 			saveArticle(
 				Article(
-					articleId = 16,
+					articleId = 18,
+					writerUserId = 7,
+					title = "test article edited",
+					content = "ok article edited",
+					time = Date(),
+					featured = true,
+				)
+			)
+		)
+	}
+
+
+	@Test
+	fun `33- test saveArticle edit writer`() {
+		println(
+			saveArticle(
+				Article(
+					articleId = 18,
 					writerUserId = 1,
-					title = "test article",
-					content = "ok article",
+					title = "test article edited",
+					content = "ok article edited",
 					time = Date(),
 					featured = true,
 				)
@@ -94,12 +111,23 @@ class ArticleRepositoryTest : BaseTest() {
 	}
 
 	@Test
-	fun `13- test deleteArticle exists`() {
-		assertTrue(deleteArticle(16))
+	fun `41- test deleteArticle exists nonwriter`() {
+		println(getUserArticle(2, 18))
+		println(deleteArticle(2, 18))
+		println(getUserArticle(2, 18))
 	}
 
 	@Test
-	fun `14- test deleteArticle non-exists`() {
-		assertFalse(deleteArticle(0))
+	fun `42- test deleteArticle exists writer`() {
+		println(getUserArticle(1, 18))
+		println(deleteArticle(1, 18))
+		println(getUserArticle(1, 18))
+	}
+
+	@Test
+	fun `43- test deleteArticle non-exists`() {
+		println(getUserArticle(1, 100))
+		println(deleteArticle(1, 100))
+		println(getUserArticle(1, 100))
 	}
 }
