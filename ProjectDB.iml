@@ -7,11 +7,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/assets" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/view" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/sql" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/dev" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jfoenix-8.0.10" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.36.0.1" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="library" name="junit:junit:4.13.2" level="project" />
   </component>
 </module>
