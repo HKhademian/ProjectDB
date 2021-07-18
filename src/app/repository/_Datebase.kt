@@ -16,7 +16,7 @@ var lastError: Throwable? = null
 @JvmField
 var test: Boolean = false
 
-fun <T> connect(action: (Connection) -> T?): T? {
+fun <T> connect(action: /*Connection.*/(Connection) -> T?): T? {
 	val db = "jdbc:sqlite:${if (test) TEST_DB_NAME else DB_NAME}"
 	try {
 		val properties = Properties()
@@ -24,6 +24,7 @@ fun <T> connect(action: (Connection) -> T?): T? {
 		DriverManager.getConnection(db, properties).use { connection ->
 			lastError = null
 
+			// return connection.run { action(connection) } as T?
 			return action(connection) as T?
 		}
 	} catch (ex: Throwable) {
