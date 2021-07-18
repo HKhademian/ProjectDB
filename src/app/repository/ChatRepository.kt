@@ -8,54 +8,75 @@ import app.model.Message
 
 fun createChat(userId: Int, title: String): Chat? =
 	connect {
-		val SQL = """
-			begin transaction;
+		val SQL1 = """
 			INSERT INTO Chat (chatId, time, title) VALUES (NULL, ?, ?);
+		""".trimIndent()
+		val SQL2 = """
 			INSERT INTO Chat_User(chatId, userId, joinTime) select chatId, ?, ? from Chat where ROWID=last_insert_rowid();
+		""".trimIndent()
+		val SQL3 = """
 			select CU.* FROM ChatUser CU
 			JOIN Chat_User CU ON CU.userId = CU.userId AND CU.chatId = CU.chatId AND CU.ROWID=last_insert_rowid();
-			commit;
 		""".trimIndent()
-		val stmt = it.prepareStatement(SQL)
-		stmt.setLong(1, System.currentTimeMillis())
-		stmt.setString(2, title)
-		stmt.setInt(3, userId)
-		stmt.setLong(4, System.currentTimeMillis())
-		stmt.executeQuery()
+
+		val stmt1 = it.prepareStatement(SQL1)
+		stmt1.setLong(1, System.currentTimeMillis())
+		stmt1.setString(2, title)
+		if (stmt1.executeUpdate() <= 0)
+			return@connect null
+
+		val stmt2 = it.prepareStatement(SQL2)
+		stmt2.setInt(1, userId)
+		stmt2.setLong(2, System.currentTimeMillis())
+		if (stmt2.executeUpdate() <= 0)
+			return@connect null
+
+		val stmt3 = it.prepareStatement(SQL3)
+		stmt3.executeQuery()
 			.singleOf<Chat>()
 	}
 
 fun updateChat(chatId: Int, userId: Int, isArchived: Boolean, isMuted: Boolean): Chat? =
 	connect {
-		val SQL = """
-			begin transaction;
+		val SQL1 = """
 			INSERT OR REPLACE INTO Chat_User(chatId, userId) VALUES (?,?);
-			UPDATE Chat_User SET isArchived=?,isMuted=? WHERE ROWID=last_insert_rowid() RETURNING *;
-			commit;
 		""".trimIndent()
-		val stmt = it.prepareStatement(SQL)
-		stmt.setInt(1, chatId)
-		stmt.setInt(2, userId)
-		stmt.setInt(3, if (isArchived) 1 else 0)
-		stmt.setInt(4, if (isMuted) 1 else 0)
-		stmt.executeQuery()
+		val SQL2 = """
+			UPDATE Chat_User SET isArchived=?,isMuted=? WHERE ROWID=last_insert_rowid() RETURNING *;
+		""".trimIndent()
+
+		val stmt1 = it.prepareStatement(SQL1)
+		stmt1.setInt(1, chatId)
+		stmt1.setInt(2, userId)
+		if (stmt1.executeUpdate() <= 0)
+			return@connect null
+
+		val stmt2 = it.prepareStatement(SQL2)
+		stmt2.setInt(1, if (isArchived) 1 else 0)
+		stmt2.setInt(2, if (isMuted) 1 else 0)
+		stmt2.executeQuery()
 			.singleOf<Chat>()
 	}
 
 fun updateChat(chatId: Int, userId: Int, title: String): Chat? =
 	connect {
-		val SQL = """
-			begin transaction;
+		val SQL1 = """
 			UPDATE Chat SET title=? WHERE chatId=?;
-			SELECT * FROM ChatUser WHERE userId=? AND chatId=?;
-			commit;
 		""".trimIndent()
-		val stmt = it.prepareStatement(SQL)
-		stmt.setString(1, title)
-		stmt.setInt(2, chatId)
-		stmt.setInt(3, userId)
-		stmt.setInt(4, chatId)
-		stmt.executeQuery()
+		val SQL2 = """
+			SELECT * FROM ChatUser WHERE chatId=? AND userId=?;
+		""".trimIndent()
+
+		val stmt1 = it.prepareStatement(SQL1)
+		stmt1.setString(1, title)
+		stmt1.setInt(2, chatId)
+		if (stmt1.executeUpdate() <= 0)
+			return@connect null
+
+		val stmt2 = it.prepareStatement(SQL2)
+		stmt2.setInt(1, chatId)
+		stmt2.setInt(2, userId)
+		stmt2.executeQuery()
 			.singleOf<Chat>()
 	}
 
@@ -72,11 +93,11 @@ fun deleteChat(chatId: Int): Boolean =
 fun getUserChats(userId: Int, chatId: Int): Chat? =
 	connect {
 		val SQL = """
-			SELECT * FROM ChatUser WHERE userId=? AND chatId=?;
+			SELECT * FROM ChatUser WHERE chatId=? AND userId=?;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
-		stmt.setInt(1, userId)
-		stmt.setInt(2, chatId)
+		stmt.setInt(1, chatId)
+		stmt.setInt(2, userId)
 		stmt.executeQuery()
 			.singleOf<Chat>()
 	}
@@ -121,24 +142,31 @@ fun listMessageStat(userId: Int, messageId: Int): Message? =
 			.singleOf<Message>()
 	}
 
-fun statMessage(userId: Int, messageId: Int, isReceived: Boolean, isSeen: Boolean): Message? =
+fun statMessage(userId: Int, messageId: Int, isReceived: Boolean, isSeen: Boolean): Boolean =
 	connect {
-		val SQL = """
-			begin transaction ;
+		val SQL1 = """
 			INSERT OR REPLACE INTO Message_State (userId, messageId, receiveTime) values (?,?,?);
-			INSERT OR REPLACE INTO Message_State (userId, messageId, seenTime) values (?,?,?) RETURNING *;
-			commit ;
 		""".trimIndent()
-		val stmt = it.prepareStatement(SQL)
-		stmt.setInt(1, userId)
-		stmt.setInt(2, messageId)
-		stmt.setLong(3, if (!isReceived) 0 else System.currentTimeMillis())
-		stmt.setInt(4, userId)
-		stmt.setInt(5, messageId)
-		stmt.setLong(6, if (!isSeen) 0 else System.currentTimeMillis())
-		stmt.executeQuery()
-			.singleOf<Message>()
-	}
+		val SQL2 = """
+			INSERT OR REPLACE INTO Message_State (userId, messageId, seenTime) values (?,?,?);
+		""".trimIndent()
+
+		val stmt1 = it.prepareStatement(SQL1)
+		stmt1.setInt(1, userId)
+		stmt1.setInt(2, messageId)
+		stmt1.setLong(3, if (!isReceived) 0 else System.currentTimeMillis())
+		if (stmt1.executeUpdate() <= 0)
+			return@connect false
+
+		val stmt2 = it.prepareStatement(SQL2)
+		stmt2.setInt(1, userId)
+		stmt2.setInt(2, messageId)
+		stmt2.setLong(3, if (!isSeen) 0 else System.currentTimeMillis())
+		if (stmt2.executeUpdate() <= 0)
+			return@connect false
+
+		true
+	} == true
 
 fun listUserMessages(userId: Int, chatId: Int): List<Message> =
 	connect {
