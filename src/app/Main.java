@@ -1,5 +1,6 @@
 package app;
 
+import app.controller.LoginController;
 import app.controller.SignupController;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -12,7 +13,7 @@ public class Main extends Application {
         if ("backend".equals(System.getenv().getOrDefault("dev.mode", null))) {
             OpenWindow.openWindow("dev/scene.fxml", null, "test javafx");
         } else {
-            OpenWindow.openWindow("view/Signup.fxml", new SignupController(), "Linkedin - Profile");
+            OpenWindow.openWindow("view/Login.fxml", new LoginController(), "Linkedin - Login");
         }
     }
 

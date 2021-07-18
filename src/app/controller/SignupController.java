@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class SignupController {
 
@@ -78,10 +79,10 @@ public class SignupController {
         passwordShowField.setVisible(false);
         showPassword.setVisible(false);
 
-        //System.out.println(Repository.suggestLocation().size());
-        //ObservableList<String> locations = FXCollections.observableArrayList(Repository.suggestLocation());
-       // locationBox.setItems(locations);
-       // new ComboBoxAutoComplete<>(locationBox);
+        System.out.println(Repository.suggestLocation().size());
+        ObservableList<String> locations = FXCollections.observableArrayList(Repository.suggestLocation());
+        locationBox.setItems(locations);
+        new ComboBoxAutoComplete<>(locationBox);
 
         hidePassword.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showPassword());
 
@@ -117,17 +118,18 @@ public class SignupController {
             String password = getPassword();
             String name = nameBox.getText().trim();
             String family = familyBox.getText().trim();
+            String location = locationBox.getValue().trim();
 
             User user = Repository.registerUser(new User(0, username, name, family,
-                    null, null, birthday, null), password);
+                    null, null, birthday, location), password);
 
             if(user==null){
                 usernameError.setText("this username is taken");
                 return;
             }
 
-            signupButton.getScene().getWindow().hide();
             OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, user), "Profile");
+            signupButton.getScene().getWindow().hide();
         }
 
     }
