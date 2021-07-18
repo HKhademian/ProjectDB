@@ -10,24 +10,45 @@ import java.util.Date
 
 fun suggestLocation(): List<String> =
 	connect {
-		val SQL = """SELECT * from SuggestLocation;"""
+		val SQL = """
+			SELECT * from SuggestLocation;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
 			.listOf<String>()
 	} ?: emptyList()
 
-fun getUserById(userId: Int): User? =
-	connect {
-		val SQL = """SELECT * from `User` where `userId`=?;"""
+fun getUserById(visitorUserId: Int, userId: Int): User? {
+	val user = connect {
+		val SQL = """
+			SELECT * from User where userId=?;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
 			.singleOf<User>()
+	} ?: return null
+
+	if (visitorUserId > 0 && visitorUserId != userId) connect {
+		val SQL = """
+			INSERT INTO Event_ProfileVisit (by_userId, userId, time, notified)
+			VALUES (?,?,?,0);
+			""".trimIndent()
+		val statement = it.prepareStatement(SQL)
+		statement.setInt(1, visitorUserId)
+		statement.setInt(2, userId)
+		statement.setLong(3, System.currentTimeMillis())
+		statement.executeUpdate() > 0
 	}
+
+	return user
+}
 
 fun loginUser(username: String?, password: String?): User? =
 	connect {
-		val SQL = """select * from `User` where `username`=? and `password`=?;"""
+		val SQL = """
+			select * from User where username=? and password=?;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setString(1, username)
 		statement.setString(2, password)
@@ -37,10 +58,12 @@ fun loginUser(username: String?, password: String?): User? =
 
 fun registerUser(user: User, password: String): User? =
 	connect {
-		val SQL = """INSERT INTO `User`
-			(`userId`, `username`, `password`, `firstname`, `lastname`, `intro`, `about`, `avatar`, `accomp`, `birthday`, `location`)
+		val SQL = """
+			INSERT INTO User
+			(userId, username, password, firstname, lastname, intro, about, avatar, accomp, birthday, location)
 			VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)
-			RETURNING *;"""
+			RETURNING *;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setString(1, user.username)
 		statement.setString(2, password)
@@ -63,14 +86,25 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean =
 		val SQL2: String
 		val SQL3: String
 		if (commentId > 0) {
-			SQL1 = """SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;"""
-			SQL2 = """DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId`=?;"""
-			SQL3 = """INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,?,0);"""
+			SQL1 = """
+				SELECT count(*) from User_Like where userId=? and articleId=? and commentId=?;
+			""".trimIndent()
+			SQL2 = """
+				DELETE from User_Like where userId=? and articleId=? and commentId=?;
+			""".trimIndent()
+			SQL3 = """
+				INSERT into User_Like (userId, articleId, time, commentId, notified) VALUES (?,?,?,?,0);
+			""".trimIndent()
 		} else {
-			SQL1 = """SELECT count(*) from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;"""
-			SQL2 = """DELETE from `User_Like` where `userId`=? and `articleId`=? and `commentId` is null;"""
-			SQL3 =
-				"""INSERT into `User_Like` (`userId`, `articleId`, `time`, `commentId`, `notified`) VALUES (?,?,?,null,0);"""
+			SQL1 = """
+				SELECT count(*) from User_Like where userId=? and articleId=? and commentId is null;
+			""".trimIndent()
+			SQL2 = """
+				DELETE from User_Like where userId=? and articleId=? and commentId is null;
+			""".trimIndent()
+			SQL3 = """
+				INSERT into User_Like (userId, articleId, time, commentId, notified) VALUES (?,?,?,null,0);
+			""".trimIndent()
 		}
 		val statement1 = it.prepareStatement(SQL1)
 		statement1.setInt(1, userId)
@@ -107,7 +141,7 @@ fun updateUserPersonalInfo(
 	location: String?,
 ): Boolean =
 	connect {
-		val sql = "UPDATE `User` SET " + buildList {
+		val sql = "UPDATE User SET " + buildList {
 			if (firstName != null) add("firstname=?")
 			if (lastName != null) add("lastname=?")
 			if (intro != null) add("intro=?")
@@ -116,7 +150,7 @@ fun updateUserPersonalInfo(
 			if (accomp != null) add("accomp=?")
 			if (birthday != null) add("birthday=?")
 			if (location != null) add("location=?")
-		}.joinToString(",") + " WHERE `userId`=?;"
+		}.joinToString(",") + " WHERE userId=?;"
 
 		var i = 0
 		val stmt = it.prepareStatement(sql)
