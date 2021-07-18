@@ -122,7 +122,7 @@ public class TestController implements Initializable {
 
 
     btnGetArticle.setOnMouseClicked(event -> {
-      Object res = Repository.getArticle(Integer.parseInt(id.getText()));
+      Object res = Repository.getArticle(loggedUser.getUserId(), Integer.parseInt(id.getText()));
       text.setText("getArticle res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSaveArticle1.setOnMouseClicked(event -> {

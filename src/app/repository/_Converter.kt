@@ -30,7 +30,6 @@ internal inline fun <reified T> ResultSet.extract(): T? =
 		Skill::class -> extractSkill() as T?
 		User::class -> extractUser() as T?
 		SkillEndorse::class -> extractSkillEndorse() as T?
-		HomeArticle::class -> extractHomeArticle() as T?
 		MyNetwork::class -> extractMyNetwork() as T?
 		Chat::class -> extractChat() as T?
 		Message::class -> extractMessage() as T?
@@ -52,6 +51,9 @@ internal fun ResultSet.extractArticle(): Article =
 		(extractInt("featured") ?: 0) != 0,
 		extractInt("like_count") ?: 0,
 		extractInt("comment_count") ?: 0,
+		extractInt("home_userId") ?: 0,
+		extractDate("home_time") ?: Date(0),
+		extractInt("home_count") ?: 0,
 	)
 
 @PublishedApi
@@ -143,15 +145,6 @@ internal fun ResultSet.extractSkillEndorse(): SkillEndorse =
 		extractInt("userId") ?: 0,
 		extractInt("skillId") ?: 0,
 		extractDate("time") ?: Date(0),
-	)
-
-@PublishedApi
-internal fun ResultSet.extractHomeArticle(): HomeArticle =
-	HomeArticle(
-		extractInt("home_userId") ?: 0,
-		extractDate("home_time") ?: Date(0),
-		extractInt("home_count") ?: 0,
-		extractArticle(),
 	)
 
 @PublishedApi

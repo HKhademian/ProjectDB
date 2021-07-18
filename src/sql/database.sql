@@ -351,6 +351,9 @@ CREATE VIEW Notification as
 ;
 
 CREATE VIEW Home as
+    select A.writer_userId as userId, A.articleId as articleId, A.time as time, 'owner' as type, A.writer_userId as by_useId
+    from Article A
+    UNION
     select CON.from_userId as userId, A.articleId as articleId, A.time as time, 'posted' as type, CON.to_userId as by_useId
     from Connection CON
     join Article A on CON.to_userId = A.writer_userId
