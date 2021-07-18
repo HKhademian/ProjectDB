@@ -251,17 +251,19 @@ CREATE VIEW CommentCounted as
 ;
 
 CREATE VIEW SuggestBackground as
-    select distinct UB.title
+    select distinct trim(UB.title) as suggestion
     from User_Background UB
+    where UB.title is not null AND length(trim(UB.title))>0
     group by UB.title
     order by count(UB.userId) desc
 ;
 
 CREATE VIEW SuggestLocation as
-    select distinct U.location
+    select distinct trim(U.location) as suggestion
     from User U
+    where U.location is not null AND length(trim(U.location))>0
     group by U.location
-    order by count(U.userId) desc
+    order by count(U.userId) desc;
 ;
 
 
