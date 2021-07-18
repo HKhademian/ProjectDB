@@ -32,24 +32,31 @@ fun getUserArticles(userId: Int): List<Article> =
 
 fun saveArticle(article: Article): Article? =
 	connect {
-		val SQL = """
-			begin transaction ;
+		val SQL1 = """
 			INSERT OR REPLACE INTO Article
-				(articleId, writer_userId, title, content, time, featured) VALUES (?,?,?,?,?,?);
+				(articleId, writer_userId, title, content, time, featured) VALUES (?,?,?,?,?,?) RETURNING articleId;
+	 """.trimIndent()
+		val SQL2 = """
 			SELECT HA.* from HomeArticle HA
 				JOIN Article A on HA.articleId = A.articleId
-				where A.ROWID=last_insert_rowid() AND HA.home_userId=?;
-			commit ;
+				where A.articleId=? AND HA.home_userId=?;
 	 """.trimIndent()
-		val statement = it.prepareStatement(SQL)
-		if (article.articleId > 0) statement.setInt(1, article.articleId) else statement.setNull(1, Types.INTEGER)
-		statement.setInt(2, article.writerUserId)
-		statement.setString(3, article.title)
-		statement.setString(4, article.content)
-		statement.setLong(5, article.time.time)
-		statement.setInt(6, if (article.featured) 1 else 0)
-		statement.setInt(7, article.writerUserId)
-		statement.executeQuery()
+		val stmt1 = it.prepareStatement(SQL1)
+		if (article.articleId > 0)
+			stmt1.setInt(1, article.articleId)
+		else
+			stmt1.setNull(1, Types.INTEGER)
+		stmt1.setInt(2, article.writerUserId)
+		stmt1.setString(3, article.title)
+		stmt1.setString(4, article.content)
+		stmt1.setLong(5, article.time.time)
+		stmt1.setInt(6, if (article.featured) 1 else 0)
+		val articleId = stmt1.executeQuery().singleOf<Int>() ?: return@connect null
+
+		val stmt2 = it.prepareStatement(SQL2)
+		stmt2.setInt(1, articleId)
+		stmt2.setInt(2, article.writerUserId)
+		stmt2.executeQuery()
 			.singleOf<Article>()
 	}
 
