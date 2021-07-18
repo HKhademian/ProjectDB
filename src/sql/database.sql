@@ -206,47 +206,39 @@ create table Message_State (
 
 -- Base Views --
 
-CREATE VIEW Count_Article_Comment as
-    select A.articleId as articleId , count(C.commentId) as comment_count
+CREATE VIEW ArticleStat as
+    select A.*, ACL.like_count, ACC.comment_count
     from Article A
-    left join Comment C on A.articleId=C.articleId and C.reply_commentId is null
-    group by A.articleId
+    left join (
+        select A.articleId as articleId , count(C.commentId) as comment_count
+        from Article A
+        left join Comment C on A.articleId=C.articleId and C.reply_commentId is null
+        group by A.articleId
+    ) ACC on A.articleId = ACC.articleId
+    left join (
+        select A.articleId as articleId , count(UL.userId) as like_count
+        from Article A
+        left join User_Like UL on A.articleId=UL.articleId and UL.commentId is null
+        group by A.articleId
+    ) ACL on A.articleId = ACL.articleId
+    order by A.time, ACL.like_count+ACC.comment_count desc
 ;
 
-CREATE VIEW Count_Article_Like as
-    select A.articleId as articleId , count(UL.userId) as like_count
-    from Article A
-    left join User_Like UL on A.articleId=UL.articleId and UL.commentId is null
-    group by A.articleId
-;
-
-CREATE VIEW Count_Comment_Like as
-    select C.commentId as commentId , count(UL.userId) as like_count
-    from Comment C
-    left join User_Like UL on C.articleId=UL.articleId and C.commentId=UL.commentId
-    group by C.commentId
-;
-
-CREATE VIEW Count_Comment_Reply as
-    select C.commentId as commentId , count(CR.commentId) as reply_count
-    from Comment C
-    left join Comment CR on C.articleId=CR.articleId and C.commentId=CR.reply_commentId
-    group by C.commentId
-;
-
-CREATE VIEW ArticleCounted as
-    select A.*, CAL.like_count, CAC.comment_count
-    from Article A
-    left join Count_Article_Like CAL on A.articleId = CAL.articleId
-    left join Count_Article_Comment CAC on A.articleId = CAC.articleId
-    order by A.time, CAL.like_count+CAC.comment_count desc
-;
-
-CREATE VIEW CommentCounted as
+CREATE VIEW CommentStat as
     select C.*, CCL.like_count as like_count, CCR.reply_count as reply_count
     from Comment C
-    left join Count_Comment_Like CCL on C.commentId = CCL.commentId
-    left join Count_Comment_Reply CCR on C.commentId = CCR.commentId
+    left join (
+        select C.commentId as commentId , count(UL.userId) as like_count
+        from Comment C
+        left join User_Like UL on C.articleId=UL.articleId and C.commentId=UL.commentId
+        group by C.commentId
+    ) CCL on C.commentId = CCL.commentId
+    left join (
+        select C.commentId as commentId , count(CR.commentId) as reply_count
+        from Comment C
+        left join Comment CR on C.articleId=CR.articleId and C.commentId=CR.reply_commentId
+        group by C.commentId
+    ) CCR on C.commentId = CCR.commentId
     order by C.time, CCL.like_count + CCR.reply_count desc
 ;
 
@@ -368,9 +360,9 @@ CREATE VIEW Home as
 ;
 
 CREATE VIEW HomeArticle as
-    select H.userId as home_userId, MAX(H.time) as home_time, count(*) as home_count, AC.*
+    select H.userId as home_userId, MAX(H.time) as home_time, count(*) as home_count, AST.*
     from Home H
-    JOIN ArticleCounted AC ON H.articleId=AC.articleId
+    JOIN ArticleStat AST ON H.articleId=AST.articleId
     group by H.userId, H.articleId
     order by H.userId, MAX(H.time) DESC
 ;

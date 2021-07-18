@@ -9,10 +9,10 @@ import java.sql.Types
 fun getArticle(userId: Int, articleId: Int): Article? =
 	connect {
 		val SQL = """
-			SELECT AC.*, HA.home_userId , HA.home_count, HA.home_time
-			from ArticleCounted AC
-			LEFT JOIN HomeArticle HA ON AC.articleId= HA.articleId AND HA.home_userId=?
-			where AC.articleId=?;
+			SELECT AST.*, HA.home_userId , HA.home_count, HA.home_time
+			from ArticleStat AST
+			LEFT JOIN HomeArticle HA ON AST.articleId= HA.articleId AND HA.home_userId=?
+			where AST.articleId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
