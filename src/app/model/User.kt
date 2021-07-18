@@ -2,6 +2,10 @@ package app.model
 
 import java.util.Date
 
+enum class NetworkType {
+	MayKnow, Requested, Invited, SameSkill, SameLocation,
+}
+
 data class User(
 	var userId: Int,
 	var username: String,
@@ -13,6 +17,10 @@ data class User(
 	var location: String?,
 ) {
 	var avatar: ByteArray? = null
+
+	// for each network
+	var mutualCount: Int = 0
+	var networkType: NetworkType = NetworkType.MayKnow
 }
 
 data class Background(
@@ -27,3 +35,11 @@ data class Background(
 		Work, Study, Research,
 	}
 }
+
+class Invitation(
+	var fromUserId: Int,
+	var toUserId: Int,
+	var time: Date,
+	var message: String,
+	var status: Int,
+)

@@ -7,15 +7,19 @@ import app.model.Language
 
 fun listLanguages(): List<Language> =
 	connect {
-		val SQL = """SELECT * from `Language`;"""
+		val SQL = """
+			SELECT * from Language;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
 			.listOf<Language>()
 	} ?: emptyList()
 
-fun getLanguageById(langCode: String): Language? =
+fun getLanguageByCode(langCode: String): Language? =
 	connect {
-		val SQL = """SELECT * from `Language` where `langCode`=?;"""
+		val SQL = """
+			SELECT * from Language where langCode=?;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setString(1, langCode)
 		statement.executeQuery()
@@ -24,7 +28,9 @@ fun getLanguageById(langCode: String): Language? =
 
 fun addLanguage(langCode: String, title: String): Language? =
 	connect {
-		val SQL = """INSERT INTO `Language` VALUES (?,?) RETURNING *;"""
+		val SQL = """
+			INSERT INTO Language VALUES (?,?) RETURNING *;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setString(1, langCode)
 		statement.setString(2, title)
@@ -34,26 +40,22 @@ fun addLanguage(langCode: String, title: String): Language? =
 
 fun listUserLanguage(userId: Int): List<Language> =
 	connect {
-		val SQL = """SELECT L.* from `Language` L JOIN 'User_Lang' UL ON L.langCode=UL.langCode where UL.`userId`=?;"""
+		val SQL = """
+			SELECT L.* from Language L
+			JOIN 'User_Lang' UL ON L.langCode=UL.langCode
+			where UL.userId=?;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
 			.listOf<Language>()
 	} ?: emptyList()
 
-
-fun getLastUserLang(userId: Int): Language? =
-	connect {
-		val SQL = """SELECT * FROM `User_Lang` WHERE `userId`=? ORDER BY ROWID DESC LIMIT 1;"""
-		val statement = it.prepareStatement(SQL)
-		statement.setInt(1, userId)
-		statement.executeQuery()
-			.singleOf<Language>()
-	}
-
 fun addUserLanguage(userId: Int, langCode: String): Boolean =
 	connect {
-		val SQL = """INSERT INTO `User_Lang` (`userId`, `langCode`) VALUES (?,?);"""
+		val SQL = """
+			INSERT INTO User_Lang (userId, langCode) VALUES (?,?);
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.setString(2, langCode)
@@ -62,7 +64,9 @@ fun addUserLanguage(userId: Int, langCode: String): Boolean =
 
 fun removeUserLanguage(userId: Int, langCode: String): Boolean =
 	connect {
-		val SQL = """DELETE FROM `User_Lang` WHERE `userId`=? AND `langCode`=?;"""
+		val SQL = """
+			DELETE FROM User_Lang WHERE userId=? AND langCode=?;
+		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.setString(2, langCode)

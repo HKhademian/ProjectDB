@@ -30,7 +30,6 @@ internal inline fun <reified T> ResultSet.extract(): T? =
 		Skill::class -> extractSkill() as T?
 		User::class -> extractUser() as T?
 		SkillEndorse::class -> extractSkillEndorse() as T?
-		MyNetwork::class -> extractMyNetwork() as T?
 		Chat::class -> extractChat() as T?
 		Message::class -> extractMessage() as T?
 		Int::class -> extractInt() as T?
@@ -136,6 +135,14 @@ internal fun ResultSet.extractUser(): User =
 		extractString("location"),
 	).apply {
 		avatar = extractByteArray("avatar")
+
+		mutualCount = extractInt("mutual_count") ?: 0
+		networkType = when (extractString("type")) {
+			"may_know" -> NetworkType.MayKnow
+			"requested" -> NetworkType.Requested
+			"invited" -> NetworkType.Invited
+			else -> throw RuntimeException("must not happened")
+		}
 	}
 
 @PublishedApi
@@ -146,20 +153,6 @@ internal fun ResultSet.extractSkillEndorse(): SkillEndorse =
 		extractInt("skillId") ?: 0,
 		extractDate("time") ?: Date(0),
 	)
-
-@PublishedApi
-internal fun ResultSet.extractMyNetwork(): MyNetwork {
-	val type = extractString("type")
-	val mutualCount = extractInt("mutual_count") ?: 0
-	val user = extractUser()
-
-	return when (type) {
-		"may_know" -> MyNetwork.MayKnowNetwork(user, mutualCount)
-		"requested" -> MyNetwork.RequestedNetwork(user, mutualCount)
-		"invited" -> MyNetwork.InvitedNetwork(user, mutualCount)
-		else -> throw RuntimeException("must not happened")
-	}
-}
 
 
 @PublishedApi
