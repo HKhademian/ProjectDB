@@ -51,13 +51,12 @@ fun saveUserBackground(bg: Background): Background? =
 			.singleOf<Background>()
 	}
 
-fun deleteUserBackground(bgId: Int): Background? =
+fun deleteUserBackground(bgId: Int): Boolean =
 	connect {
 		val SQL = """
 			DELETE FROM User_Background WHERE bgId=? RETURNING *;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, bgId)
-		statement.executeQuery()
-			.singleOf<Background>()
-	}
+		statement.executeUpdate() > 0
+	} == true
