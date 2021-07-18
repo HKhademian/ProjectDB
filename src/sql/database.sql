@@ -379,16 +379,16 @@ CREATE VIEW UserMessage as
 ;
 
 CREATE VIEW UserChat as
-    select CU.userId, CU.unread_count, MAX(UM.seenTime) as lastSeen_time, C.*
-    from(
+    SELECT C.title, C.time, CU.*, MAX(UM.seenTime) AS lastSeen_time
+    FROM Chat C
+    JOIN (
         select CU.*, count(UM.messageId) as unread_count
         from Chat_User CU
         LEFT JOIN UserMessage UM ON CU.chatId = UM.chatId AND CU.userId = UM.userId AND (UM.seenTime is NULL OR UM.seenTime <= 0)
         group by CU.userId, CU.chatId
-    ) CU
-    JOIN Chat C on CU.chatId = C.chatId
+    ) CU ON CU.chatId = C.chatId
     LEFT JOIN UserMessage UM ON CU.chatId = UM.chatId AND CU.userId = UM.userId
-    group by CU.userId, CU.chatId
+    GROUP BY CU.userId, CU.chatId
 ;
 
 

@@ -12,7 +12,9 @@ open class BaseTest {
 		@BeforeClass
 		@JvmStatic
 		fun `init test db`() {
+			File(TEST_DB_NAME).delete()
 			File(DB_NAME).copyTo(File(TEST_DB_NAME), overwrite = true)
+			Thread.sleep(100);
 			app.repository.test = true
 		}
 

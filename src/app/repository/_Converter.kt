@@ -170,7 +170,7 @@ internal fun ResultSet.extractChat(): Chat =
 		extractDate("time") ?: Date(0),
 		extractInt("unread_count") ?: 0,
 		extractDate("lastSeen_time") ?: Date(0),
-		extractDate("join_time") ?: Date(0),
+		extractDate("joinTime") ?: Date(0),
 		extractInt("isAdmin") == 1,
 		extractInt("isArchived") == 1,
 		extractInt("isMuted") == 1,
