@@ -1,10 +1,11 @@
 package app.repository
 
+import app.BaseTest
 import org.junit.Test
 
 import org.junit.Assert.*
 
-class UserRepositoryTest {
+class UserRepositoryTest : BaseTest() {
 
 	@Test
 	fun `test suggestBackground`() {

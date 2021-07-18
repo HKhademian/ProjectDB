@@ -9,7 +9,10 @@ import java.sql.Types
 fun getArticle(userId: Int, articleId: Int): Article? =
 	connect {
 		val SQL = """
-			SELECT * from HomeArticle where home_userId=? AND articleId=?;
+			SELECT AC.*, HA.home_userId , HA.home_count, HA.home_time
+			from ArticleCounted AC
+			LEFT JOIN HomeArticle HA ON AC.articleId= HA.articleId AND HA.home_userId=?
+			where AC.articleId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
@@ -18,14 +21,25 @@ fun getArticle(userId: Int, articleId: Int): Article? =
 			.singleOf<Article>()
 	}
 
-fun getUserArticles(userId: Int): List<Article> =
+fun getUserArticles(writerUserId: Int): List<Article> =
 	connect {
 		val SQL = """
 			SELECT * from HomeArticle where home_userId=? AND writer_userId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
+		statement.setInt(1, writerUserId)
+		statement.setInt(2, writerUserId)
+		statement.executeQuery()
+			.listOf<Article>()
+	} ?: emptyList()
+
+fun getUserHomeArticles(userId: Int): List<Article> =
+	connect {
+		val SQL = """
+			SELECT * from HomeArticle where home_userId=?;
+		""".trimIndent()
+		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
-		statement.setInt(2, userId)
 		statement.executeQuery()
 			.listOf<Article>()
 	} ?: emptyList()
@@ -41,6 +55,7 @@ fun saveArticle(article: Article): Article? =
 				JOIN Article A on HA.articleId = A.articleId
 				where A.articleId=? AND HA.home_userId=?;
 	 """.trimIndent()
+
 		val stmt1 = it.prepareStatement(SQL1)
 		if (article.articleId > 0)
 			stmt1.setInt(1, article.articleId)
@@ -69,14 +84,3 @@ fun deleteArticle(articleId: Int): Boolean =
 		statement.setInt(1, articleId)
 		statement.executeUpdate() > 0
 	} == true
-
-fun getUserHomeArticles(userId: Int): List<Article> =
-	connect {
-		val SQL = """
-			SELECT * from HomeArticle where home_userId=?;
-		""".trimIndent()
-		val statement = it.prepareStatement(SQL)
-		statement.setInt(1, userId)
-		statement.executeQuery()
-			.listOf<Article>()
-	} ?: emptyList()
