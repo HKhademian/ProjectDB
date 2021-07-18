@@ -11,7 +11,7 @@ fun getCommentById(commentId: Int): Comment? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, commentId)
 		statement.executeQuery()
-			.tryRead<Comment>()
+			.singleOf<Comment>()
 	}
 
 /**
@@ -23,7 +23,7 @@ fun listComments(articleId: Int): List<Comment> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, articleId)
 		statement.executeQuery()
-			.list<Comment>()
+			.listOf<Comment>()
 	} ?: emptyList()
 
 fun deleteComment(commentId: Int): Comment? =
@@ -32,7 +32,7 @@ fun deleteComment(commentId: Int): Comment? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, commentId)
 		statement.executeQuery()
-			.tryRead<Comment>()
+			.singleOf<Comment>()
 	}
 
 /**
@@ -54,5 +54,5 @@ fun sendCommentOn(userId: Int, articleId: Int, replyCommentId: Int, content: Str
 		statement.setLong(3, System.currentTimeMillis())
 		statement.setInt(4, if (replyCommentId > 0) replyCommentId else articleId)
 		statement.executeQuery()
-			.tryRead<Comment>()
+			.singleOf<Comment>()
 	}

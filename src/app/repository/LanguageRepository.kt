@@ -10,7 +10,7 @@ fun listLanguages(): List<Language> =
 		val SQL = """SELECT * from `Language`;"""
 		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
-			.list<Language>()
+			.listOf<Language>()
 	} ?: emptyList()
 
 fun getLanguageById(langCode: String): Language? =
@@ -19,7 +19,7 @@ fun getLanguageById(langCode: String): Language? =
 		val statement = it.prepareStatement(SQL)
 		statement.setString(1, langCode)
 		statement.executeQuery()
-			.tryRead<Language>()
+			.singleOf<Language>()
 	}
 
 fun addLanguage(langCode: String, title: String): Language? =
@@ -29,7 +29,7 @@ fun addLanguage(langCode: String, title: String): Language? =
 		statement.setString(1, langCode)
 		statement.setString(2, title)
 		statement.executeQuery()
-			.tryRead<Language>()
+			.singleOf<Language>()
 	}
 
 fun listUserLanguage(userId: Int): List<Language> =
@@ -38,7 +38,7 @@ fun listUserLanguage(userId: Int): List<Language> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<Language>()
+			.listOf<Language>()
 	} ?: emptyList()
 
 
@@ -48,7 +48,7 @@ fun getLastUserLang(userId: Int): Language? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.tryRead<Language>()
+			.singleOf<Language>()
 	}
 
 fun addUserLanguage(userId: Int, langCode: String): Boolean =

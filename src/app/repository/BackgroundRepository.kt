@@ -11,7 +11,7 @@ fun suggestBackground(): List<Background> =
 		val SQL = """SELECT * from `SuggestBackground`;"""
 		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
-			.list<Background>()
+			.listOf<Background>()
 	} ?: emptyList()
 
 fun listUserBackground(userId: Int): List<Background> =
@@ -20,7 +20,7 @@ fun listUserBackground(userId: Int): List<Background> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<Background>()
+			.listOf<Background>()
 	} ?: emptyList()
 
 fun saveUserBackground(bg: Background): Background? =
@@ -44,7 +44,7 @@ fun saveUserBackground(bg: Background): Background? =
 		else
 			statement.setNull(6, Types.INTEGER)
 		statement.executeQuery()
-			.tryRead<Background>()
+			.singleOf<Background>()
 	}
 
 fun deleteUserBackground(bgId: Int): Background? =
@@ -53,5 +53,5 @@ fun deleteUserBackground(bgId: Int): Background? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, bgId)
 		statement.executeQuery()
-			.tryRead<Background>()
+			.singleOf<Background>()
 	}

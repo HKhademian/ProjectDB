@@ -11,7 +11,7 @@ fun listSkillEndorsedByUser(byUserId: Int): List<SkillEndorse> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, byUserId)
 		statement.executeQuery()
-			.list<SkillEndorse>()
+			.listOf<SkillEndorse>()
 	} ?: emptyList()
 
 fun listSkillEndorseOnUser(userId: Int): List<SkillEndorse> =
@@ -20,7 +20,7 @@ fun listSkillEndorseOnUser(userId: Int): List<SkillEndorse> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<SkillEndorse>()
+			.listOf<SkillEndorse>()
 	} ?: emptyList()
 
 fun addSkillEndorse(byUserId: Int, userId: Int, skillId: Int): SkillEndorse? =
@@ -33,7 +33,7 @@ fun addSkillEndorse(byUserId: Int, userId: Int, skillId: Int): SkillEndorse? =
 		statement.setInt(3, skillId)
 		statement.setLong(4, System.currentTimeMillis())
 		statement.executeQuery()
-			.tryRead<SkillEndorse>()
+			.singleOf<SkillEndorse>()
 	}
 
 fun removeSkillEndorse(byUserId: Int, userId: Int, skillId: Int): SkillEndorse? =
@@ -44,5 +44,5 @@ fun removeSkillEndorse(byUserId: Int, userId: Int, skillId: Int): SkillEndorse? 
 		statement.setInt(2, userId)
 		statement.setInt(3, skillId)
 		statement.executeQuery()
-			.tryRead<SkillEndorse>()
+			.singleOf<SkillEndorse>()
 	}

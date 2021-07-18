@@ -12,7 +12,7 @@ fun listInvitation(userId: Int): List<Invitation> =
 		stmt.setInt(1, userId)
 		stmt.setInt(2, userId)
 		stmt.executeQuery()
-			.list<Invitation>()
+			.listOf<Invitation>()
 	} ?: emptyList()
 
 fun sendInvitation(userId: Int, byUserId: Int, message: String): Invitation? =
@@ -26,7 +26,7 @@ fun sendInvitation(userId: Int, byUserId: Int, message: String): Invitation? =
 		stmt.setLong(3, System.currentTimeMillis())
 		stmt.setString(4, message)
 		stmt.executeQuery()
-			.tryRead<Invitation>()
+			.singleOf<Invitation>()
 	}
 
 fun deleteInvitation(userId: Int, byUserId: Int): Invitation? =
@@ -36,7 +36,7 @@ fun deleteInvitation(userId: Int, byUserId: Int): Invitation? =
 		stmt.setInt(1, userId)
 		stmt.setInt(2, byUserId)
 		stmt.executeQuery()
-			.tryRead<Invitation>()
+			.singleOf<Invitation>()
 	}
 
 fun acceptInvitation(userId: Int, byUserId: Int): Invitation? =
@@ -56,7 +56,7 @@ fun acceptInvitation(userId: Int, byUserId: Int): Invitation? =
 		stmt.setInt(7, userId)
 		stmt.setInt(8, byUserId)
 		stmt.executeQuery()
-			.tryRead<Invitation>()
+			.singleOf<Invitation>()
 	}
 
 fun rejectInvitation(userId: Int, byUserId: Int): Invitation? =
@@ -73,5 +73,5 @@ fun rejectInvitation(userId: Int, byUserId: Int): Invitation? =
 		stmt.setInt(5, userId)
 		stmt.setInt(6, byUserId)
 		stmt.executeQuery()
-			.tryRead<Invitation>()
+			.singleOf<Invitation>()
 	}

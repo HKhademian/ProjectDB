@@ -15,7 +15,7 @@ fun listUserNetworkUsers(userId: Int): List<User> =
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
 		stmt.executeQuery()
-			.list<User>()
+			.listOf<User>()
 	} ?: emptyList()
 
 fun listMyNetwork(userId: Int): List<MyNetwork> =
@@ -27,5 +27,5 @@ fun listMyNetwork(userId: Int): List<MyNetwork> =
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
 		stmt.executeQuery()
-			.list<MyNetwork>()
+			.listOf<MyNetwork>()
 	} ?: emptyList()

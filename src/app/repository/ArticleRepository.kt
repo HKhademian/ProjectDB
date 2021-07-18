@@ -13,7 +13,7 @@ fun getArticle(articleId: Int): Article? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, articleId)
 		statement.executeQuery()
-			.tryRead<Article>()
+			.singleOf<Article>()
 	}
 
 fun getUserArticles(userId: Int): List<Article> =
@@ -22,7 +22,7 @@ fun getUserArticles(userId: Int): List<Article> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<Article>()
+			.listOf<Article>()
 	} ?: emptyList()
 
 fun saveArticle(article: Article): Article? =
@@ -39,7 +39,7 @@ fun saveArticle(article: Article): Article? =
 		statement.setLong(5, article.time.time)
 		statement.setInt(6, if (article.featured) 1 else 0)
 		statement.executeQuery()
-			.tryRead<Article>()
+			.singleOf<Article>()
 	}
 
 fun deleteArticle(articleId: Int): Article? =
@@ -48,7 +48,7 @@ fun deleteArticle(articleId: Int): Article? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, articleId)
 		statement.executeQuery()
-			.tryRead<Article>()
+			.singleOf<Article>()
 	}
 
 fun getUserHome(userId: Int): List<HomeArticle> =
@@ -57,7 +57,7 @@ fun getUserHome(userId: Int): List<HomeArticle> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<HomeArticle>()
+			.listOf<HomeArticle>()
 	} ?: emptyList()
 
 fun getUserHomeArticles(userId: Int): List<Article> =
@@ -66,5 +66,5 @@ fun getUserHomeArticles(userId: Int): List<Article> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<Article>()
+			.listOf<Article>()
 	} ?: emptyList()

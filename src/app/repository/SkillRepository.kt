@@ -10,7 +10,7 @@ fun listSkills(): List<Skill> =
 		val SQL = """SELECT * from `Skill`;"""
 		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
-			.list<Skill>()
+			.listOf<Skill>()
 	} ?: emptyList()
 
 fun getSkillById(skillId: Int): Skill? =
@@ -19,7 +19,7 @@ fun getSkillById(skillId: Int): Skill? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, skillId)
 		statement.executeQuery()
-			.tryRead<Skill>()
+			.singleOf<Skill>()
 	}
 
 fun addSkill(title: String?): Skill? =
@@ -28,7 +28,7 @@ fun addSkill(title: String?): Skill? =
 		val statement = it.prepareStatement(SQL)
 		statement.setString(1, title)
 		statement.executeQuery()
-			.tryRead<Skill>()
+			.singleOf<Skill>()
 	}
 
 fun listUserSkill(userId: Int): List<Skill> =
@@ -37,7 +37,7 @@ fun listUserSkill(userId: Int): List<Skill> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<Skill>()
+			.listOf<Skill>()
 	} ?: emptyList()
 
 fun getLastUserSkill(userId: Int): Skill? =
@@ -46,7 +46,7 @@ fun getLastUserSkill(userId: Int): Skill? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.tryRead<Skill>()
+			.singleOf<Skill>()
 	}
 
 fun addUserSkill(userId: Int, skillId: Int, level: Int): Boolean =

@@ -11,5 +11,5 @@ fun getUserNotification(userId: Int): List<Notification> =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.list<Notification>()
+			.listOf<Notification>()
 	} ?: emptyList()

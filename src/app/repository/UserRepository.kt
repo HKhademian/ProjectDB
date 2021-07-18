@@ -4,7 +4,6 @@
 
 package app.repository
 
-import app.model.MyNetwork
 import app.model.User
 import java.sql.Types
 import java.util.Date
@@ -14,7 +13,7 @@ fun suggestLocation(): List<String> =
 		val SQL = """SELECT * from SuggestLocation;"""
 		val statement = it.prepareStatement(SQL)
 		statement.executeQuery()
-			.list<String>()
+			.listOf<String>()
 	} ?: emptyList()
 
 fun getUserById(userId: Int): User? =
@@ -23,7 +22,7 @@ fun getUserById(userId: Int): User? =
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, userId)
 		statement.executeQuery()
-			.tryRead<User>()
+			.singleOf<User>()
 	}
 
 fun loginUser(username: String?, password: String?): User? =
@@ -33,7 +32,7 @@ fun loginUser(username: String?, password: String?): User? =
 		statement.setString(1, username)
 		statement.setString(2, password)
 		statement.executeQuery()
-			.tryRead<User>()
+			.singleOf<User>()
 	}
 
 fun registerUser(user: User, password: String): User? =
@@ -55,7 +54,7 @@ fun registerUser(user: User, password: String): User? =
 		else statement.setNull(8, Types.INTEGER)
 		statement.setString(9, user.location)
 		statement.executeQuery()
-			.tryRead<User>()
+			.singleOf<User>()
 	}
 
 fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean =

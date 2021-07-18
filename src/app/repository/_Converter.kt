@@ -7,88 +7,100 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.Date
 
-inline fun <reified T> ResultSet?.list(): List<T> =
-	generateSequence { tryRead<T>() }.toList()
+inline fun <reified T> ResultSet?.listOf(): List<T> =
+	generateSequence {
+		singleOf<T>()
+	}.toList()
 
-inline fun <reified T> ResultSet?.tryRead(): T? =
-	if (this != null && next()) read<T>() else null
+inline fun <reified T> ResultSet?.singleOf(): T? =
+	if (this != null && next())
+		extract<T>()
+	else
+		null
 
-inline fun <reified T> ResultSet.read(): T =
+@PublishedApi
+internal inline fun <reified T> ResultSet.extract(): T? =
 	when (T::class) {
-		Article::class -> readArticle() as T
-		Background::class -> readBackground() as T
-		Comment::class -> readComment() as T
-		Invitation::class -> readInvitation() as T
-		Language::class -> readLanguage() as T
-		Notification::class -> readNotification() as T
-		Skill::class -> readSkill() as T
-		User::class -> readUser() as T
-		SkillEndorse::class -> readSkillEndorse() as T
-		HomeArticle::class -> readHomeArticle() as T
-		MyNetwork::class -> readMyNetwork() as T
-		Chat::class -> readChat() as T
-		Message::class -> readMessage() as T
-		Int::class -> getInt(1) as T
-		Long::class -> getLong(1) as T
-		String::class -> getString(1) as T
-		Date::class -> Date(getLong(1)) as T
+		Article::class -> extractArticle() as T?
+		Background::class -> extractBackground() as T?
+		Comment::class -> extractComment() as T?
+		Invitation::class -> extractInvitation() as T?
+		Language::class -> extractLanguage() as T?
+		Notification::class -> extractNotification() as T?
+		Skill::class -> extractSkill() as T?
+		User::class -> extractUser() as T?
+		SkillEndorse::class -> extractSkillEndorse() as T?
+		HomeArticle::class -> extractHomeArticle() as T?
+		MyNetwork::class -> extractMyNetwork() as T?
+		Chat::class -> extractChat() as T?
+		Message::class -> extractMessage() as T?
+		Int::class -> extractInt() as T?
+		Long::class -> extractLong() as T?
+		String::class -> extractString() as T?
+		Date::class -> extractDate() as T?
 		else -> throw RuntimeException("must not happened")
 	}
 
-fun ResultSet.readArticle(): Article =
+@PublishedApi
+internal fun ResultSet.extractArticle(): Article =
 	Article(
-		tryInt("articleId") ?: 0,
-		tryInt("writeUserId") ?: 0,
-		tryString("title") ?: "",
-		tryString("content") ?: "",
-		tryDate("time") ?: Date(0),
-		(tryInt("featured") ?: 0) != 0,
-		tryInt("like_count") ?: 0,
-		tryInt("comment_count") ?: 0,
+		extractInt("articleId") ?: 0,
+		extractInt("writeUserId") ?: 0,
+		extractString("title") ?: "",
+		extractString("content") ?: "",
+		extractDate("time") ?: Date(0),
+		(extractInt("featured") ?: 0) != 0,
+		extractInt("like_count") ?: 0,
+		extractInt("comment_count") ?: 0,
 	)
 
-fun ResultSet.readBackground(): Background =
+@PublishedApi
+internal fun ResultSet.extractBackground(): Background =
 	Background(
-		tryInt("bgId") ?: 0,
-		tryInt("userId") ?: 0,
-		tryString("title") ?: "",
-		Background.BgType.values()[tryInt("type") ?: 0],
-		tryDate("fromTime") ?: Date(0),
-		tryDate("toTime"),
+		extractInt("bgId") ?: 0,
+		extractInt("userId") ?: 0,
+		extractString("title") ?: "",
+		Background.BgType.values()[extractInt("type") ?: 0],
+		extractDate("fromTime") ?: Date(0),
+		extractDate("toTime"),
 	)
 
-fun ResultSet.readComment(): Comment =
+@PublishedApi
+internal fun ResultSet.extractComment(): Comment =
 	Comment(
-		tryInt("commentId") ?: 0,
-		tryInt("articleId") ?: 0,
-		tryInt("replyCommentId") ?: 0,
-		tryInt("userId") ?: 0,
-		tryString("content") ?: "",
-		tryDate("time") ?: Date(0),
-		tryInt("like_count") ?: -1,
-		tryInt("reply_count") ?: -1,
+		extractInt("commentId") ?: 0,
+		extractInt("articleId") ?: 0,
+		extractInt("replyCommentId") ?: 0,
+		extractInt("userId") ?: 0,
+		extractString("content") ?: "",
+		extractDate("time") ?: Date(0),
+		extractInt("like_count") ?: -1,
+		extractInt("reply_count") ?: -1,
 	)
 
-fun ResultSet.readInvitation(): Invitation =
+@PublishedApi
+internal fun ResultSet.extractInvitation(): Invitation =
 	Invitation(
-		tryInt("userId") ?: 0,
-		tryInt("from_userId") ?: 0,
-		tryDate("time") ?: Date(0),
-		tryString("message") ?: "",
-		tryInt("status") ?: 0,
+		extractInt("userId") ?: 0,
+		extractInt("from_userId") ?: 0,
+		extractDate("time") ?: Date(0),
+		extractString("message") ?: "",
+		extractInt("status") ?: 0,
 	)
 
-fun ResultSet.readLanguage(): Language =
+@PublishedApi
+internal fun ResultSet.extractLanguage(): Language =
 	Language(
-		tryString("langCode") ?: "",
-		tryString("title") ?: "",
+		extractString("langCode") ?: "",
+		extractString("title") ?: "",
 	)
 
-fun ResultSet.readNotification(): Notification {
-	val byUserId = tryInt("by_userId") ?: 0
-	val time = tryDate("time")
-	val targetId = tryInt("targetId") ?: 0
-	val event = tryString("event")
+@PublishedApi
+internal fun ResultSet.extractNotification(): Notification {
+	val byUserId = extractInt("by_userId") ?: 0
+	val time = extractDate("time")
+	val targetId = extractInt("targetId") ?: 0
+	val event = extractString("event")
 
 	return when (event) {
 		"birth" -> Notification.BirthdayNotification(byUserId, time)
@@ -102,46 +114,51 @@ fun ResultSet.readNotification(): Notification {
 	}
 }
 
-fun ResultSet.readSkill(): Skill =
+@PublishedApi
+internal fun ResultSet.extractSkill(): Skill =
 	Skill(
-		tryInt("skillId") ?: 0,
-		tryString("title") ?: "",
+		extractInt("skillId") ?: 0,
+		extractString("title") ?: "",
 	)
 
-fun ResultSet.readUser(): User =
+@PublishedApi
+internal fun ResultSet.extractUser(): User =
 	User(
-		tryInt("userId") ?: 0,
-		tryString("username") ?: "",
-		tryString("firstname"),
-		tryString("lastname"),
-		tryString("intro"),
-		tryString("about"),
-		tryDate("birthday"),
-		tryString("location"),
+		extractInt("userId") ?: 0,
+		extractString("username") ?: "",
+		extractString("firstname"),
+		extractString("lastname"),
+		extractString("intro"),
+		extractString("about"),
+		extractDate("birthday"),
+		extractString("location"),
 	).apply {
-		avatar = tryByteArray("avatar")
+		avatar = extractByteArray("avatar")
 	}
 
-fun ResultSet.readSkillEndorse(): SkillEndorse =
+@PublishedApi
+internal fun ResultSet.extractSkillEndorse(): SkillEndorse =
 	SkillEndorse(
-		tryInt("by_userId") ?: 0,
-		tryInt("userId") ?: 0,
-		tryInt("skillId") ?: 0,
-		tryDate("time") ?: Date(0),
+		extractInt("by_userId") ?: 0,
+		extractInt("userId") ?: 0,
+		extractInt("skillId") ?: 0,
+		extractDate("time") ?: Date(0),
 	)
 
-fun ResultSet.readHomeArticle(): HomeArticle =
+@PublishedApi
+internal fun ResultSet.extractHomeArticle(): HomeArticle =
 	HomeArticle(
-		tryInt("home_userId") ?: 0,
-		tryDate("home_time") ?: Date(0),
-		tryInt("home_count") ?: 0,
-		readArticle(),
+		extractInt("home_userId") ?: 0,
+		extractDate("home_time") ?: Date(0),
+		extractInt("home_count") ?: 0,
+		extractArticle(),
 	)
 
-fun ResultSet.readMyNetwork(): MyNetwork {
-	val type = tryString("type")
-	val mutualCount = tryInt("mutual_count") ?: 0
-	val user = readUser()
+@PublishedApi
+internal fun ResultSet.extractMyNetwork(): MyNetwork {
+	val type = extractString("type")
+	val mutualCount = extractInt("mutual_count") ?: 0
+	val user = extractUser()
 
 	return when (type) {
 		"may_know" -> MyNetwork.MayKnowNetwork(user, mutualCount)
@@ -152,64 +169,111 @@ fun ResultSet.readMyNetwork(): MyNetwork {
 }
 
 
-fun ResultSet.readChat(): Chat =
+@PublishedApi
+internal fun ResultSet.extractChat(): Chat =
 	Chat(
-		tryInt("chatId") ?: 0,
-		tryString("title") ?: "",
-		tryDate("time") ?: Date(0),
-		tryInt("unread_count") ?: 0,
-		tryDate("lastSeen_time") ?: Date(0),
-		tryDate("join_time") ?: Date(0),
-		tryInt("isAdmin") == 1,
-		tryInt("isArchived") == 1,
-		tryInt("isMuted") == 1,
+		extractInt("chatId") ?: 0,
+		extractString("title") ?: "",
+		extractDate("time") ?: Date(0),
+		extractInt("unread_count") ?: 0,
+		extractDate("lastSeen_time") ?: Date(0),
+		extractDate("join_time") ?: Date(0),
+		extractInt("isAdmin") == 1,
+		extractInt("isArchived") == 1,
+		extractInt("isMuted") == 1,
 	)
 
-fun ResultSet.readMessage(): Message =
+@PublishedApi
+internal fun ResultSet.extractMessage(): Message =
 	Message(
-		tryInt("messageId") ?: 0,
-		tryInt("chatId") ?: 0,
-		tryInt("userId") ?: 0,
-		tryInt("reply_messageId") ?: 0,
-		tryString("content") ?: "",
-		tryDate("time") ?: Date(0),
-		tryDate("received_time") ?: Date(0),
-		tryDate("seen_time") ?: Date(0),
+		extractInt("messageId") ?: 0,
+		extractInt("chatId") ?: 0,
+		extractInt("userId") ?: 0,
+		extractInt("reply_messageId") ?: 0,
+		extractString("content") ?: "",
+		extractDate("time") ?: Date(0),
+		extractDate("received_time") ?: Date(0),
+		extractDate("seen_time") ?: Date(0),
 	)
 
 
-fun ResultSet.tryInt(column: String?): Int? =
+@PublishedApi
+internal fun ResultSet.extractInt(columnName: String): Int? =
 	try {
-		getInt(column)
+		getInt(columnName)
 	} catch (ex: SQLException) {
 		null
 	}
 
-fun ResultSet.tryLong(column: String?): Long? =
+@PublishedApi
+internal fun ResultSet.extractInt(columnIndex: Int = 1): Int? =
 	try {
-		getLong(column)
+		getInt(columnIndex)
 	} catch (ex: SQLException) {
 		null
 	}
 
-fun ResultSet.tryString(column: String?): String? =
+@PublishedApi
+internal fun ResultSet.extractLong(columnName: String): Long? =
 	try {
-		getString(column)
+		getLong(columnName)
 	} catch (ex: SQLException) {
 		null
 	}
 
-fun ResultSet.tryByteArray(column: String?): ByteArray? =
+@PublishedApi
+internal fun ResultSet.extractLong(columnIndex: Int = 1): Long? =
 	try {
-		getBytes(column)
+		getLong(columnIndex)
+	} catch (ex: SQLException) {
+		null
+	}
+
+@PublishedApi
+internal fun ResultSet.extractString(columnName: String): String? =
+	try {
+		getString(columnName)
+	} catch (ex: SQLException) {
+		null
+	}
+
+@PublishedApi
+internal fun ResultSet.extractString(columnIndex: Int = 1): String? =
+	try {
+		getString(columnIndex)
+	} catch (ex: SQLException) {
+		null
+	}
+
+@PublishedApi
+internal fun ResultSet.extractByteArray(columnName: String): ByteArray? =
+	try {
+		getBytes(columnName)
+	} catch (ex: SQLException) {
+		null
+	}
+
+@PublishedApi
+internal fun ResultSet.extractByteArray(columnIndex: Int = 1): ByteArray? =
+	try {
+		getBytes(columnIndex)
 	} catch (ex: SQLException) {
 		null
 	}
 
 
-fun ResultSet.tryDate(column: String?): Date? =
+@PublishedApi
+internal fun ResultSet.extractDate(column: String): Date? =
 	try {
 		getLong(column).let { if (it > 0) Date(it) else null }
+	} catch (ex: SQLException) {
+		null
+	}
+
+@PublishedApi
+internal fun ResultSet.extractDate(columnIndex: Int = 1): Date? =
+	try {
+		getLong(columnIndex).let { if (it > 0) Date(it) else null }
 	} catch (ex: SQLException) {
 		null
 	}

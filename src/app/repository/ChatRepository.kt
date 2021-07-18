@@ -22,7 +22,7 @@ fun createChat(userId: Int, title: String): Chat? =
 		stmt.setInt(3, userId)
 		stmt.setLong(4, System.currentTimeMillis())
 		stmt.executeQuery()
-			.tryRead<Chat>()
+			.singleOf<Chat>()
 	}
 
 fun updateChat(chatId: Int, userId: Int, isArchived: Boolean, isMuted: Boolean): Chat? =
@@ -39,7 +39,7 @@ fun updateChat(chatId: Int, userId: Int, isArchived: Boolean, isMuted: Boolean):
 		stmt.setInt(3, if (isArchived) 1 else 0)
 		stmt.setInt(4, if (isMuted) 1 else 0)
 		stmt.executeQuery()
-			.tryRead<Chat>()
+			.singleOf<Chat>()
 	}
 
 fun updateChat(chatId: Int, userId: Int, title: String): Chat? =
@@ -56,7 +56,7 @@ fun updateChat(chatId: Int, userId: Int, title: String): Chat? =
 		stmt.setInt(3, userId)
 		stmt.setInt(4, chatId)
 		stmt.executeQuery()
-			.tryRead<Chat>()
+			.singleOf<Chat>()
 	}
 
 fun deleteChat(chatId: Int): Boolean =
@@ -78,7 +78,7 @@ fun getUserChats(userId: Int, chatId: Int): Chat? =
 		stmt.setInt(1, userId)
 		stmt.setInt(2, chatId)
 		stmt.executeQuery()
-			.tryRead<Chat>()
+			.singleOf<Chat>()
 	}
 
 fun listUserChats(userId: Int): List<Chat> =
@@ -89,7 +89,7 @@ fun listUserChats(userId: Int): List<Chat> =
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
 		stmt.executeQuery()
-			.list<Chat>()
+			.listOf<Chat>()
 	} ?: emptyList()
 
 
@@ -106,7 +106,7 @@ fun sendMessage(chatId: Int, userId: Int, replyMessageId: Int, content: String):
 		stmt.setString(4, content)
 		stmt.setLong(5, System.currentTimeMillis())
 		stmt.executeQuery()
-			.tryRead<Message>()
+			.singleOf<Message>()
 	}
 
 fun listMessageStat(userId: Int, messageId: Int): Message? =
@@ -118,7 +118,7 @@ fun listMessageStat(userId: Int, messageId: Int): Message? =
 		stmt.setInt(1, userId)
 		stmt.setInt(2, messageId)
 		stmt.executeQuery()
-			.tryRead<Message>()
+			.singleOf<Message>()
 	}
 
 fun statMessage(userId: Int, messageId: Int, isReceived: Boolean, isSeen: Boolean): Message? =
@@ -137,7 +137,7 @@ fun statMessage(userId: Int, messageId: Int, isReceived: Boolean, isSeen: Boolea
 		stmt.setInt(5, messageId)
 		stmt.setLong(6, if (!isSeen) 0 else System.currentTimeMillis())
 		stmt.executeQuery()
-			.tryRead<Message>()
+			.singleOf<Message>()
 	}
 
 fun listUserMessages(userId: Int, chatId: Int): List<Message> =
@@ -149,5 +149,5 @@ fun listUserMessages(userId: Int, chatId: Int): List<Message> =
 		stmt.setInt(1, userId)
 		stmt.setInt(2, chatId)
 		stmt.executeQuery()
-			.list<Message>()
+			.listOf<Message>()
 	} ?: emptyList()
