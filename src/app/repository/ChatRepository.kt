@@ -64,7 +64,7 @@ fun updateChat(chatId: Int, userId: Int, title: String): Chat? =
 			UPDATE Chat SET title=? WHERE chatId=?;
 		""".trimIndent()
 		val SQL2 = """
-			SELECT * FROM ChatUser WHERE chatId=? AND userId=?;
+			SELECT * FROM UserChat WHERE chatId=? AND userId=?;
 		""".trimIndent()
 
 		val stmt1 = it.prepareStatement(SQL1)
@@ -90,10 +90,10 @@ fun deleteChat(chatId: Int): Boolean =
 		stmt.executeUpdate() > 0
 	} == true
 
-fun getUserChats(userId: Int, chatId: Int): Chat? =
+fun getUserChat(userId: Int, chatId: Int): Chat? =
 	connect {
 		val SQL = """
-			SELECT * FROM ChatUser WHERE chatId=? AND userId=?;
+			SELECT * FROM UserChat WHERE chatId=? AND userId=?;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, chatId)
@@ -105,7 +105,7 @@ fun getUserChats(userId: Int, chatId: Int): Chat? =
 fun listUserChats(userId: Int): List<Chat> =
 	connect {
 		val SQL = """
-			SELECT * FROM ChatUser WHERE userId=?;
+			SELECT * FROM UserChat WHERE userId=?;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
@@ -179,3 +179,14 @@ fun listUserMessages(userId: Int, chatId: Int): List<Message> =
 		stmt.executeQuery()
 			.listOf<Message>()
 	} ?: emptyList()
+
+fun deleteMessage(messageId: Int): Boolean =
+	connect {
+		val SQL = """
+			DELETE FROM Message WHERE messageId=?;
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		stmt.setInt(1, messageId)
+		stmt.executeUpdate() > 0
+	} == true
+
