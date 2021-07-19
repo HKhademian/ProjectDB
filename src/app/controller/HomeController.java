@@ -84,6 +84,7 @@ public class HomeController {
 
         name.setText(user.getFirstname());
         family.setText(user.getLastname());
+        Location.setText(user.getLocation());
         setImage();
 
         articles = FXCollections.observableArrayList(Repository.listHomeUserArticles(user.getUserId()));
@@ -142,9 +143,9 @@ public class HomeController {
         OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(user),
                 "Create Article");
 
-        List<Article> articles = Repository.listHomeUserArticles(user.getUserId());
-        if(len == articles.size()){
-            for(Article article: articles){
+        List<Article> articleList = Repository.listHomeUserArticles(user.getUserId());
+        if(len == articleList.size()){
+            for(Article article: articleList){
                 if(!articles.contains(article)){
                     articles.add(article);
                     break;

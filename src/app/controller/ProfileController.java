@@ -105,7 +105,7 @@ public class ProfileController {
     private JFXListView<?> featureList;
 
     @FXML
-    private TextField locationProfile;
+    private TextField locationField;
 
     @FXML
     private TextField name;
@@ -123,7 +123,7 @@ public class ProfileController {
     private JFXButton cancelChangeNFL;
 
     @FXML
-    private JFXComboBox<?> changeLocation;
+    private JFXComboBox<String> changeLocation;
 
     @FXML
     private ImageView home;
@@ -163,6 +163,7 @@ public class ProfileController {
     private String nowAbout;
     private String nowName;
     private String nowFamily;
+    private String nowLocation;
     private ObservableList<Background> backgrounds;
     private ObservableList<Skill> skills;
     private ObservableList<Language> languages;
@@ -170,38 +171,7 @@ public class ProfileController {
     @FXML
     public void initialize(){
 
-        name.setText(owner.getFirstname());
-        family.setText(owner.getLastname());
-        setImage();
-        intro.setText(owner.getIntro());
-        about.setText(owner.getAbout());
-
-        saveIntro.setVisible(false);
-        saveAbout.setVisible(false);
-        cancelIntro.setVisible(false);
-        cancelAbout.setVisible(false);
-        saveChangeNFL.setVisible(false);
-        cancelChangeNFL.setVisible(false);
-        changeLocation.setVisible(false);
-
-        nowIntro = owner.getIntro();
-        nowAbout = owner.getAbout();
-        nowName = owner.getFirstname();
-        nowFamily = owner.getLastname();
-
-        if(!isOwner()){
-            introEdit.setVisible(false);
-            aboutEdit.setVisible(false);
-            accomplishmentsAdd.setVisible(false);
-            backgroundAdd.setVisible(false);
-            languageAdd.setVisible(false);
-            featureAdd.setVisible(false);
-            editNFL.setVisible(false);
-            deleteSelectedBackground.setVisible(false);
-            editSelectedBackground.setVisible(false);
-            deleteSelectedSkill.setVisible(false);
-            editSelectedSkill.setVisible(false);
-        }
+        init();
 
         //Image
         changeImage.setOnAction(event -> imageChange());
@@ -270,6 +240,43 @@ public class ProfileController {
 
         logout.setOnAction(event -> logOut());
 
+    }
+
+    private void init(){
+        name.setText(owner.getFirstname());
+        family.setText(owner.getLastname());
+        locationField.setText(owner.getLocation());
+        setImage();
+        intro.setText(owner.getIntro());
+        about.setText(owner.getAbout());
+
+        saveIntro.setVisible(false);
+        saveAbout.setVisible(false);
+        cancelIntro.setVisible(false);
+        cancelAbout.setVisible(false);
+        saveChangeNFL.setVisible(false);
+        cancelChangeNFL.setVisible(false);
+        changeLocation.setVisible(false);
+
+        nowIntro = owner.getIntro();
+        nowAbout = owner.getAbout();
+        nowName = owner.getFirstname();
+        nowFamily = owner.getLastname();
+        nowLocation = owner.getLocation();
+
+        if(!isOwner()){
+            introEdit.setVisible(false);
+            aboutEdit.setVisible(false);
+            accomplishmentsAdd.setVisible(false);
+            backgroundAdd.setVisible(false);
+            languageAdd.setVisible(false);
+            featureAdd.setVisible(false);
+            editNFL.setVisible(false);
+            deleteSelectedBackground.setVisible(false);
+            editSelectedBackground.setVisible(false);
+            deleteSelectedSkill.setVisible(false);
+            editSelectedSkill.setVisible(false);
+        }
     }
 
     private void deleteSkill(){
@@ -344,27 +351,33 @@ public class ProfileController {
     }
 
     private void changeNFL(){
+        ObservableList<String> locations = FXCollections.observableArrayList(Repository.suggestLocation());
+        changeLocation.setItems(locations);
+        new ComboBoxAutoComplete<>(changeLocation);
+
         saveChangeNFL.setVisible(true);
         cancelChangeNFL.setVisible(true);
         name.setEditable(true);
         name.requestFocus();
         family.setEditable(true);
-        locationProfile.setVisible(false);
+        locationField.setVisible(false);
         changeLocation.setVisible(true);
     }
 
     private void saveNFL(){
         nowName = name.getText().trim();
         nowFamily = family.getText().trim();
-        //get location
-        Repository.updateAvatar(owner.getUserId(), nowName, nowFamily, "");
+        nowLocation = changeLocation.getSelectionModel().getSelectedItem();
+        Repository.updateAvatar(owner.getUserId(), nowName, nowFamily, nowLocation);
         owner.setFirstname(nowName);
         owner.setLastname(nowFamily);
+        owner.setLocation(nowLocation);
+        locationField.setText(nowLocation);
         saveChangeNFL.setVisible(false);
         cancelChangeNFL.setVisible(false);
         name.setEditable(false);
         family.setEditable(false);
-        locationProfile.setVisible(true);
+        locationField.setVisible(true);
         changeLocation.setVisible(false);
     }
 
@@ -375,7 +388,7 @@ public class ProfileController {
         cancelChangeNFL.setVisible(false);
         name.setEditable(false);
         family.setEditable(false);
-        locationProfile.setVisible(true);
+        locationField.setVisible(true);
         changeLocation.setVisible(false);
     }
 

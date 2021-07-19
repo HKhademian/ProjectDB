@@ -76,6 +76,7 @@ public class NetworkController {
 
         name.setText(user.getFirstname());
         family.setText(user.getLastname());
+        Location.setText(user.getLocation());
         setImage();
 
         users = FXCollections.observableArrayList(Repository.listMyNetworkProfiles(user.getUserId()));

@@ -142,7 +142,7 @@
       <JFXListView fx:id="featureList" layoutX="744.0" layoutY="536.0" prefHeight="291.0" prefWidth="433.0" style="-fx-background-color: #F8F9FA;" />
       <Label alignment="TOP_LEFT" layoutX="6.0" layoutY="297.0" prefHeight="21.0" prefWidth="70.0" text="Name" textFill="#5879b7" />
       <Label alignment="TOP_LEFT" layoutX="5.0" layoutY="355.0" prefHeight="21.0" prefWidth="99.0" text="Family" textFill="#5879b7" />
-      <TextField fx:id="locationProfile" editable="false" layoutX="6.0" layoutY="443.0" prefHeight="31.0" prefWidth="189.0" style="-fx-background-color: #F8F9FA;" />
+      <TextField fx:id="locationField" editable="false" layoutX="6.0" layoutY="443.0" prefHeight="31.0" prefWidth="189.0" style="-fx-background-color: #F8F9FA;" />
       <TextField fx:id="name" editable="false" layoutX="6.0" layoutY="315.0" prefHeight="31.0" prefWidth="189.0" style="-fx-background-color: #F8F9FA;" />
       <TextField fx:id="family" editable="false" layoutX="6.0" layoutY="375.0" prefHeight="31.0" prefWidth="189.0" style="-fx-background-color: #F8F9FA;" />
       <Label alignment="TOP_LEFT" layoutX="5.0" layoutY="417.0" prefHeight="21.0" prefWidth="99.0" text="Location" textFill="#5879b7" />
