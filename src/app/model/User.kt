@@ -1,9 +1,12 @@
 package app.model
 
-import java.util.Date
+import java.awt.Image
+import java.io.ByteArrayInputStream
+import java.util.*
+import javax.imageio.ImageIO
 
 enum class NetworkType {
-	MayKnow, Requested, Invited, SameSkill, SameLocation,
+	Unknown, MayKnow, Requested, Invited, SameSkill, SameLocation,
 }
 
 data class User(
@@ -20,7 +23,10 @@ data class User(
 
 	// for each network
 	var mutualCount: Int = 0
-	var networkType: NetworkType = NetworkType.MayKnow
+	var networkType: NetworkType = NetworkType.Unknown
+
+	val avatarImage: Image?
+		get() = avatar?.let { ImageIO.read(ByteArrayInputStream(it)) }
 }
 
 data class Background(

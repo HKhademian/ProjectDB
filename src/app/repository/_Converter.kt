@@ -137,11 +137,15 @@ internal fun ResultSet.extractUser(): User =
 		avatar = extractByteArray("avatar")
 
 		mutualCount = extractInt("mutual_count") ?: 0
-		networkType = when (extractString("type")) {
+
+		val netType = extractString("type")
+		networkType = when (netType) {
 			"may_know" -> NetworkType.MayKnow
+			"may_know_skill" -> NetworkType.SameSkill
+			"may_know_loc" -> NetworkType.SameLocation
 			"requested" -> NetworkType.Requested
 			"invited" -> NetworkType.Invited
-			else -> throw RuntimeException("must not happened")
+			else -> NetworkType.Unknown
 		}
 	}
 

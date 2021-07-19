@@ -256,7 +256,7 @@ public class ProfileController {
         skillAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addSkill());
 
         skills = FXCollections.observableArrayList();
-        skills.addAll(Repository.listUserSkill(owner.getUserId()));
+        skills.addAll(Repository.listUserSkills(owner.getUserId()));
         skillList.setItems(skills);
         skillList.setCellFactory(SkillCellController -> new SkillCellController(owner, user));
 
@@ -455,9 +455,9 @@ public class ProfileController {
         int len = skills.size()+1;
         OpenWindow.openWindowWait("view/AddSkill.fxml", new AddSkillController(owner),
                 "Add Skill");
-        int lenSkill = Repository.listUserSkill(owner.getUserId()).size();
+        int lenSkill = Repository.listUserSkills(owner.getUserId()).size();
         if(len == lenSkill){
-            for(Skill skill:Repository.listUserSkill(owner.getUserId())){
+            for(Skill skill:Repository.listUserSkills(owner.getUserId())){
                 if(!skills.contains(skill)){
                     skills.add(skill);
                     break;

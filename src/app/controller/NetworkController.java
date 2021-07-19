@@ -78,11 +78,11 @@ public class NetworkController {
         family.setText(user.getLastname());
         setImage();
 
-        users = FXCollections.observableArrayList(Repository.listUserNetworkUsers(user.getUserId()));
+        users = FXCollections.observableArrayList(Repository.listMyNetworkProfiles(user.getUserId()));
         networkList.setItems(users);
         networkList.setCellFactory(NetworkCellController -> new NetworkCellController());
 
-        invitations = FXCollections.observableArrayList(Repository.listInvitation(user.getUserId()));
+        invitations = FXCollections.observableArrayList(Repository.listUserInvitations(user.getUserId()));
         inviteList.setItems(invitations);
         inviteList.setCellFactory(InvitationCellController -> new InvitationCellController(user));
 

@@ -1,21 +1,112 @@
 package app.repository
 
 import app.BaseTest
+import app.model.User
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.FixMethodOrder
+import org.junit.runners.MethodSorters
+import java.util.*
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class UserRepositoryTest : BaseTest() {
 
 	@Test
-	fun `test suggestBackground`() {
+	fun `01- test suggestBackground`() {
 		val res = suggestBackground()
 		println(res)
 	}
 
 	@Test
-	fun `test suggestLocation`() {
+	fun `02- test suggestLocation`() {
 		val res = suggestLocation()
+		println(res)
+	}
+
+	@Test
+	fun `11- test getUserById user-1 no-visitor`() {
+		val res = getUserById(-1, 1)
+		println(res)
+	}
+
+	@Test
+	fun `12- test getUserById user-1 same-visitor`() {
+		val res = getUserById(1, 1)
+		println(res)
+	}
+
+	@Test
+	fun `13- test getUserById user-1 visitor-2`() {
+		val res = getUserById(2, 1)
+		println(res)
+	}
+
+	@Test
+	fun `14- test getUserById user-non`() {
+		val res = getUserById(2, 0)
+		println(res)
+	}
+
+
+	@Test
+	fun `21- test loginUser correct`() {
+		val res = loginUser("admin", "admin")
+		println(res)
+	}
+
+	@Test
+	fun `22- test loginUser wrong-user`() {
+		val res = loginUser("admins", "admin")
+		println(res)
+	}
+
+	@Test
+	fun `23- test loginUser wrong-pass`() {
+		val res = loginUser("admin", "admins")
+		println(res)
+	}
+
+
+	@Test
+	fun `31- test registerUser exists`() {
+		val res = registerUser(
+			User(
+				-1, "admin",
+				"Admin", "Adminestan",
+				"Salute", "Just to happy",
+				null, "Shiraz",
+			),
+			"admin"
+		)
+		println(res)
+	}
+
+	@Test
+	fun `32- test registerUser exists`() {
+		val res = registerUser(
+			User(
+				-1, "adminX",
+				"Admin", "Adminestan",
+				"Salute", "Just to happy",
+				null, "Shiraz",
+			),
+			"admin"
+		)
+		println(res)
+	}
+
+	@Test
+	fun `33- test registerUser correct`() {
+		val res = registerUser(
+			User(
+				-1, "tom",
+				"Tom", "TomPoor",
+				null, null,
+				Date(1980, 1, 5), "NewYork",
+			),
+			"tomtom"
+		)
 		println(res)
 	}
 }
