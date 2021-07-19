@@ -111,3 +111,42 @@ fun listMyNetworkProfiles(userId: Int): List<User> =
 		stmt.executeQuery()
 			.listOf<User>()
 	} ?: emptyList()
+
+
+fun searchProfiles(
+	name: String?,
+	location: String?,
+	skillId: Int?,
+	langCode: String?,
+	backgroundTitle: String?
+): List<User> =
+	connect {
+		val SQL = """
+		SELECT * FROM User U WHERE 1
+		  AND (? OR (U.firstname || U.lastname like '%' || ? || '%'))
+		  AND (? OR (U.location like '%' || ? || '%'))
+		  AND (? OR EXISTS(select * from User_Skill U_S WHERE U.userId = U_S.userId AND U_S.skillId = ?))
+		  AND (? OR EXISTS(select * from User_Lang U_L WHERE U.userId = U_L.userId AND U_L.langCode = ?))
+		  AND (? OR EXISTS(select * from User_Background U_B WHERE U.userId = U_B.userId AND U_B.title LIKE '%' || ? || '%'))
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		var i = 0
+
+		stmt.setInt(++i, if (name != null) 0 else 1)
+		stmt.setString(++i, name)
+
+		stmt.setInt(++i, if (location != null) 0 else 1)
+		stmt.setString(++i, location)
+
+		stmt.setInt(++i, if (skillId != null) 0 else 1)
+		stmt.setInt(++i, skillId ?: 0)
+
+		stmt.setInt(++i, if (langCode != null) 0 else 1)
+		stmt.setString(++i, langCode)
+
+		stmt.setInt(++i, if (backgroundTitle != null) 0 else 1)
+		stmt.setString(++i, backgroundTitle)
+
+		stmt.executeQuery()
+			.listOf<User>()
+	} ?: emptyList()
