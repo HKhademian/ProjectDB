@@ -43,8 +43,8 @@ data class Background(
 }
 
 class Invitation(
-	var fromUserId: Int,
-	var toUserId: Int,
+	var senderUserId: Int,
+	var receiverUserId: Int,
 	var time: Date,
 	var message: String,
 	var status: Int,

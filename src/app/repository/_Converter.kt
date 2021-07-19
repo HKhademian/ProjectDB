@@ -82,8 +82,8 @@ internal fun ResultSet.extractComment(): Comment =
 @PublishedApi
 internal fun ResultSet.extractInvitation(): Invitation =
 	Invitation(
-		extractInt("from_userId") ?: 0,
-		extractInt("userId") ?: 0,
+		extractInt("sender_userId") ?: 0,
+		extractInt("receive_userId") ?: 0,
 		extractDate("time") ?: Date(0),
 		extractString("message") ?: "",
 		extractInt("status") ?: 0,

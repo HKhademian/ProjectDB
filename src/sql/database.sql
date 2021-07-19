@@ -118,16 +118,16 @@ create table User_Like (
 -- Network Tables --
 
 create table Invitation (
-    to_userId INTEGER not null
+    sender_userId INTEGER not null
         references User(userId)
         on update cascade on delete cascade,
-    from_userId INTEGER not null
+    receiver_userId INTEGER not null
         references User(userId)
         on update cascade on delete cascade,
-    time INTEGER not null,
+    time INTEGER not null default 0,
     message text,
-    status int default 0 not null,
-    primary key (to_userId, from_userId)
+    status int not null default 0,
+    primary key (sender_userId, receiver_userId)
 );
 
 create table Connection (
@@ -295,10 +295,10 @@ CREATE VIEW MyNetwork as
          select MK.from_userId as from_userId, MK.to_userId as to_userId, 'may_know' as type
          from MayKnow MK
          UNION
-         select I.to_userId as from_userId, I.from_userId as to_userId, 'requested' as type
+         select I.receiver_userId as from_userId, I.sender_userId as to_userId, 'requested' as type
          from Invitation I
          UNION
-         select I.from_userId as from_userId, I.to_userId as to_userId, 'invited' as type
+         select I.sender_userId as from_userId, I.receiver_userId as to_userId, 'invited' as type
          from Invitation I
     ) MN
     left join MutualConnection MC on MC.from_userId=MN.from_userId and MC.to_userId=MN.to_userId

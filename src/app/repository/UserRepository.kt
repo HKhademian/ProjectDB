@@ -4,6 +4,7 @@
 
 package app.repository
 
+import app.model.Skill
 import app.model.User
 import java.sql.Types
 import java.util.Date
@@ -182,3 +183,10 @@ fun updateInfo(userId: Int, info: String) =
 //TODO: updateAbout(int userId, String about)
 fun updateAbout(userId: Int, about: String) =
 	updateUserPersonalInfo(userId, null, null, null, about, null, null, null, null)
+
+
+fun searchUsers(name: String?, location: String?, skillId: Int?, langId: Int?): List<User> =
+	connect {
+
+		null
+	} ?: emptyList()
