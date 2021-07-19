@@ -9,7 +9,7 @@ import app.model.Invitation
 fun listUserInvitations(userId: Int): List<Invitation> =
 	connect {
 		val SQL = """
-			SELECT * FROM Invitation WHERE userId=? OR by_userId=?;
+			SELECT * FROM Invitation WHERE receive_userId=? OR sender_userId=?;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
@@ -18,81 +18,81 @@ fun listUserInvitations(userId: Int): List<Invitation> =
 			.listOf<Invitation>()
 	} ?: emptyList()
 
-fun sendInvitation(fromUserId: Int, toUserId: Int, message: String): Invitation? =
+fun sendInvitation(senderUserId: Int, receiverUserId: Int, message: String): Invitation? =
 	connect {
 		val SQL = """
 			INSERT INTO Invitation
-			(userId, by_userId, time, message, status)
+			(sender_userId, receive_userId, time, message, status)
 			VALUES (?,?,?,?,0) RETURNING *;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
-		stmt.setInt(1, toUserId)
-		stmt.setInt(2, fromUserId)
+		stmt.setInt(1, senderUserId)
+		stmt.setInt(2, receiverUserId)
 		stmt.setLong(3, System.currentTimeMillis())
 		stmt.setString(4, message)
 		stmt.executeQuery()
 			.singleOf<Invitation>()
 	}
 
-fun deleteInvitation(fromUserId: Int, toUserId: Int): Boolean =
+fun deleteInvitation(senderUserId: Int, receiverUserId: Int): Boolean =
 	connect {
 		val SQL = """
-			DELETE FROM Invitation WHERE userId=? AND by_userId=?;
+			DELETE FROM Invitation WHERE receive_userId=? AND sender_userId=?;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
-		stmt.setInt(1, toUserId)
-		stmt.setInt(2, fromUserId)
+		stmt.setInt(1, receiverUserId)
+		stmt.setInt(2, senderUserId)
 		stmt.executeUpdate() > 0
 	} == true
 
-fun acceptInvitation(fromUserId: Int, toUserId: Int): Invitation? =
+fun acceptInvitation(senderUserId: Int, receiverUserId: Int): Invitation? =
 	connect {
 		val SQL_CON = """
 			INSERT OR REPLACE INTO Connection (from_userId, to_userId, time)
-			SELECT userId,by_userId,? FROM Invitation WHERE userId=? AND by_userId=? AND status!=1
+			SELECT I.receive_userId,I.sender_userId,? FROM Invitation I WHERE I.receive_userId=? AND I.sender_userId=? AND I.status!=1
 			UNION
-			SELECT by_userId,userId,? FROM Invitation WHERE userId=? AND by_userId=? AND status!=1
+			SELECT I.sender_userId,I.receive_userId,? FROM Invitation I WHERE I.receive_userId=? AND I.sender_userId=? AND I.status!=1
 		""".trimIndent()
 		val SQL_INV = """
-			UPDATE Invitation SET status=1 WHERE userId=? AND by_userId=? RETURNING *;
+			UPDATE Invitation SET status=1 WHERE receive_userId=? AND sender_userId=? RETURNING *;
 		""".trimIndent()
 
 		val time = System.currentTimeMillis()
 		val stmt1 = it.prepareStatement(SQL_CON)
 		stmt1.setLong(1, time)
-		stmt1.setInt(2, toUserId)
-		stmt1.setInt(3, fromUserId)
+		stmt1.setInt(2, receiverUserId)
+		stmt1.setInt(3, senderUserId)
 		stmt1.setLong(4, time)
-		stmt1.setInt(5, fromUserId)
-		stmt1.setInt(6, toUserId)
+		stmt1.setInt(5, senderUserId)
+		stmt1.setInt(6, receiverUserId)
 		if (stmt1.executeUpdate() <= 0) return@connect null
 
 		val stmt2 = it.prepareStatement(SQL_INV)
-		stmt1.setInt(1, toUserId)
-		stmt1.setInt(2, fromUserId)
+		stmt1.setInt(1, receiverUserId)
+		stmt1.setInt(2, senderUserId)
 		stmt2.executeQuery()
 			.singleOf<Invitation>()
 	}
 
-fun rejectInvitation(fromUserId: Int, toUserId: Int): Invitation? =
+fun rejectInvitation(senderUserId: Int, receiverUserId: Int): Invitation? =
 	connect {
 		val SQL_CON = """
 			DELETE FROM Connection WHERE (from_userId=? AND to_userId=?) OR (to_userId=? AND from_userId=?);
 		""".trimIndent()
 		val SQL_INV = """
-			UPDATE Invitation SET status=-1 WHERE userId=? AND by_userId=? RETURNING *;
+			UPDATE Invitation SET status=-1 WHERE receive_userId=? AND sender_userId=? RETURNING *;
 		""".trimIndent()
 
 		val stmt1 = it.prepareStatement(SQL_CON)
-		stmt1.setInt(1, fromUserId)
-		stmt1.setInt(2, toUserId)
-		stmt1.setInt(3, toUserId)
-		stmt1.setInt(4, fromUserId)
+		stmt1.setInt(1, senderUserId)
+		stmt1.setInt(2, receiverUserId)
+		stmt1.setInt(3, receiverUserId)
+		stmt1.setInt(4, senderUserId)
 		if (stmt1.executeUpdate() <= 0) return@connect null
 
 		val stmt2 = it.prepareStatement(SQL_INV)
-		stmt1.setInt(1, toUserId)
-		stmt1.setInt(2, fromUserId)
+		stmt1.setInt(1, receiverUserId)
+		stmt1.setInt(2, senderUserId)
 		stmt2.executeQuery()
 			.singleOf<Invitation>()
 	}
