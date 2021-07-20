@@ -67,7 +67,7 @@
       <Label layoutX="245.0" layoutY="232.0" text="About" />
       <JFXListView fx:id="backgroundList" layoutX="297.0" layoutY="350.0" prefHeight="216.0" prefWidth="440.0" style="-fx-background-color: #F8F9FA;" />
       <Label layoutX="205.0" layoutY="365.0" text="Background" />
-      <ImageView fx:id="backgroundAdd" fitHeight="35.0" fitWidth="114.0" layoutX="243.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="backgroundAdd" fitHeight="21.0" fitWidth="21.0" layoutX="259.0" layoutY="391.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/add.png" />
          </image>
@@ -77,7 +77,7 @@
       </ImageView>
       <JFXListView fx:id="accomplishmentsList" layoutX="296.0" layoutY="588.0" prefHeight="240.0" prefWidth="440.0" style="-fx-background-color: #F8F9FA;" />
       <Label layoutX="169.0" layoutY="595.0" text="Accomplishments" />
-      <ImageView fx:id="accomplishmentsAdd" fitHeight="35.0" fitWidth="114.0" layoutX="248.0" layoutY="622.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="accomplishmentsAdd" fitHeight="21.0" fitWidth="21.0" layoutX="259.0" layoutY="623.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/add.png" />
          </image>
@@ -85,8 +85,8 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <Label layoutX="785.0" layoutY="106.0" text="Supported Languages" />
-      <ImageView fx:id="languageAdd" fitHeight="35.0" fitWidth="114.0" layoutX="745.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+      <Label layoutX="744.0" layoutY="117.0" text="Languages" />
+      <ImageView fx:id="languageAdd" fitHeight="21.0" fitWidth="21.0" layoutX="817.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/add.png" />
          </image>
@@ -95,8 +95,8 @@
          </cursor>
       </ImageView>
       <JFXListView fx:id="languageList" layoutX="744.0" layoutY="140.0" prefHeight="98.0" prefWidth="433.0" style="-fx-background-color: #F8F9FA;" />
-      <Label layoutX="785.0" layoutY="262.0" text="Skill" />
-      <ImageView fx:id="skillAdd" fitHeight="35.0" fitWidth="114.0" layoutX="745.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true">
+      <Label layoutX="744.0" layoutY="271.0" text="Skill" />
+      <ImageView fx:id="skillAdd" fitHeight="21.0" fitWidth="21.0" layoutX="775.0" layoutY="273.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/add.png" />
          </image>
@@ -130,8 +130,8 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <Label layoutX="785.0" layoutY="501.0" text="Feature" />
-      <ImageView fx:id="featureAdd" fitHeight="35.0" fitWidth="114.0" layoutX="745.0" layoutY="494.0" pickOnBounds="true" preserveRatio="true">
+      <Label layoutX="746.0" layoutY="512.0" text="Feature" />
+      <ImageView fx:id="featureAdd" fitHeight="21.0" fitWidth="21.0" layoutX="799.0" layoutY="512.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/add.png" />
          </image>
@@ -205,7 +205,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="deleteSelectedSkill" fitHeight="24.0" fitWidth="28.0" layoutX="1153.0" layoutY="271.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="deleteSelectedSkill" fitHeight="21.0" fitWidth="21.0" layoutX="1153.0" layoutY="271.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/delete.png" />
          </image>
@@ -213,7 +213,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="deleteSelectedBackground" fitHeight="24.0" fitWidth="28.0" layoutX="266.0" layoutY="500.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="deleteSelectedBackground" fitHeight="21.0" fitWidth="21.0" layoutX="258.0" layoutY="500.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/delete.png" />
          </image>
@@ -221,7 +221,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="editSelectedBackground" fitHeight="24.0" fitWidth="28.0" layoutX="266.0" layoutY="447.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="editSelectedBackground" fitHeight="24.0" fitWidth="28.0" layoutX="258.0" layoutY="447.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/edit.png" />
          </image>
@@ -229,7 +229,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="deleteSelectedLanguage" fitHeight="24.0" fitWidth="28.0" layoutX="1153.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="deleteSelectedLanguage" fitHeight="21.0" fitWidth="21.0" layoutX="1153.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/delete.png" />
          </image>

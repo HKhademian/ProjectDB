@@ -2,6 +2,7 @@ package app.controller.cells;
 
 import app.controller.CommentController;
 import app.controller.OpenWindow;
+import app.controller.ProfileController;
 import app.model.Article;
 import app.model.User;
 import app.repository.Repository;
@@ -92,7 +93,9 @@ public class ArticleCellController extends JFXListCell<Article> {
             title.setText(article.getTitle());
             content.setText(article.getContent());
             time.setText(article.getTime().toString());
-            setImage(Repository.getUserById(user.getUserId(),article.getWriterUserId()));
+            User writer = Repository.getUserById(article.getWriterUserId(),article.getWriterUserId());
+            setImage(writer);
+            imagePlace.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profile(writer));
 
             comment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
             commentLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
@@ -128,6 +131,11 @@ public class ArticleCellController extends JFXListCell<Article> {
 
     private void showComments(Article article){
         OpenWindow.openWindowWait("view/Comments.fxml", new CommentController(user, article), "Comments");
+    }
+
+    private void profile(User writer){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Profile.fxml", new ProfileController(writer, user), "Profile");
     }
 
 }

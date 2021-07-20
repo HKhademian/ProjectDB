@@ -1,20 +1,22 @@
 package app.controller.cells;
 
-import app.controller.DeleteWarningController;
+import app.controller.EndorseListController;
 import app.controller.OpenWindow;
 import app.model.Skill;
+import app.model.SkillEndorse;
 import app.model.User;
+import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListCell;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.util.List;
 
 public class SkillCellController extends JFXListCell<Skill> {
 
@@ -40,6 +42,8 @@ public class SkillCellController extends JFXListCell<Skill> {
 
     private FXMLLoader fxmlLoader;
 
+    private List<SkillEndorse> skillEndorses;
+
     @FXML
     public void initialize() {
 
@@ -62,9 +66,26 @@ public class SkillCellController extends JFXListCell<Skill> {
                     e.printStackTrace();
                 }
             }
+            skillEndorses = Repository.listEndorseToUserSkill(owner.getUserId(), skill.getSkillId());
+
             if(owner == user){
                 endorseButton.setVisible(false);
             }
+            for(SkillEndorse skillEndorse : skillEndorses){
+                if(skillEndorse.getByUserId() == user.getUserId()){
+                    endorseButton.setVisible(false);
+                    break;
+                }
+            }
+
+            int endorseNum = Repository.listEndorseToUserSkill(owner.getUserId(), skill.getSkillId()).size();
+            if(endorseNum == 0){
+                endorseNumber.setVisible(false);
+            }else endorseNumber.setText(String.valueOf(endorseNum));
+
+            endorseButton.setOnAction(event -> endorse(skill, endorseNum));
+
+            endorseNumber.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> listEndorse(skill));
 
             skillTitle.setText(skill.getTitle());
 
@@ -73,5 +94,14 @@ public class SkillCellController extends JFXListCell<Skill> {
         }
     }
 
+    private void endorse(Skill skill, int endorseNum){
+        Repository.addSkillEndorse(user.getUserId(), owner.getUserId(), skill.getSkillId());
+        endorseButton.setVisible(false);
+        endorseNumber.setText(String.valueOf(endorseNum+1));
+    }
+
+    private void listEndorse(Skill skill){
+        OpenWindow.openWindowWait("view/EndorseList.fxml", new EndorseListController(user, owner, skill),"Endorse List");
+    }
 
 }

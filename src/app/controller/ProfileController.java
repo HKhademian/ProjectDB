@@ -270,6 +270,7 @@ public class ProfileController {
         nowLocation = owner.getLocation();
 
         if(!isOwner()){
+            Repository.getUserById(user.getUserId(), owner.getUserId());
             introEdit.setVisible(false);
             aboutEdit.setVisible(false);
             accomplishmentsAdd.setVisible(false);
@@ -282,6 +283,8 @@ public class ProfileController {
             deleteSelectedSkill.setVisible(false);
             deleteSelectedLanguage.setVisible(false);
             unFeature.setVisible(false);
+            skillAdd.setVisible(false);
+            changeImage.setVisible(false);
         }
     }
 

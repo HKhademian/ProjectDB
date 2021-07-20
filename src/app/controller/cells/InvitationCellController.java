@@ -1,5 +1,7 @@
 package app.controller.cells;
 
+import app.controller.OpenWindow;
+import app.controller.ProfileController;
 import app.model.Invitation;
 import app.model.User;
 import app.repository.Repository;
@@ -11,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -104,7 +107,7 @@ public class InvitationCellController extends JFXListCell<Invitation> {
                     response.setText("Rejected");
                     setVisibleButton(false);
                 }
-
+                imagePlace.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage(sender, receiver));
                 //System.out.println(invitation.getStatus());
 
                 acceptButton.setOnAction(event -> acceptInvite(sender.getUserId(), receiver.getUserId()));
@@ -156,6 +159,16 @@ public class InvitationCellController extends JFXListCell<Invitation> {
         Repository.rejectInvitation(senderId, receiverId);
         setVisibleButton(false);
         response.setText("Rejected");
+    }
+
+    private void profilePage(User sender, User receiver){
+        imagePlace.getScene().getWindow().hide();
+        if(sender.getUserId() == owner.getUserId()){
+            OpenWindow.openWindow("view/Profile.fxml",new ProfileController(receiver, sender), "Profile");
+        }
+        else{
+            OpenWindow.openWindow("view/Profile.fxml",new ProfileController(sender, receiver), "Profile");
+        }
     }
 
 }
