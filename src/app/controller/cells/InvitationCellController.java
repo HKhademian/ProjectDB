@@ -79,36 +79,46 @@ public class InvitationCellController extends JFXListCell<Invitation> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //System.out.println(invitation.getFromUserId());
-                /*User user = Repository.getUserById(invitation.getFromUserId());
-                //setImage(user);
+                User user = Repository.getUserById(owner.getUserId(),invitation.getSenderUserId());
                 message.setText(invitation.getMessage());
                 time.setText(invitation.getTime().toString());
 
-                if(user == owner){
-                    acceptButton.setVisible(false);
-                    rejectButton.setVisible(false);
+                if(user.getUserId() == owner.getUserId()){
+                    setVisibleButton(false);
                     fromOrTo.setText("to : ");
-                    User u = Repository.getUserById(invitation.getUserId());
+                    User u = Repository.getUserById(owner.getUserId(),invitation.getReceiverUserId());
                     name.setText(u.getFirstname());
-                    family.setText(user.getLastname());
+                    family.setText(u.getLastname());
+                    setImage(u);
                 }else{
                     fromOrTo.setText("from : ");
                     name.setText(user.getFirstname());
-                    name.setText(user.getLastname());
+                    family.setText(user.getLastname());
+                    setImage(user);
                 }
-                if(invitation.getStatus() == 1) response.setText("Accepted");
-                else if(invitation.getStatus() == -1) response.setText("Rejected");
+                if(invitation.getStatus() == 1){
+                    response.setText("Accepted");
+                    setVisibleButton(false);
+                }
+                else if(invitation.getStatus() == -1){
+                    response.setText("Rejected");
+                    setVisibleButton(false);
+                }
 
                 acceptButton.setOnAction(event -> acceptInvite(user));
                 rejectButton.setOnAction(event -> rejectInvite(user));
-*/
+
                 setText(null);
                 setGraphic(rootAnchorPane);
 
             }
 
         }
+    }
+
+    private void setVisibleButton(boolean visible){
+        acceptButton.setVisible(visible);
+        rejectButton.setVisible(visible);
     }
 
     private void setImage(User user) {

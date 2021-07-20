@@ -18,18 +18,11 @@ public class AddArticleController {
     public AddArticleController(User user) {
         this.user = user;
     }
-
     @FXML
     private TextArea titleBox;
 
     @FXML
     private TextArea textBox;
-
-    @FXML
-    private Label chooseTypeLabel;
-
-    @FXML
-    private Label address;
 
     @FXML
     private Label titleError;

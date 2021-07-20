@@ -1,12 +1,10 @@
 package app.controller;
 
 import app.controller.cells.BackgroundCellController;
+import app.controller.cells.FeatureCellController;
 import app.controller.cells.LanguageCellController;
 import app.controller.cells.SkillCellController;
-import app.model.Background;
-import app.model.Language;
-import app.model.Skill;
-import app.model.User;
+import app.model.*;
 import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -27,6 +25,7 @@ import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.List;
 
 public class ProfileController {
 
@@ -102,7 +101,7 @@ public class ProfileController {
     private ImageView featureAdd;
 
     @FXML
-    private JFXListView<?> featureList;
+    private JFXListView<Article> featureList;
 
     @FXML
     private TextField locationField;
@@ -141,9 +140,6 @@ public class ProfileController {
     private ImageView profile;
 
     @FXML
-    private ImageView editSelectedSkill;
-
-    @FXML
     private ImageView deleteSelectedSkill;
 
     @FXML
@@ -153,10 +149,10 @@ public class ProfileController {
     private ImageView editSelectedBackground;
 
     @FXML
-    private ImageView editSelectedLanguage;
+    private ImageView deleteSelectedLanguage;
 
     @FXML
-    private ImageView deleteSelectedLanguage;
+    private JFXButton unFeature;
 
 
     private String nowIntro;
@@ -167,6 +163,7 @@ public class ProfileController {
     private ObservableList<Background> backgrounds;
     private ObservableList<Skill> skills;
     private ObservableList<Language> languages;
+    private ObservableList<Article> featureArticles;
 
     @FXML
     public void initialize(){
@@ -206,9 +203,10 @@ public class ProfileController {
 
         backgrounds = FXCollections.observableArrayList(Repository.listUserBackground(owner.getUserId()));
         backgroundList.setItems(backgrounds);
-        backgroundList.setCellFactory(BackgroundCellController -> new BackgroundCellController(owner, user));
+        backgroundList.setCellFactory(BackgroundCellController -> new BackgroundCellController(owner));
 
         deleteSelectedBackground.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> deleteBackground());
+        editSelectedBackground.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> editBackground());
 
         //Accomplishments
         accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
@@ -225,18 +223,25 @@ public class ProfileController {
         //Skill
         skillAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addSkill());
 
-        skills = FXCollections.observableArrayList();
-        skills.addAll(Repository.listUserSkills(owner.getUserId()));
+        skills = FXCollections.observableArrayList(Repository.listUserSkills(owner.getUserId()));
         skillList.setItems(skills);
         skillList.setCellFactory(SkillCellController -> new SkillCellController(owner, user));
 
         deleteSelectedSkill.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> deleteSkill());
+
+        //feature
+        setFeatureList();
+        featureAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addFeature());
+        unFeature.setOnAction(event -> unFeatureArticle());
 
         //Home icon
         home.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> homePage());
 
         //MyNetwork icon
         network.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> myNetwork());
+
+        //profile
+        profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> userProfile());
 
         logout.setOnAction(event -> logOut());
 
@@ -275,7 +280,8 @@ public class ProfileController {
             deleteSelectedBackground.setVisible(false);
             editSelectedBackground.setVisible(false);
             deleteSelectedSkill.setVisible(false);
-            editSelectedSkill.setVisible(false);
+            deleteSelectedLanguage.setVisible(false);
+            unFeature.setVisible(false);
         }
     }
 
@@ -300,6 +306,24 @@ public class ProfileController {
             OpenWindow.openWindowWait("view/DeleteWarning.fxml", new DeleteWarningController<Language>(
                     languageList.getSelectionModel().getSelectedItem(), languages, owner.getUserId()),"Warning"
             );
+        }
+    }
+
+    private void editBackground(){
+        Background background = backgroundList.getSelectionModel().getSelectedItem();
+        if(background!=null){
+            OpenWindow.openWindowWait("view/AddBackground.fxml", new AddBackgroundController(owner, background), "Edit Background");
+        }
+        backgrounds.remove(background);
+        backgrounds.add(background);
+    }
+
+    private void unFeatureArticle(){
+        Article article = featureList.getSelectionModel().getSelectedItem();
+        if(article != null){
+            featureArticles.remove(article);
+            article.setFeatured(false);
+            Repository.saveArticle(article);
         }
     }
 
@@ -432,16 +456,17 @@ public class ProfileController {
     private void addBackground(){
         int len = backgrounds.size() + 1;
         OpenWindow.openWindowWait("view/AddBackground.fxml", new AddBackgroundController(owner),
-                "Background");
-        int lenBackground = Repository.listUserBackground(owner.getUserId()).size();
-        if(len == lenBackground){
-            for(Background background:Repository.listUserBackground(owner.getUserId())){
+                "Add Background");
+        List<Background> backgroundList = Repository.listUserBackground(owner.getUserId());
+        if(len == backgroundList.size()){
+            for(Background background: backgroundList){
                 if(!backgrounds.contains(background)){
                     backgrounds.add(background);
                     break;
                 }
             }
         }
+
     }
 
     private void addAccomplishment(){
@@ -453,9 +478,9 @@ public class ProfileController {
         int len = languages.size() + 1;
         OpenWindow.openWindowWait("view/AddSupportedLanguage.fxml", new AddSupportedLanguageController(owner),
                 "Add Language");
-        int lenLanguage = Repository.listUserLanguage(owner.getUserId()).size();
-        if(len==lenLanguage){
-            for(Language language: Repository.listUserLanguage(owner.getUserId())){
+        List<Language> languageList = Repository.listUserLanguage(owner.getUserId());
+        if(len==languageList.size()){
+            for(Language language: languageList){
                 if(!languages.contains(language)){
                     languages.add(language);
                     break;
@@ -468,16 +493,39 @@ public class ProfileController {
         int len = skills.size()+1;
         OpenWindow.openWindowWait("view/AddSkill.fxml", new AddSkillController(owner),
                 "Add Skill");
-        int lenSkill = Repository.listUserSkills(owner.getUserId()).size();
-        if(len == lenSkill){
-            for(Skill skill:Repository.listUserSkills(owner.getUserId())){
+        List<Skill> skillList = Repository.listUserSkills(owner.getUserId());
+        if(len == skillList.size()){
+            for(Skill skill:skillList){
                 if(!skills.contains(skill)){
                     skills.add(skill);
                     break;
                 }
             }
-            //skills.add(Repository.getLastUserSkill(user.getUserId()));
         }
+    }
+
+    private void setFeatureList(){
+        List<Article> articles = Repository.listUserArticles(owner.getUserId());
+        featureArticles = FXCollections.observableArrayList();
+        for(Article article: articles){
+            if(article.getFeatured()) featureArticles.add(article);
+        }
+        featureList.setItems(featureArticles);
+        featureList.setCellFactory(FeatureCellController -> new FeatureCellController(owner));
+    }
+
+    private void addFeature(){
+        int len = featureArticles.size() + 1;
+        OpenWindow.openWindowWait("view/AddFeature.fxml", new AddFeatureController(owner),
+                "Add Feature");
+        List<Article> articles = Repository.listUserArticles(owner.getUserId());
+        for(Article article: articles){
+            if(article.getFeatured() && !featureArticles.contains(article)){
+                featureArticles.add(article);
+                break;
+            }
+        }
+
     }
 
     private void homePage(){
@@ -489,6 +537,13 @@ public class ProfileController {
     private void myNetwork(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/Network.fxml", new NetworkController(owner), "MyNetwork");
+    }
+
+    private void userProfile(){
+        if(!isOwner()){
+            imagePlace.getScene().getWindow().hide();
+            OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, user), "Profile");
+        }
     }
 
 }

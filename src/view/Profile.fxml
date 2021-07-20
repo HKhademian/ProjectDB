@@ -205,15 +205,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="editSelectedSkill" fitHeight="24.0" fitWidth="28.0" layoutX="1101.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../assets/edit.png" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
-      <ImageView fx:id="deleteSelectedSkill" fitHeight="24.0" fitWidth="28.0" layoutX="1153.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="deleteSelectedSkill" fitHeight="24.0" fitWidth="28.0" layoutX="1153.0" layoutY="271.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/delete.png" />
          </image>
@@ -237,14 +229,6 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="editSelectedLanguage" fitHeight="24.0" fitWidth="28.0" layoutX="1101.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../assets/edit.png" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
       <ImageView fx:id="deleteSelectedLanguage" fitHeight="24.0" fitWidth="28.0" layoutX="1153.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/delete.png" />
@@ -253,5 +237,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
+      <JFXButton fx:id="unFeature" layoutX="1088.0" layoutY="507.0" text="UnFeature">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
    </children>
 </AnchorPane>

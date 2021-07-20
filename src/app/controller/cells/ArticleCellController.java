@@ -85,16 +85,14 @@ public class ArticleCellController extends JFXListCell<Article> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                title.setText(article.getTitle());
-                content.setText(article.getContent());
-                time.setText(article.getTime().toString());
-                //setImage(Repository.getUserById(article.getWriterUserId()));
-                //System.out.println(Repository.getUserById(article.getWriterUserId()));
-
-                setText(null);
-                setGraphic(rootAnchorPane);
-
             }
+            title.setText(article.getTitle());
+            content.setText(article.getContent());
+            time.setText(article.getTime().toString());
+            setImage(Repository.getUserById(user.getUserId(),article.getWriterUserId()));
+
+            setText(null);
+            setGraphic(rootAnchorPane);
 
         }
     }

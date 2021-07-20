@@ -20,9 +20,16 @@ import java.util.Date;
 public class AddBackgroundController {
 
     private User user;
+    private Background background;
 
     public AddBackgroundController(User user) {
         this.user = user;
+        background = null;
+    }
+
+    public AddBackgroundController(User user, Background background){
+        this.user = user;
+        this.background = background;
     }
 
     @FXML
@@ -62,6 +69,13 @@ public class AddBackgroundController {
         type.setItems(bgTypes);
         type.setValue(Background.BgType.Work);
 
+        if(background!=null){
+            titleBox.setText(background.getTitle());
+            type.setValue(background.getBgType());
+            startDateBox.setText(parseDate(background.getFromTime()));
+            endDateBox.setText(parseDate(background.getToTime()));
+        }
+
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
         saveButton.setOnAction(event -> saveBackground());
     }
@@ -69,8 +83,16 @@ public class AddBackgroundController {
     private void saveBackground(){
         boolean valid = validation();
         if(valid){
-            Repository.saveUserBackground(new Background(-1, user.getUserId(),titleBox.getText().trim()
-                    ,type.getSelectionModel().getSelectedItem(), start, end));
+            if(background==null) {
+                Repository.saveUserBackground(new Background(-1, user.getUserId(), titleBox.getText().trim()
+                        , type.getSelectionModel().getSelectedItem(), start, end));
+            }else{
+                background.setTitle(titleBox.getText().trim());
+                background.setBgType(type.getSelectionModel().getSelectedItem());
+                background.setFromTime(start);
+                background.setToTime(end);
+                Repository.saveUserBackground(background);
+            }
             saveButton.getScene().getWindow().hide();
         }
     }
@@ -116,8 +138,15 @@ public class AddBackgroundController {
         if(dateInString.isEmpty()){
             return null;
         }
-        Date date1 = formatter.parse(dateInString);
-        return date1;
+        return formatter.parse(dateInString);
+    }
+
+    private String parseDate(Date date){
+        if(date!=null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            return formatter.format(date);
+        }
+        return "";
     }
 
 }

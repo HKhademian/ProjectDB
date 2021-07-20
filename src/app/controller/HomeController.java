@@ -87,6 +87,8 @@ public class HomeController {
         Location.setText(user.getLocation());
         setImage();
 
+        //System.out.println(user.getUserId());
+
         articles = FXCollections.observableArrayList(Repository.listHomeUserArticles(user.getUserId()));
         articleList.setItems(articles);
         articleList.setCellFactory(ArticleCellController -> new ArticleCellController(user));
@@ -141,16 +143,17 @@ public class HomeController {
         int len = articles.size()+1;
         imagePlace.getScene().getWindow();
         OpenWindow.openWindowWait("view/AddArticle.fxml", new AddArticleController(user),
-                "Create Article");
+                "Add Article");
 
-        List<Article> articleList = Repository.listHomeUserArticles(user.getUserId());
-        if(len == articleList.size()){
-            for(Article article: articleList){
+        List<Article> listArticle = Repository.listHomeUserArticles(user.getUserId());
+        if(len == listArticle.size()){
+            for(Article article: listArticle){
                 if(!articles.contains(article)){
                     articles.add(article);
                     break;
                 }
             }
+            articleList.setItems(articles);
         }
     }
 

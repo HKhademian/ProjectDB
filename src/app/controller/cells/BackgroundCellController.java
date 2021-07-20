@@ -1,7 +1,5 @@
 package app.controller.cells;
 
-import app.controller.DeleteWarningController;
-import app.controller.OpenWindow;
 import app.model.Background;
 import app.model.User;
 import com.jfoenix.controls.JFXListCell;
@@ -9,19 +7,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
 public class BackgroundCellController extends JFXListCell<Background> {
 
-    private User owner;
     private User user;
 
-    public BackgroundCellController(User owner, User user) {
-        this.owner = owner;
+    public BackgroundCellController(User user) {
         this.user = user;
     }
 
