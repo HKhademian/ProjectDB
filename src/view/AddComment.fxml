@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" prefHeight="391.0" prefWidth="547.0" style="-fx-background-color: #E9ECEF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextArea fx:id="text" layoutX="16.0" layoutY="61.0" prefHeight="184.0" prefWidth="504.0" style="-fx-background-color: #F8F9FA;">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextArea>
+        <JFXButton fx:id="cancelButton" layoutX="320.0" layoutY="290.0" prefHeight="38.0" prefWidth="95.0" style="-fx-background-color: #ADB5BD;" text="Cancel">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <JFXButton fx:id="sendButton" layoutX="150.0" layoutY="290.0" prefHeight="38.0" prefWidth="95.0" style="-fx-background-color: #000000;" text="Send" textFill="#fffdfd">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+      <Label layoutX="28.0" layoutY="31.0" prefHeight="21.0" prefWidth="254.0" text="write your comment" />
+      <Label fx:id="emptyError" layoutX="16.0" layoutY="260.0" prefHeight="21.0" prefWidth="232.0" text="Please first write something" textFill="#dd2424" />
+    </children>
+</AnchorPane>
