@@ -79,8 +79,8 @@ public class InvitationCellController extends JFXListCell<Invitation> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                User sender = Repository.getUserById(owner.getUserId(), invitation.getSenderUserId());
-                User receiver = Repository.getUserById(owner.getUserId(), invitation.getReceiverUserId());
+                User sender = Repository.getUserById(invitation.getSenderUserId(), invitation.getSenderUserId());
+                User receiver = Repository.getUserById(invitation.getReceiverUserId(), invitation.getReceiverUserId());
                 message.setText(invitation.getMessage());
                 time.setText(invitation.getTime().toString());
 
