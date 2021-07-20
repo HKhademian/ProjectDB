@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="146.0" prefWidth="386.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextField fx:id="articleTitle" alignment="TOP_LEFT" editable="false" layoutX="15.0" layoutY="14.0" prefHeight="119.0" prefWidth="356.0" style="-fx-background-color: #F8F9FA;" />
+    </children>
+</AnchorPane>
