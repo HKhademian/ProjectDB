@@ -1,5 +1,7 @@
 package app.controller.cells;
 
+import app.controller.CommentController;
+import app.controller.OpenWindow;
 import app.model.Article;
 import app.model.User;
 import app.repository.Repository;
@@ -11,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -91,6 +94,9 @@ public class ArticleCellController extends JFXListCell<Article> {
             time.setText(article.getTime().toString());
             setImage(Repository.getUserById(user.getUserId(),article.getWriterUserId()));
 
+            comment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
+            commentLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
+
             setText(null);
             setGraphic(rootAnchorPane);
 
@@ -118,6 +124,10 @@ public class ArticleCellController extends JFXListCell<Article> {
             }
             imagePlace.setFill(new ImagePattern(wr));
         }
+    }
+
+    private void showComments(Article article){
+        OpenWindow.openWindowWait("view/Comments.fxml", new CommentController(user, article), "Comments");
     }
 
 }
