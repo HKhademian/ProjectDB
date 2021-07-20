@@ -79,22 +79,22 @@ public class InvitationCellController extends JFXListCell<Invitation> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                User user = Repository.getUserById(owner.getUserId(),invitation.getSenderUserId());
+                User sender = Repository.getUserById(owner.getUserId(), invitation.getSenderUserId());
+                User receiver = Repository.getUserById(owner.getUserId(), invitation.getReceiverUserId());
                 message.setText(invitation.getMessage());
                 time.setText(invitation.getTime().toString());
 
-                if(user.getUserId() == owner.getUserId()){
+                if(sender.getUserId() == owner.getUserId()){
                     setVisibleButton(false);
                     fromOrTo.setText("to : ");
-                    User u = Repository.getUserById(owner.getUserId(),invitation.getReceiverUserId());
-                    name.setText(u.getFirstname());
-                    family.setText(u.getLastname());
-                    setImage(u);
+                    name.setText(receiver.getFirstname());
+                    family.setText(receiver.getLastname());
+                    setImage(receiver);
                 }else{
                     fromOrTo.setText("from : ");
-                    name.setText(user.getFirstname());
-                    family.setText(user.getLastname());
-                    setImage(user);
+                    name.setText(sender.getFirstname());
+                    family.setText(sender.getLastname());
+                    setImage(sender);
                 }
                 if(invitation.getStatus() == 1){
                     response.setText("Accepted");
@@ -105,8 +105,10 @@ public class InvitationCellController extends JFXListCell<Invitation> {
                     setVisibleButton(false);
                 }
 
-                acceptButton.setOnAction(event -> acceptInvite(user));
-                rejectButton.setOnAction(event -> rejectInvite(user));
+                //System.out.println(invitation.getStatus());
+
+                acceptButton.setOnAction(event -> acceptInvite(sender.getUserId(), receiver.getUserId()));
+                rejectButton.setOnAction(event -> rejectInvite(sender.getUserId(), receiver.getUserId()));
 
                 setText(null);
                 setGraphic(rootAnchorPane);
@@ -144,11 +146,16 @@ public class InvitationCellController extends JFXListCell<Invitation> {
         }
     }
 
-    private void acceptInvite(User user){
-        Repository.acceptInvitation(owner.getUserId(), user.getUserId());
+    private void acceptInvite(int senderId, int receiverId){
+        Repository.acceptInvitation(senderId, receiverId);
+        setVisibleButton(false);
+        response.setText("Accepted");
     }
 
-    private void rejectInvite(User user){
-        Repository.rejectInvitation(owner.getUserId(), user.getUserId());
+    private void rejectInvite(int senderId, int receiverId){
+        Repository.rejectInvitation(senderId, receiverId);
+        setVisibleButton(false);
+        response.setText("Rejected");
     }
+
 }
