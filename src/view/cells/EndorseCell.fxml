@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="103.0" prefWidth="386.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+      <Circle fx:id="imagePlace" fill="#c9c9c9" layoutX="46.0" layoutY="46.0" radius="32.0" stroke="#c9c9c9" strokeType="INSIDE" />
+      <Label fx:id="name" layoutX="88.0" layoutY="36.0" prefHeight="21.0" prefWidth="108.0" text="Name" />
+      <Label fx:id="family" layoutX="205.0" layoutY="36.0" prefHeight="21.0" prefWidth="108.0" text="family" />
+    </children>
+</AnchorPane>
