@@ -508,10 +508,10 @@ public class ProfileController {
     }
 
     private void setFeatureList(){
-        List<Article> articles = Repository.listUserArticles(owner.getUserId());
+        List<Article> articles = Repository.listUserFeaturedArticles(owner.getUserId(),owner.getUserId());
         featureArticles = FXCollections.observableArrayList();
         for(Article article: articles){
-            if(article.getFeatured()) featureArticles.add(article);
+           featureArticles.add(article);
         }
         featureList.setItems(featureArticles);
         featureList.setCellFactory(FeatureCellController -> new FeatureCellController(owner));
@@ -521,9 +521,9 @@ public class ProfileController {
         int len = featureArticles.size() + 1;
         OpenWindow.openWindowWait("view/AddFeature.fxml", new AddFeatureController(owner),
                 "Add Feature");
-        List<Article> articles = Repository.listUserArticles(owner.getUserId());
+        List<Article> articles = Repository.listUserFeaturedArticles(owner.getUserId(),owner.getUserId());
         for(Article article: articles){
-            if(article.getFeatured() && !featureArticles.contains(article)){
+            if( !featureArticles.contains(article)){
                 featureArticles.add(article);
                 break;
             }

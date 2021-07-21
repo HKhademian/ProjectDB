@@ -45,10 +45,10 @@ public class AddFeatureController {
     }
 
     private void setArticleList(){
-        List<Article> articles = Repository.listUserArticles(user.getUserId());
+        List<Article> articles = Repository.listUserFeaturedArticles(user.getUserId(),user.getUserId());
         notFeatureArticles = FXCollections.observableArrayList();
         for(Article article: articles){
-            if(!article.getFeatured()) notFeatureArticles.add(article);
+            if(false /*!article.getFeatured() FIXME*/) notFeatureArticles.add(article);
         }
         articleList.setItems(notFeatureArticles);
         articleList.setCellFactory(FeatureCellController -> new FeatureCellController(user));

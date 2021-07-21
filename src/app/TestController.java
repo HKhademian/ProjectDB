@@ -127,14 +127,14 @@ public class TestController implements Initializable {
     });
     btnSaveArticle1.setOnMouseClicked(event -> {
       final Article article = new Article(
-        Integer.parseInt(id.getText()), loggedUser.getUserId(), title.getText(), text.getText(), true, new Date()
+        Integer.parseInt(id.getText()), loggedUser.getUserId(), title.getText(), text.getText(),  new Date()
       );
       Object res = Repository.saveArticle(article);
       text.setText("saveArticle `edit` res: " + res + "\nLastErr:" + Database.lastError);
     });
     btnSaveArticle2.setOnMouseClicked(event -> {
       final Article article = new Article(
-        0, loggedUser.getUserId(), title.getText(), text.getText(), true, new Date()
+        0, loggedUser.getUserId(), title.getText(), text.getText(),  new Date()
       );
       Object res = Repository.saveArticle(article);
       text.setText("saveArticle `new` res: " + res + "\nLastErr:" + Database.lastError);

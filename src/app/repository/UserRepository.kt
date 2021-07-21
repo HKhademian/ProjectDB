@@ -62,8 +62,8 @@ fun registerUser(user: User, password: String): User? =
 	connect {
 		val SQL = """
 			INSERT INTO User
-			(userId, username, password, firstname, lastname, intro, about, avatar, accomp, birthday, location)
-			VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)
+			(userId, username, password, firstname, lastname, intro, about, avatar,  birthday, location)
+			VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			RETURNING *;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)

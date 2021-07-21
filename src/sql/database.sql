@@ -20,7 +20,6 @@ create table User (
     intro TEXT,
     about TEXT,
     avatar BLOB,
-    accomp text,
     birthday integer,
     location text
 );
@@ -80,8 +79,7 @@ create table Article (
         on update cascade on delete cascade,
     title text not null,
     content text,
-    time INTEGER NOT NULL DEFAULT 0,
-    featured INTEGER NOT NULL DEFAULT 0
+    time INTEGER NOT NULL DEFAULT 0
 );
 
 create table Comment (
@@ -126,6 +124,17 @@ create table User_Accomplishment
     time    INTEGER NOT NULL DEFAULT -1
 );
 
+create table User_Feature
+(
+    userId    INTEGER NOT NULL
+        references User (userId)
+        on update cascade on delete cascade,
+    articleId INTEGER NOT NULL
+        references Article (articleId)
+        on update cascade on delete cascade,
+    time      INTEGER NOT NULL DEFAULT -1,
+    primary key (userId, articleId)
+);
 
 -- Network Tables --
 
@@ -372,17 +381,19 @@ CREATE VIEW Home as
 ;
 
 CREATE VIEW HomeArticle as
-    select
-        H.userId       as home_userId,
-        MAX(H.time)    as home_time,
-        count(*)       as home_count,
-        count(UL.time) as home_isLiked,
-        AST.*
-    from Home H
-    JOIN ArticleStat AST ON H.articleId = AST.articleId
-    LEFT JOIN User_Like UL ON UL.userId = H.userId AND UL.articleId = AST.articleId AND UL.commentId IS NULL
-    group by H.userId, H.articleId
-    order by H.userId, MAX(H.time) DESC
+    select A.*,
+        U.userId                 as home_userId,
+        MAX(H.time)              as home_time,
+        count(ALL H.userId)      as home_count,
+        (U_L.userId IS NOT NULL) as home_isLiked,
+        (U_F.userId IS NOT NULL) as home_isFeatured,
+        (H.userId IS NOT NULL)   as home_isInHome
+    from User U, ArticleStat A
+    LEFT JOIN Home H ON H.userId = U.userId AND H.articleId = A.articleId
+    LEFT JOIN User_Like U_L ON U_L.userId = U.userId AND U_L.articleId = A.articleId AND U_L.commentId IS NULL
+    LEFT JOIN User_Feature U_F ON U_F.userId = U.userId AND U_F.articleId = A.articleId
+    group by U.userId, A.articleId
+    order by U.userId, MAX(H.time) DESC
 ;
 
 CREATE VIEW HomeComment AS

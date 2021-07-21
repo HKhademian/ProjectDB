@@ -46,7 +46,6 @@ internal fun ResultSet.extractArticle(): Article =
 		extractInt("writer_userId") ?: 0,
 		extractString("title") ?: "",
 		extractString("content") ?: "",
-		extractInt("featured") == 1,
 		extractDate("time") ?: Date(0),
 	).apply {
 		likeCount = extractInt("like_count") ?: 0
@@ -55,7 +54,9 @@ internal fun ResultSet.extractArticle(): Article =
 		homeUserId = extractInt("home_userId") ?: 0
 		homeTime = extractDate("home_time") ?: Date(0)
 		homeCount = extractInt("home_count") ?: 0
-		isHomeUserLiked = (extractInt("home_isLiked") ?: 0) != 0
+		isLiked = (extractInt("home_isLiked") ?: 0) != 0
+		isFeatured = (extractInt("home_isFeatured") ?: 0) != 0
+		isInHome = (extractInt("home_isInHome") ?: 0) != 0
 	}
 
 @PublishedApi

@@ -71,7 +71,6 @@ class ArticleRepositoryTest : BaseTest() {
 					title = "test article",
 					content = "ok article",
 					time = Date(),
-					featured = true,
 				)
 			)
 		)
@@ -87,7 +86,6 @@ class ArticleRepositoryTest : BaseTest() {
 					title = "test article edited",
 					content = "ok article edited",
 					time = Date(),
-					featured = true,
 				)
 			)
 		)
@@ -104,7 +102,6 @@ class ArticleRepositoryTest : BaseTest() {
 					title = "test article edited",
 					content = "ok article edited",
 					time = Date(),
-					featured = true,
 				)
 			)
 		)
