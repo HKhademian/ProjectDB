@@ -56,7 +56,7 @@ public class AddArticleController {
         }
         else{
             String text = textBox.getText().trim();
-            Repository.saveArticle(new Article(-1, user.getUserId(), title, text, new Date(), addFeature.isSelected()));
+            Repository.saveArticle(new Article(-1, user.getUserId(), title, text, addFeature.isSelected(), new Date()));
             postButton.getScene().getWindow().hide();
         }
     }

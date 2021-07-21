@@ -360,12 +360,19 @@ CREATE VIEW Home as
 ;
 
 CREATE VIEW HomeArticle as
-    select H.userId as home_userId, MAX(H.time) as home_time, count(*) as home_count, AST.*
+    select
+        H.userId       as home_userId,
+        MAX(H.time)    as home_time,
+        count(*)       as home_count,
+        count(UL.time) as home_isLiked,
+        AST.*
     from Home H
-    JOIN ArticleStat AST ON H.articleId=AST.articleId
+    JOIN ArticleStat AST ON H.articleId = AST.articleId
+    LEFT JOIN User_Like UL ON UL.userId = H.userId AND UL.articleId = AST.articleId AND UL.commentId IS NULL
     group by H.userId, H.articleId
     order by H.userId, MAX(H.time) DESC
 ;
+
 
 
 -- Messaging Views --

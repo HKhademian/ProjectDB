@@ -46,14 +46,17 @@ internal fun ResultSet.extractArticle(): Article =
 		extractInt("writer_userId") ?: 0,
 		extractString("title") ?: "",
 		extractString("content") ?: "",
+		extractInt("featured") == 1,
 		extractDate("time") ?: Date(0),
-		(extractInt("featured") ?: 0) != 0,
-		extractInt("like_count") ?: 0,
-		extractInt("comment_count") ?: 0,
-		extractInt("home_userId") ?: 0,
-		extractDate("home_time") ?: Date(0),
-		extractInt("home_count") ?: 0,
-	)
+	).apply {
+		likeCount = extractInt("like_count") ?: 0
+		commentCount = extractInt("comment_count") ?: 0
+
+		homeUserId = extractInt("home_userId") ?: 0
+		homeTime = extractDate("home_time") ?: Date(0)
+		homeCount = extractInt("home_count") ?: 0
+		isHomeUserLiked = (extractInt("home_isLiked") ?: 0) != 0
+	}
 
 @PublishedApi
 internal fun ResultSet.extractBackground(): Background =

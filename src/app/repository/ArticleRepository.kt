@@ -4,42 +4,41 @@
 package app.repository
 
 import app.model.Article
-import java.sql.Types
 
-fun getUserArticle(userId: Int, articleId: Int): Article? =
+fun getUserArticle(homeUserId: Int, articleId: Int): Article? =
 	connect {
 		val SQL = """
-			SELECT AST.*, HA.home_userId , HA.home_count, HA.home_time
+			SELECT AST.*, HA.home_userId , HA.home_count, HA.home_time, HA.home_isLiked
 			from ArticleStat AST
 			LEFT JOIN HomeArticle HA ON AST.articleId= HA.articleId AND HA.home_userId=?
 			where AST.articleId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
-		statement.setInt(1, userId)
+		statement.setInt(1, homeUserId)
 		statement.setInt(2, articleId)
 		statement.executeQuery()
 			.singleOf<Article>()
 	}
 
-fun listUserArticles(writerUserId: Int): List<Article> =
+fun listUserArticles(homeUserId: Int): List<Article> =
 	connect {
 		val SQL = """
 			SELECT * from HomeArticle where home_userId=? AND writer_userId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
-		statement.setInt(1, writerUserId)
-		statement.setInt(2, writerUserId)
+		statement.setInt(1, homeUserId)
+		statement.setInt(2, homeUserId)
 		statement.executeQuery()
 			.listOf<Article>()
 	} ?: emptyList()
 
-fun listHomeUserArticles(userId: Int): List<Article> =
+fun listHomeUserArticles(homeUserId: Int): List<Article> =
 	connect {
 		val SQL = """
 			SELECT * from HomeArticle where home_userId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
-		statement.setInt(1, userId)
+		statement.setInt(1, homeUserId)
 		statement.executeQuery()
 			.listOf<Article>()
 	} ?: emptyList()
@@ -71,13 +70,13 @@ fun saveArticle(article: Article): Article? {
 	return getUserArticle(article.writerUserId, articleId)
 }
 
-fun deleteArticle(userId: Int, articleId: Int): Boolean =
+fun deleteArticle(homeUserId: Int, articleId: Int): Boolean =
 	connect {
 		val SQL = """
 			DELETE FROM Article WHERE articleId=? AND writer_userId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
 		statement.setInt(1, articleId)
-		statement.setInt(2, userId)
+		statement.setInt(2, homeUserId)
 		statement.executeUpdate() > 0
 	} == true
