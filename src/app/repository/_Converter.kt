@@ -70,6 +70,16 @@ internal fun ResultSet.extractBackground(): Background =
 	)
 
 @PublishedApi
+internal fun ResultSet.extractAccomplishment(): Accomplishment =
+	Accomplishment(
+		extractInt("accId") ?: 0,
+		extractInt("userId") ?: 0,
+		extractString("title") ?: "",
+		extractString("content") ?: "",
+		extractDate("time") ?: Date(0),
+	)
+
+@PublishedApi
 internal fun ResultSet.extractComment(): Comment =
 	Comment(
 		extractInt("commentId") ?: 0,

@@ -115,6 +115,18 @@ create table User_Like (
     primary key (userId, articleId, commentId)
 );
 
+create table User_Accomplishment
+(
+    accId   INTEGER PRIMARY KEY,
+    userId  INTEGER NOT NULL
+        references User(userId)
+        on update cascade on delete cascade,
+    title   TEXT    NOT NULL,
+    content TEXT    NOT NULL,
+    time    INTEGER NOT NULL DEFAULT 0
+);
+
+
 -- Network Tables --
 
 create table Invitation (

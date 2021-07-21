@@ -1,5 +1,6 @@
 package app.model
 
+import app.controller.AddAccomplishmentsController
 import java.awt.Image
 import java.io.ByteArrayInputStream
 import java.util.*
@@ -41,6 +42,14 @@ data class Background(
 		Work, Study, Research,
 	}
 }
+
+data class Accomplishment(
+	var accId: Int,
+	var userId: Int,
+	var title: String,
+	var content: String,
+	var time: Date,
+)
 
 class Invitation(
 	var senderUserId: Int,
