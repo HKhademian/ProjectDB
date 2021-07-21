@@ -373,6 +373,12 @@ CREATE VIEW HomeArticle as
     order by H.userId, MAX(H.time) DESC
 ;
 
+CREATE VIEW HomeComment AS
+    SELECT CS.*, U.userId as home_userId, count(UL.time) as home_isLiked
+    from User U, CommentStat CS
+    LEFT JOIN User_Like UL ON UL.userId = U.userId AND UL.articleId = CS.articleId AND UL.commentId = CS.commentId
+    group by U.userId, CS.commentId
+;
 
 
 -- Messaging Views --

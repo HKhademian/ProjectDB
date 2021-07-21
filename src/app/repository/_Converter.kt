@@ -78,9 +78,11 @@ internal fun ResultSet.extractComment(): Comment =
 		extractInt("userId") ?: 0,
 		extractString("content") ?: "",
 		extractDate("time") ?: Date(0),
-		extractInt("like_count") ?: -1,
-		extractInt("reply_count") ?: -1,
-	)
+	).apply {
+		likeCount = extractInt("like_count") ?: -1
+		replyCount = extractInt("reply_count") ?: -1
+		home_isLiked = (extractInt("reply_count") ?: 0) != 0
+	}
 
 @PublishedApi
 internal fun ResultSet.extractInvitation(): Invitation =

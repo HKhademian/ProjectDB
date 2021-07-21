@@ -5,13 +5,14 @@ package app.repository
 
 import app.model.Comment
 
-fun getCommentById(commentId: Int): Comment? =
+fun getCommentById(homeUserId: Int, commentId: Int): Comment? =
 	connect {
 		val SQL = """
-			SELECT * from CommentStat where commentId=?;
+			SELECT * from HomeComment HC where HC.home_userId=? AND HC.commentId=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
-		statement.setInt(1, commentId)
+		statement.setInt(1, homeUserId)
+		statement.setInt(2, commentId)
 		statement.executeQuery()
 			.singleOf<Comment>()
 	}
@@ -19,13 +20,14 @@ fun getCommentById(commentId: Int): Comment? =
 /**
  * returns all comment and replies on this articleId
  */
-fun listComments(articleId: Int): List<Comment> =
+fun listComments(homeUserId: Int, articleId: Int): List<Comment> =
 	connect {
 		val SQL = """
-			SELECT * from CommentStat where articleId=?; --and reply_commentId is null
+			SELECT * from HomeComment where home_userId=? and articleId=?; --and reply_commentId is null
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
-		statement.setInt(1, articleId)
+		statement.setInt(1, homeUserId)
+		statement.setInt(2, articleId)
 		statement.executeQuery()
 			.listOf<Comment>()
 	} ?: emptyList()

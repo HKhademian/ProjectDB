@@ -40,7 +40,7 @@ public class CommentController {
     @FXML
     public void initialize(){
 
-        comments = FXCollections.observableList(Repository.listComments(article.getArticleId()));
+        comments = FXCollections.observableList(Repository.listComments(user.getUserId(),article.getArticleId()));
         commentList.setItems(comments);
         commentList.setCellFactory(CellFactory -> new CommentCellController(user));
 
@@ -53,7 +53,7 @@ public class CommentController {
         int len = comments.size()+1;
         OpenWindow.openWindowWait("view/AddComment.fxml", new AddCommentController(user, article),
                 "Add Comment");
-        List<Comment> listComment = Repository.listComments(article.getArticleId());
+        List<Comment> listComment = Repository.listComments(user.getUserId(),article.getArticleId());
         if(len == listComment.size()){
             for(Comment comment: listComment){
                 if(!comments.contains(comment)){
