@@ -93,6 +93,9 @@ public class NetworkController {
         //Home
         home.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> homePage());
 
+        //Notification
+        notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
+
         logout.setOnAction(event -> logOut());
     }
 
@@ -133,5 +136,10 @@ public class NetworkController {
     private void homePage(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/Home.fxml", new HomeController(user), "Home");
+    }
+
+    private void notificationPage(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Notification.fxml", new NotificationController(user), "Notification");
     }
 }

@@ -40,9 +40,9 @@ public class CommentController {
     @FXML
     public void initialize(){
 
-        comments = FXCollections.observableList(Repository.listComments(user.getUserId(),article.getArticleId()));
+        comments = FXCollections.observableArrayList(Repository.listComments(user.getUserId(),article.getArticleId()));
         commentList.setItems(comments);
-        commentList.setCellFactory(CellFactory -> new CommentCellController(user));
+        commentList.setCellFactory(CellFactory -> new CommentCellController(user, article));
 
 
         addCommentButton.setOnAction(event -> addComment());

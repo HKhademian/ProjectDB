@@ -1,6 +1,7 @@
 package app.controller;
 
 
+import app.model.Accomplishment;
 import app.model.Background;
 import app.model.Language;
 import app.model.Skill;
@@ -14,8 +15,6 @@ public class DeleteWarningController<T> {
     private T object;
     private ObservableList<T> lists;
     private int userId;
-
-    private ListView<Background> backgroundListView;
 
     public DeleteWarningController(T object, ObservableList<T> lists, int userId){
         this.object = object;
@@ -47,6 +46,9 @@ public class DeleteWarningController<T> {
         }
         else if(object instanceof Language){
             Repository.removeUserLanguage(userId, ((Language) object).getCode());
+        }
+        else if(object instanceof Accomplishment){
+            Repository.deleteUserAccomplishment(((Accomplishment) object).getAccId());
         }
         lists.remove(object);
         deleteButton.getScene().getWindow().hide();

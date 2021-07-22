@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.model.Article;
+import app.model.Comment;
 import app.model.User;
 import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
@@ -12,10 +13,18 @@ public class AddCommentController {
 
     private User user;
     private Article article;
+    private Comment comment;
 
     public AddCommentController(User user, Article article){
         this.user = user;
         this.article = article;
+        comment = null;
+    }
+
+    public AddCommentController(User user, Article article, Comment comment) {
+        this.user = user;
+        this.article = article;
+        this.comment = comment;
     }
 
     @FXML
@@ -47,7 +56,11 @@ public class AddCommentController {
             emptyError.setVisible(true);
             return;
         }
-        Repository.sendCommentOn(user.getUserId(), article.getArticleId(), -1, t);
+        if(comment==null) {
+            Repository.sendCommentOn(user.getUserId(), article.getArticleId(), -1, t);
+        }else{
+            Repository.sendCommentOn(user.getUserId(), article.getArticleId(), comment.getCommentId(), t);
+        }
         sendButton.getScene().getWindow().hide();
     }
 }

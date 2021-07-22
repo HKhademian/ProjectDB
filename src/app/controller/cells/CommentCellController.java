@@ -1,5 +1,8 @@
 package app.controller.cells;
 
+import app.controller.AddCommentController;
+import app.controller.OpenWindow;
+import app.model.Article;
 import app.model.Comment;
 import app.model.User;
 import app.repository.Repository;
@@ -15,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -28,9 +32,11 @@ import java.io.InputStream;
 public class CommentCellController extends JFXListCell<Comment> {
 
     private User user;
+    private Article article;
 
-    public CommentCellController(User user){
+    public CommentCellController(User user, Article article) {
         this.user = user;
+        this.article = article;
     }
 
     @FXML
@@ -99,6 +105,19 @@ public class CommentCellController extends JFXListCell<Comment> {
             dateLabel.setText(comment.getTime().toString());
             commentText.setText(comment.getContent());
 
+            if(comment.getHome_isLiked()){
+                notLikeImage.setVisible(false);
+                likeImage.setVisible(true);
+            }else {
+                notLikeImage.setVisible(true);
+                likeImage.setVisible(false);
+            }
+
+            replyButton.setOnAction(event -> replyComment(comment));
+
+            notLikeImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> likeComment(comment));
+            likeImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notLikeComment(comment));
+
             setText(null);
             setGraphic(rootAnchorPane);
 
@@ -128,4 +147,22 @@ public class CommentCellController extends JFXListCell<Comment> {
         }
     }
 
+    private void likeComment(Comment comment){
+        comment.setHome_isLiked(true);
+        Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
+        likeImage.setVisible(true);
+        notLikeImage.setVisible(false);
+    }
+
+    private void notLikeComment(Comment comment){
+        comment.setHome_isLiked(false);
+        Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
+        likeImage.setVisible(false);
+        notLikeImage.setVisible(true);
+    }
+
+    private void replyComment(Comment comment){
+        OpenWindow.openWindowWait("view/AddComment.fxml", new AddCommentController(user, article, comment),
+                "Reply Comment");
+    }
 }

@@ -56,7 +56,11 @@ public class AddArticleController {
         }
         else{
             String text = textBox.getText().trim();
-            Repository.saveArticle(new Article(-1, user.getUserId(), title, text, /*addFeature.isSelected() FIXME*/ new Date()));
+            Article article = new Article(-1, user.getUserId(), title, text, new Date());
+            article = Repository.saveArticle(article);
+            if(addFeature.isSelected()){
+                Repository.addUserFeaturedArticle(user.getUserId(), article.getArticleId());
+            }
             postButton.getScene().getWindow().hide();
         }
     }

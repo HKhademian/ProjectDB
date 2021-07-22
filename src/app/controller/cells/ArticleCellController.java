@@ -97,6 +97,17 @@ public class ArticleCellController extends JFXListCell<Article> {
             setImage(writer);
             imagePlace.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profile(writer));
 
+            if(article.isLiked()){
+                unlike.setVisible(false);
+                like.setVisible(true);
+            }else {
+                unlike.setVisible(true);
+                like.setVisible(false);
+            }
+
+            unlike.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> likeArticle(article));
+            like.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> unLikeArticle(article));
+
             comment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
             commentLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
 
@@ -136,6 +147,18 @@ public class ArticleCellController extends JFXListCell<Article> {
     private void profile(User writer){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/Profile.fxml", new ProfileController(writer, user), "Profile");
+    }
+
+    private void likeArticle(Article article){
+        Repository.toggleUserLike(user.getUserId(), article.getArticleId(), -1);
+        like.setVisible(true);
+        unlike.setVisible(false);
+    }
+
+    private void unLikeArticle(Article article){
+        Repository.toggleUserLike(user.getUserId(), article.getArticleId(), -1);
+        like.setVisible(false);
+        unlike.setVisible(true);
     }
 
 }

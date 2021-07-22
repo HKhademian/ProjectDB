@@ -1,9 +1,6 @@
 package app.controller;
 
-import app.controller.cells.BackgroundCellController;
-import app.controller.cells.FeatureCellController;
-import app.controller.cells.LanguageCellController;
-import app.controller.cells.SkillCellController;
+import app.controller.cells.*;
 import app.model.*;
 import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
@@ -65,7 +62,7 @@ public class ProfileController {
     private ImageView backgroundAdd;
 
     @FXML
-    private JFXListView<?> accomplishmentsList;
+    private JFXListView<Accomplishment> accomplishmentsList;
 
     @FXML
     private ImageView accomplishmentsAdd;
@@ -155,6 +152,16 @@ public class ProfileController {
     private JFXButton unFeature;
 
 
+    @FXML
+    private ImageView deleteSelectedAccomplishment;
+
+    @FXML
+    private ImageView editSelectedAccomplishment;
+
+
+    @FXML
+    private JFXButton advanceSearch;
+
     private String nowIntro;
     private String nowAbout;
     private String nowName;
@@ -164,6 +171,7 @@ public class ProfileController {
     private ObservableList<Skill> skills;
     private ObservableList<Language> languages;
     private ObservableList<Article> featureArticles;
+    private ObservableList<Accomplishment> accomplishments;
 
     @FXML
     public void initialize(){
@@ -209,7 +217,14 @@ public class ProfileController {
         editSelectedBackground.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> editBackground());
 
         //Accomplishments
-        accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
+        /*accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
+
+        accomplishments = FXCollections.observableArrayList(Repository.listUserAccomplishment(owner.getUserId()));
+        accomplishmentsList.setItems(accomplishments);
+        accomplishmentsList.setCellFactory(AccomplishmentCellController -> new AccomplishmentCellController(owner));*/
+
+        deleteSelectedAccomplishment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> deleteAccomplishment());
+        editSelectedAccomplishment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> editAccomplishment());
 
         //Language
         languageAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addLanguage());
@@ -242,6 +257,9 @@ public class ProfileController {
 
         //profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> userProfile());
+
+        //Notification
+        notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
 
         logout.setOnAction(event -> logOut());
 
@@ -285,6 +303,8 @@ public class ProfileController {
             unFeature.setVisible(false);
             skillAdd.setVisible(false);
             changeImage.setVisible(false);
+            editSelectedAccomplishment.setVisible(false);
+            deleteSelectedAccomplishment.setVisible(false);
         }
     }
 
@@ -301,6 +321,14 @@ public class ProfileController {
             OpenWindow.openWindowWait("view/DeleteWarning.fxml", new DeleteWarningController<Background>(
                     backgroundList.getSelectionModel().getSelectedItem(), backgrounds, user.getUserId()), "Warning"
             );
+        }
+    }
+
+    private void deleteAccomplishment(){
+        Accomplishment accomplishment = accomplishmentsList.getSelectionModel().getSelectedItem();
+        if(accomplishment!=null){
+            OpenWindow.openWindowWait("view/DeleteWarning.fxml", new DeleteWarningController<Accomplishment>(
+                    accomplishment, accomplishments, owner.getUserId()), "Warning");
         }
     }
 
@@ -321,12 +349,22 @@ public class ProfileController {
         backgrounds.add(background);
     }
 
+    private void editAccomplishment(){
+        Accomplishment accomplishment = accomplishmentsList.getSelectionModel().getSelectedItem();
+        if(accomplishment!=null){
+            OpenWindow.openWindowWait("view/AddAccomplishment.fxml", new AddAccomplishmentsController(owner),
+                    "Edit Accomplishment");
+        }
+        accomplishments.remove(accomplishment);
+        accomplishments.add(accomplishment);
+    }
+
     private void unFeatureArticle(){
         Article article = featureList.getSelectionModel().getSelectedItem();
         if(article != null){
             featureArticles.remove(article);
             article.setFeatured(false);
-            Repository.saveArticle(article);
+            Repository.removeUserFeaturedArticle(owner.getUserId(), article.getArticleId());
         }
     }
 
@@ -473,8 +511,18 @@ public class ProfileController {
     }
 
     private void addAccomplishment(){
+        int len = accomplishments.size()+1;
         OpenWindow.openWindowWait("view/AddAccomplishments.fxml", new AddAccomplishmentsController(owner),
-                "Accomplishment");
+                "Add Accomplishment");
+        List<Accomplishment> listAccomplishment = Repository.listUserAccomplishment(owner.getUserId());
+        if(len == listAccomplishment.size()){
+            for(Accomplishment accomplishment: listAccomplishment){
+                if(!accomplishments.contains(accomplishment)){
+                    accomplishments.add(accomplishment);
+                    break;
+                }
+            }
+        }
     }
 
     private void addLanguage(){
@@ -508,10 +556,10 @@ public class ProfileController {
     }
 
     private void setFeatureList(){
-        List<Article> articles = Repository.listUserFeaturedArticles(owner.getUserId(),owner.getUserId());
+        List<Article> articles = Repository.listUserArticles(owner.getUserId());
         featureArticles = FXCollections.observableArrayList();
         for(Article article: articles){
-           featureArticles.add(article);
+           if(article.isFeatured()) featureArticles.add(article);
         }
         featureList.setItems(featureArticles);
         featureList.setCellFactory(FeatureCellController -> new FeatureCellController(owner));
@@ -521,9 +569,9 @@ public class ProfileController {
         int len = featureArticles.size() + 1;
         OpenWindow.openWindowWait("view/AddFeature.fxml", new AddFeatureController(owner),
                 "Add Feature");
-        List<Article> articles = Repository.listUserFeaturedArticles(owner.getUserId(),owner.getUserId());
+        List<Article> articles = Repository.listUserArticles(owner.getUserId());
         for(Article article: articles){
-            if( !featureArticles.contains(article)){
+            if(article.isFeatured() && !featureArticles.contains(article)){
                 featureArticles.add(article);
                 break;
             }
@@ -533,13 +581,13 @@ public class ProfileController {
 
     private void homePage(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Home.fxml", new HomeController(owner),
+        OpenWindow.openWindow("view/Home.fxml", new HomeController(user),
                 "Home");
     }
 
     private void myNetwork(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Network.fxml", new NetworkController(owner), "MyNetwork");
+        OpenWindow.openWindow("view/Network.fxml", new NetworkController(user), "MyNetwork");
     }
 
     private void userProfile(){
@@ -547,6 +595,11 @@ public class ProfileController {
             imagePlace.getScene().getWindow().hide();
             OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, user), "Profile");
         }
+    }
+
+    private void notificationPage(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Notification.fxml", new NotificationController(user), "Notification");
     }
 
 }

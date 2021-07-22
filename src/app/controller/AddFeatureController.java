@@ -45,10 +45,10 @@ public class AddFeatureController {
     }
 
     private void setArticleList(){
-        List<Article> articles = Repository.listUserFeaturedArticles(user.getUserId(),user.getUserId());
+        List<Article> articles = Repository.listUserArticles(user.getUserId());
         notFeatureArticles = FXCollections.observableArrayList();
         for(Article article: articles){
-            if(false /*!article.getFeatured() FIXME*/) notFeatureArticles.add(article);
+            if(!article.isFeatured()) notFeatureArticles.add(article);
         }
         articleList.setItems(notFeatureArticles);
         articleList.setCellFactory(FeatureCellController -> new FeatureCellController(user));
@@ -60,8 +60,7 @@ public class AddFeatureController {
             errorLabel.setVisible(true);
             return;
         }
-        article.setFeatured(true);
-        Repository.saveArticle(article);
+        Repository.addUserFeaturedArticle(user.getUserId(), article.getArticleId());
         addButton.getScene().getWindow().hide();
     }
 }
