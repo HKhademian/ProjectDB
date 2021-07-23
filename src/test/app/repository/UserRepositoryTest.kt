@@ -109,4 +109,62 @@ class UserRepositoryTest : BaseTest() {
 		)
 		println(res)
 	}
+
+
+	@Test
+	fun `41- test toggleLike article`() {
+		println(connect {
+			it.createStatement()
+				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
+				.executeQuery("SELECT (userId||':'||articleId||':') from User_Like;")
+				.listOf<String>()
+		})
+
+		val res1 = toggleUserLike(1, 10, -1)
+		println(res1)
+
+		println(connect {
+			it.createStatement()
+				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
+				.listOf<String>()
+		})
+
+		val res2 = toggleUserLike(1, 10, -1)
+		println(res2)
+
+		println(connect {
+			it.createStatement()
+				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
+				.listOf<String>()
+		})
+	}
+
+	@Test
+	fun `42- test toggleLike comment`() {
+		println(connect {
+			it.createStatement()
+				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
+				.listOf<String>()
+		})
+
+		val res1 = toggleUserLike(1, 10, 3)
+		println(res1)
+
+		println(connect {
+			it.createStatement()
+				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
+				.listOf<String>()
+		})
+
+		val res2 = toggleUserLike(1, 10, 3)
+		println(res2)
+
+		println(connect {
+			it.createStatement()
+				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
+				.listOf<String>()
+		})
+	}
+
+
 }

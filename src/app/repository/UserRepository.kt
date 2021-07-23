@@ -82,54 +82,63 @@ fun registerUser(user: User, password: String): User? =
 			.singleOf<User>()
 	}
 
-fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean =
-	connect {
-		val SQL1: String
-		val SQL2: String
-		val SQL3: String
-		if (commentId > 0) {
-			SQL1 = """
+fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
+	val isLiked = (connect {
+		val SQL = if (commentId > 0) {
+			"""
 				SELECT count(*) from User_Like where userId=? and articleId=? and commentId=?;
 			""".trimIndent()
-			SQL2 = """
-				DELETE from User_Like where userId=? and articleId=? and commentId=?;
-			""".trimIndent()
-			SQL3 = """
-				INSERT into User_Like (userId, articleId, time, commentId, notified) VALUES (?,?,?,?,0);
-			""".trimIndent()
 		} else {
-			SQL1 = """
+			"""
 				SELECT count(*) from User_Like where userId=? and articleId=? and commentId is null;
 			""".trimIndent()
-			SQL2 = """
-				DELETE from User_Like where userId=? and articleId=? and commentId is null;
-			""".trimIndent()
-			SQL3 = """
-				INSERT into User_Like (userId, articleId, time, commentId, notified) VALUES (?,?,?,null,0);
-			""".trimIndent()
 		}
-		val statement1 = it.prepareStatement(SQL1)
-		statement1.setInt(1, userId)
-		statement1.setInt(2, articleId)
-		if (commentId > 0) statement1.setInt(3, commentId)
-		val res1 = statement1.executeQuery()
-		if (res1.next() && res1.getInt(1) > 0) {
-			val statement2 = it.prepareStatement(SQL2)
-			statement2.setInt(1, userId)
-			statement2.setInt(2, articleId)
-			if (commentId > 0) statement2.setInt(3, commentId)
-			statement2.executeUpdate()
-			return@connect true
-		} else {
-			val statement3 = it.prepareStatement(SQL3)
-			statement3.setInt(1, userId)
-			statement3.setInt(2, articleId)
-			statement3.setLong(3, System.currentTimeMillis())
-			if (commentId > 0) statement3.setInt(4, commentId)
-			statement3.executeUpdate()
-			return@connect true
-		}
-	} == true
+		val stmt = it.prepareStatement(SQL)
+		stmt.setInt(1, userId)
+		stmt.setInt(2, articleId)
+		if (commentId > 0) stmt.setInt(3, commentId)
+		stmt.executeQuery()
+			.extract<Int>()
+	} ?: 0) > 0
+
+	return if (isLiked) {
+		connect {
+			val SQL = if (commentId > 0) {
+				"""
+					DELETE from User_Like where userId=? and articleId=? and commentId=?;
+				""".trimIndent()
+			} else {
+				"""
+					DELETE from User_Like where userId=? and articleId=? and commentId is null;
+				""".trimIndent()
+			}
+			val stmt = it.prepareStatement(SQL)
+			stmt.setInt(1, userId)
+			stmt.setInt(2, articleId)
+			if (commentId > 0) stmt.setInt(3, commentId)
+			stmt.executeUpdate() > 0
+		} == true
+	} else {
+		connect {
+			val SQL = if (commentId > 0) {
+				"""
+					INSERT into User_Like (userId, articleId, time, commentId, notified) VALUES (?,?,?,?,0);
+				""".trimIndent()
+			} else {
+				"""
+					INSERT into User_Like (userId, articleId, time, commentId, notified) VALUES (?,?,?,null,0);
+				""".trimIndent()
+			}
+			val stmt = it.prepareStatement(SQL)
+			stmt.setInt(1, userId)
+			stmt.setInt(2, articleId)
+			stmt.setLong(3, System.currentTimeMillis())
+			if (commentId > 0) stmt.setInt(4, commentId)
+			stmt.executeUpdate() > 0
+		} == true
+	}
+
+}
 
 fun updateUserPersonalInfo(
 	userId: Int,
@@ -240,7 +249,6 @@ fun deleteUserBackground(bgId: Int): Boolean =
 		statement.setInt(1, bgId)
 		statement.executeUpdate() > 0
 	} == true
-
 
 
 fun listUserAccomplishment(userId: Int): List<Accomplishment> =
