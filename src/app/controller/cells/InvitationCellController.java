@@ -150,13 +150,13 @@ public class InvitationCellController extends JFXListCell<Invitation> {
     }
 
     private void acceptInvite(int senderId, int receiverId){
-        Repository.acceptInvitation(senderId, receiverId);
+        Repository.acceptInvitation(senderId, receiverId,true);
         setVisibleButton(false);
         response.setText("Accepted");
     }
 
     private void rejectInvite(int senderId, int receiverId){
-        Repository.rejectInvitation(senderId, receiverId);
+        Repository.acceptInvitation(senderId, receiverId, false);
         setVisibleButton(false);
         response.setText("Rejected");
     }

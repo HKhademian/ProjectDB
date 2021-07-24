@@ -5,6 +5,7 @@ package app.repository
 import java.lang.Exception
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.util.*
 import kotlin.jvm.Throws
@@ -18,12 +19,12 @@ var lastError: Throwable? = null
 @JvmField
 var test: Boolean = false
 
-fun interface ConnectionAction<T> {
+fun interface ConnectionAction<D, T> {
 	@Throws(Exception::class)
-	operator fun invoke(conn: Connection): T?
+	operator fun invoke(it: D): T?
 }
 
-fun <T> connect(action: ConnectionAction<T>): T? {
+fun <T> connect(action: ConnectionAction<Connection, T>): T? {
 	val db = "jdbc:sqlite:${if (test) TEST_DB_NAME else DB_NAME}"
 	try {
 		val properties = Properties()
@@ -40,6 +41,13 @@ fun <T> connect(action: ConnectionAction<T>): T? {
 		return null
 	}
 }
+
+
+fun <T> connect(sql: String, action: ConnectionAction<PreparedStatement, T>): T? =
+	connect {
+		val stmt = it.prepareStatement(sql)
+		action(stmt)
+	}
 
 fun scalarQuery(sql: String): String? =
 	connect<String> {
