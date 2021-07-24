@@ -56,15 +56,14 @@ public class NetworkCellController extends JFXListCell<User> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                setImage(user);
-                name.setText(user.getFirstname());
-                family.setText(user.getLastname());
-
-
-                setText(null);
-                setGraphic(rootAnchorPane);
-
             }
+            setImage(user);
+            name.setText(user.getFirstname());
+            family.setText(user.getLastname());
+
+
+            setText(null);
+            setGraphic(rootAnchorPane);
 
         }
     }

@@ -82,41 +82,41 @@ public class InvitationCellController extends JFXListCell<Invitation> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                User sender = Repository.getUserById(invitation.getSenderUserId(), invitation.getSenderUserId());
-                User receiver = Repository.getUserById(invitation.getReceiverUserId(), invitation.getReceiverUserId());
-                message.setText(invitation.getMessage());
-                time.setText(invitation.getTime().toString());
-
-                if(sender.getUserId() == owner.getUserId()){
-                    setVisibleButton(false);
-                    fromOrTo.setText("to : ");
-                    name.setText(receiver.getFirstname());
-                    family.setText(receiver.getLastname());
-                    setImage(receiver);
-                }else{
-                    fromOrTo.setText("from : ");
-                    name.setText(sender.getFirstname());
-                    family.setText(sender.getLastname());
-                    setImage(sender);
-                }
-                if(invitation.getStatus() == 1){
-                    response.setText("Accepted");
-                    setVisibleButton(false);
-                }
-                else if(invitation.getStatus() == -1){
-                    response.setText("Rejected");
-                    setVisibleButton(false);
-                }
-                imagePlace.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage(sender, receiver));
-                //System.out.println(invitation.getStatus());
-
-                acceptButton.setOnAction(event -> acceptInvite(sender.getUserId(), receiver.getUserId()));
-                rejectButton.setOnAction(event -> rejectInvite(sender.getUserId(), receiver.getUserId()));
-
-                setText(null);
-                setGraphic(rootAnchorPane);
-
             }
+            User sender = Repository.getUserById(invitation.getSenderUserId(), invitation.getSenderUserId());
+            User receiver = Repository.getUserById(invitation.getReceiverUserId(), invitation.getReceiverUserId());
+            message.setText(invitation.getMessage());
+            time.setText(invitation.getTime().toString());
+
+            if(sender.getUserId() == owner.getUserId()){
+                setVisibleButton(false);
+                fromOrTo.setText("to : ");
+                name.setText(receiver.getFirstname());
+                family.setText(receiver.getLastname());
+                setImage(receiver);
+            }else{
+                fromOrTo.setText("from : ");
+                name.setText(sender.getFirstname());
+                family.setText(sender.getLastname());
+                setImage(sender);
+            }
+            if(invitation.getStatus() == 1){
+                response.setText("Accepted");
+                setVisibleButton(false);
+            }
+            else if(invitation.getStatus() == -1){
+                response.setText("Rejected");
+                setVisibleButton(false);
+            }
+            imagePlace.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage(sender, receiver));
+            //System.out.println(invitation.getStatus());
+
+            acceptButton.setOnAction(event -> acceptInvite(sender.getUserId(), receiver.getUserId()));
+            rejectButton.setOnAction(event -> rejectInvite(sender.getUserId(), receiver.getUserId()));
+
+            setText(null);
+            setGraphic(rootAnchorPane);
+
 
         }
     }

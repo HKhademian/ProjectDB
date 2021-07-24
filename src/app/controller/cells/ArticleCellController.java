@@ -141,6 +141,7 @@ public class ArticleCellController extends JFXListCell<Article> {
     }
 
     private void showComments(Article article){
+        imagePlace.getScene().getWindow();
         OpenWindow.openWindowWait("view/Comments.fxml", new CommentController(user, article), "Comments");
     }
 

@@ -48,8 +48,8 @@ public class CommentController {
         Integer id;
         for(Comment comment: listComment){
             id = comment.getReplyCommentId();
-            System.out.println(comment.getContent() + " " +comment.getReplyCommentId()+
-                    " " + comment.getArticleId());
+            //System.out.println(comment.getContent() + " " +comment.getReplyCommentId()+
+            //        " " + comment.getArticleId());
             if(id != null){
                 comments.add(comment);
             }else{

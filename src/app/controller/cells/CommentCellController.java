@@ -28,15 +28,18 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class CommentCellController extends JFXListCell<Comment> {
 
     private User user;
     private Article article;
+    private List<Comment> replyComments;
 
-    public CommentCellController(User user, Article article) {
+    public CommentCellController(User user, Article article, List<Comment> replyComments) {
         this.user = user;
         this.article = article;
+        this.replyComments = replyComments;
     }
 
     @FXML
@@ -58,7 +61,7 @@ public class CommentCellController extends JFXListCell<Comment> {
     private Label dateLabel;
 
     @FXML
-    private JFXListView<?> replyCommentList;
+    private JFXListView<Comment> replyCommentList;
 
     @FXML
     private ImageView notLikeImage;
@@ -74,7 +77,7 @@ public class CommentCellController extends JFXListCell<Comment> {
 
 
     private FXMLLoader fxmlLoader;
-    private ObservableList<Comment> replyComments;
+    private ObservableList<Comment> replyComment;
 
     @FXML
     public void initialize(){
@@ -97,6 +100,14 @@ public class CommentCellController extends JFXListCell<Comment> {
                     e.printStackTrace();
                 }
             }
+            replyComment = FXCollections.observableArrayList();
+            replyCommentList.setItems(replyComment);
+            for(Comment comment1: replyComments){
+                if(comment1.getReplyCommentId() == comment.getCommentId()){
+                    replyComment.add(comment);
+                }
+            }
+            replyCommentList.setCellFactory(CommentCellController -> new CommentCellController(user, article, replyComments));
 
             User sender = Repository.getUserById(comment.getUserId(), comment.getUserId());
             setImage(sender);
@@ -112,6 +123,14 @@ public class CommentCellController extends JFXListCell<Comment> {
                 notLikeImage.setVisible(true);
                 likeImage.setVisible(false);
             }
+
+            likeCountLabel.setText(String.valueOf(comment.getLikeCount()));
+
+            /*System.out.println("================================================");
+            System.out.println(comment.getContent());
+            System.out.println("islike : "+comment.getHome_isLiked());
+            System.out.println("like count : "+comment.getLikeCount());
+            System.out.println("================================================");*/
 
             replyButton.setOnAction(event -> replyComment(comment));
 
@@ -148,17 +167,22 @@ public class CommentCellController extends JFXListCell<Comment> {
     }
 
     private void likeComment(Comment comment){
-        comment.setHome_isLiked(true);
-        Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
-        likeImage.setVisible(true);
+        //comment.setHome_isLiked(true);
+        boolean d = Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
+        //System.out.println("like : "+d);
         notLikeImage.setVisible(false);
+        likeImage.setVisible(true);
+        likeCountLabel.setText(String.valueOf(comment.getLikeCount()));
     }
 
     private void notLikeComment(Comment comment){
-        comment.setHome_isLiked(false);
-        Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
+        //comment.setHome_isLiked(false);
+        //System.out.println(comment.getCommentId());
+        boolean d = Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
+        //System.out.println("not like : "+d);
         likeImage.setVisible(false);
         notLikeImage.setVisible(true);
+        likeCountLabel.setText(String.valueOf(comment.getLikeCount()));
     }
 
     private void replyComment(Comment comment){
