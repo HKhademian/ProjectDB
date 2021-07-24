@@ -26,7 +26,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <ImageView fitHeight="35.0" fitWidth="88.0" layoutX="20.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="iconSearch" fitHeight="35.0" fitWidth="88.0" layoutX="20.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/search.png" />
          </image>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane prefHeight="900.0" prefWidth="1200.0" style="-fx-background-color: #E9ECEF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Circle fx:id="imagePlace" fill="#c9c9c9" layoutX="112.0" layoutY="167.0" radius="75.0" stroke="#c9c9c9" strokeType="INSIDE">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor></Circle>
+        <Label alignment="TOP_LEFT" layoutX="14.0" layoutY="252.0" prefHeight="21.0" prefWidth="70.0" text="Name" textFill="#5879b7" />
+        <Label alignment="TOP_LEFT" layoutX="14.0" layoutY="313.0" prefHeight="21.0" prefWidth="99.0" text="Family" textFill="#5879b7" />
+        <TextField fx:id="Location" editable="false" layoutX="15.0" layoutY="401.0" prefHeight="31.0" prefWidth="196.0" style="-fx-background-color: #F8F9FA;" />
+        <TextField fx:id="name" editable="false" layoutX="15.0" layoutY="273.0" prefHeight="31.0" prefWidth="196.0" style="-fx-background-color: #F8F9FA;" />
+        <TextField fx:id="family" editable="false" layoutX="15.0" layoutY="333.0" prefHeight="31.0" prefWidth="196.0" style="-fx-background-color: #F8F9FA;" />
+        <Label alignment="TOP_LEFT" layoutX="14.0" layoutY="380.0" prefHeight="21.0" prefWidth="99.0" text="Location" textFill="#5879b7" />
+        <Label prefHeight="70.0" prefWidth="1200.0" style="-fx-background-color: #DEE2E6;" />
+        <TextField fx:id="searchBox" focusTraversable="false" layoutX="58.0" layoutY="17.0" prefHeight="35.0" prefWidth="440.0" promptText="Search" style="-fx-background-color: #F8F9FA;" />
+        <ImageView fx:id="searchIcon" fitHeight="35.0" fitWidth="88.0" layoutX="20.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/search.png" />
+            </image>
+        </ImageView>
+        <JFXButton fx:id="logout" layoutX="1069.0" layoutY="12.0" prefHeight="45.0" prefWidth="83.0" ripplerFill="BLACK" style="-fx-background-color: #ADB5BD;" text="Logout">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <ImageView fx:id="home" fitHeight="35.0" fitWidth="88.0" layoutX="644.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/home.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ImageView fx:id="network" fitHeight="35.0" fitWidth="88.0" layoutX="699.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/network.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ImageView fx:id="messaging" fitHeight="35.0" fitWidth="88.0" layoutX="754.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/chat.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ImageView fx:id="notification" fitHeight="35.0" fitWidth="88.0" layoutX="809.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/notification.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ImageView fx:id="profile" fitHeight="35.0" fitWidth="88.0" layoutX="864.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/profile.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <JFXButton fx:id="advanceSearch" layoutX="505.0" layoutY="20.0" style="-fx-background-color: #ADB5BD;" text="advace search" />
+      <TextField fx:id="nameSearch" layoutX="446.0" layoutY="160.0" prefHeight="31.0" prefWidth="308.0" style="-fx-background-color: #F8F9FA;" />
+      <JFXComboBox fx:id="locationList" layoutX="446.0" layoutY="237.0" prefHeight="31.0" prefWidth="308.0" />
+      <JFXComboBox fx:id="skill" layoutX="446.0" layoutY="319.0" prefHeight="31.0" prefWidth="308.0" />
+      <JFXComboBox fx:id="language" layoutX="446.0" layoutY="417.0" prefHeight="31.0" prefWidth="308.0" />
+      <TextField fx:id="background" layoutX="446.0" layoutY="511.0" prefHeight="31.0" prefWidth="308.0" style="-fx-background-color: #F8F9FA;" />
+      <Label layoutX="390.0" layoutY="165.0" text="Name" />
+      <Label layoutX="373.0" layoutY="242.0" text="Location" />
+      <Label layoutX="400.0" layoutY="323.0" text="Skill" />
+      <Label layoutX="365.0" layoutY="422.0" text="Language" />
+      <Label layoutX="358.0" layoutY="516.0" text="Background" />
+      <JFXButton fx:id="searchButton" layoutX="525.0" layoutY="587.0" prefHeight="31.0" prefWidth="150.0" style="-fx-background-color: #000000;" text="Search" textFill="WHITE" />
+      <Label fx:id="errorLabel" layoutX="446.0" layoutY="555.0" prefHeight="21.0" prefWidth="308.0" text="Yout must fill at least one field" textFill="#ee2222" />
+    </children>
+</AnchorPane>

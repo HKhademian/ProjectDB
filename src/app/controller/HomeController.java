@@ -39,6 +39,12 @@ public class HomeController {
     private TextField searchBox;
 
     @FXML
+    private ImageView iconSearch;
+
+    @FXML
+    private JFXButton advanceSearch;
+
+    @FXML
     private TextField Location;
 
     @FXML
@@ -105,6 +111,9 @@ public class HomeController {
         //Notification
         notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
 
+        advanceSearch.setOnAction(event -> searchAdvance());
+        iconSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> search());
+
         logout.setOnAction(event -> logOut());
     }
 
@@ -156,7 +165,7 @@ public class HomeController {
                     break;
                 }
             }
-            articleList.setItems(articles);
+            //articleList.setItems(articles);
         }
     }
 
@@ -168,6 +177,21 @@ public class HomeController {
     private void notificationPage(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/Notification.fxml", new NotificationController(user), "Notification");
+    }
+
+    private void searchAdvance(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/AdvanceSearch.fxml", new AdvanceSearchController(user), "Advance Search");
+    }
+
+    private void search(){
+        String s = searchBox.getText().trim();
+        if(!s.isEmpty()){
+            imagePlace.getScene().getWindow().hide();
+            OpenWindow.openWindow("view/SearchResult.fxml", new SearchResultController(user,
+                            Repository.searchProfiles(s, null, null, null, null)),
+                    "Search Result");
+        }
     }
 
 }

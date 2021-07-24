@@ -1,7 +1,7 @@
 package app.controller;
 
 import app.controller.cells.NotificationCellController;
-import app.model.Notification;
+import app.controller.cells.SearchResultCellController;
 import app.model.User;
 import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
@@ -22,13 +22,16 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
-public class NotificationController {
+public class SearchResultController {
 
     private User user;
+    private List<User> users;
 
-    public NotificationController(User user) {
+    public SearchResultController(User user, List<User> users) {
         this.user = user;
+        this.users = users;
     }
 
     @FXML
@@ -53,6 +56,9 @@ public class NotificationController {
     private JFXButton advanceSearch;
 
     @FXML
+    private ImageView searchIcon;
+
+    @FXML
     private JFXButton logout;
 
     @FXML
@@ -65,12 +71,15 @@ public class NotificationController {
     private ImageView messaging;
 
     @FXML
+    private ImageView notification;
+
+    @FXML
     private ImageView profile;
 
     @FXML
-    private JFXListView<Notification> notificationList;
+    private JFXListView<User> resultList;
 
-    private ObservableList<Notification> notifications;
+    private ObservableList<User> userList;
 
     public void initialize(){
 
@@ -79,9 +88,11 @@ public class NotificationController {
         Location.setText(user.getLocation());
         setImage();
 
-        notifications = FXCollections.observableArrayList(Repository.getUserNotification(user.getUserId()));
-        notificationList.setItems(notifications);
-        notificationList.setCellFactory(NotificationCellController -> new NotificationCellController(user));
+        //System.out.println(users.size());
+
+        userList = FXCollections.observableArrayList(users);
+        resultList.setItems(userList);
+        resultList.setCellFactory(CellController -> new SearchResultCellController(user));
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
@@ -92,8 +103,10 @@ public class NotificationController {
         //MyNetwork
         network.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> myNetwork());
 
+        //Notification
+        notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
+
         advanceSearch.setOnAction(event -> searchAdvance());
-        iconSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> search());
 
         logout.setOnAction(event -> logOut());
     }
@@ -142,19 +155,14 @@ public class NotificationController {
         OpenWindow.openWindow("view/Network.fxml", new NetworkController(user), "MyNetwork");
     }
 
+    private void notificationPage(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Notification.fxml", new NotificationController(user), "Notification");
+    }
+
     private void searchAdvance(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/AdvanceSearch.fxml", new AdvanceSearchController(user), "Advance Search");
     }
 
-    private void search(){
-        String s = searchBox.getText().trim();
-        if(!s.isEmpty()){
-            imagePlace.getScene().getWindow().hide();
-            OpenWindow.openWindow("view/SearchResult.fxml", new SearchResultController(user,
-                            Repository.searchProfiles(s, null, null, null, null)),
-                    "Search Result");
-        }
-    }
 }
-
