@@ -44,6 +44,10 @@ public class AddAccomplishmentsController {
     public void initialize(){
         titleError.setVisible(false);
 
+        if(accomplishment!=null) {
+          titleBox.setText(accomplishment.getTitle());
+          aboutBox.setText(accomplishment.getContent());
+        }
         cancelButton.setOnAction(event -> cancelButton.getScene().getWindow().hide());
         saveButton.setOnAction(event -> saveAccomplishment());
     }

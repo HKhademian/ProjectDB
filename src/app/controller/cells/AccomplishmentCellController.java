@@ -40,7 +40,7 @@ public class AccomplishmentCellController extends JFXListCell<Accomplishment> {
             setGraphic(null);
         }else{
             if(fxmlLoader == null){
-                fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/cells/AccomplishmentCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("view/cells/AccomplishmentsCell.fxml"));
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();

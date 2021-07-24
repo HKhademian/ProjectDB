@@ -295,8 +295,8 @@ fun saveUserAccomplishment(acc: Accomplishment): Accomplishment? =
 			statement.setNull(1, Types.INTEGER)
 		statement.setInt(2, acc.userId)
 		statement.setString(3, acc.title)
-		statement.setString(3, acc.content)
-		statement.setLong(4, acc.time.time)
+		statement.setString(4, acc.content)
+		statement.setLong(5, acc.time.time)
 		statement.executeQuery()
 			.singleOf<Accomplishment>()
 	}

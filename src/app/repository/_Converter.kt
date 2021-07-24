@@ -32,6 +32,7 @@ internal inline fun <reified T> ResultSet.extract(): T? =
 		SkillEndorse::class -> extractSkillEndorse() as T?
 		Chat::class -> extractChat() as T?
 		Message::class -> extractMessage() as T?
+		Accomplishment::class -> extractAccomplishment() as T?
 		Int::class -> extractInt() as T?
 		Long::class -> extractLong() as T?
 		String::class -> extractString() as T?

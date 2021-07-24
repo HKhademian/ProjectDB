@@ -220,11 +220,10 @@ public class ProfileController {
         editSelectedBackground.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> editBackground());
 
         //Accomplishments
-        /*accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
-
+        accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
         accomplishments = FXCollections.observableArrayList(Repository.listUserAccomplishment(owner.getUserId()));
         accomplishmentsList.setItems(accomplishments);
-        accomplishmentsList.setCellFactory(AccomplishmentCellController -> new AccomplishmentCellController(owner));*/
+        accomplishmentsList.setCellFactory(AccomplishmentCellController -> new AccomplishmentCellController(owner));
 
         deleteSelectedAccomplishment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> deleteAccomplishment());
         editSelectedAccomplishment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> editAccomplishment());
@@ -358,7 +357,7 @@ public class ProfileController {
     private void editAccomplishment(){
         Accomplishment accomplishment = accomplishmentsList.getSelectionModel().getSelectedItem();
         if(accomplishment!=null){
-            OpenWindow.openWindowWait("view/AddAccomplishment.fxml", new AddAccomplishmentsController(owner),
+            OpenWindow.openWindowWait("view/AddAccomplishment.fxml", new AddAccomplishmentsController(owner, accomplishment),
                     "Edit Accomplishment");
         }
         accomplishments.remove(accomplishment);
@@ -518,7 +517,7 @@ public class ProfileController {
 
     private void addAccomplishment(){
         int len = accomplishments.size()+1;
-        OpenWindow.openWindowWait("view/AddAccomplishments.fxml", new AddAccomplishmentsController(owner),
+        OpenWindow.openWindowWait("AddAccomplishment.fxml", new AddAccomplishmentsController(owner),
                 "Add Accomplishment");
         List<Accomplishment> listAccomplishment = Repository.listUserAccomplishment(owner.getUserId());
         if(len == listAccomplishment.size()){
