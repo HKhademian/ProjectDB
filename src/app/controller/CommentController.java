@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommentController {
@@ -40,9 +41,22 @@ public class CommentController {
     @FXML
     public void initialize(){
 
-        comments = FXCollections.observableArrayList(Repository.listComments(user.getUserId(),article.getArticleId()));
+        List<Comment> listComment = Repository.listComments(user.getUserId(),article.getArticleId());
+        List<Comment> replyComments = new ArrayList<>();
+        comments = FXCollections.observableArrayList();
         commentList.setItems(comments);
-        commentList.setCellFactory(CellFactory -> new CommentCellController(user, article));
+        Integer id;
+        for(Comment comment: listComment){
+            id = comment.getReplyCommentId();
+            System.out.println(comment.getContent() + " " +comment.getReplyCommentId()+
+                    " " + comment.getArticleId());
+            if(id != null){
+                comments.add(comment);
+            }else{
+                replyComments.add(comment);
+            }
+        }
+        commentList.setCellFactory(CellFactory -> new CommentCellController(user, article, replyComments));
 
 
         addCommentButton.setOnAction(event -> addComment());
