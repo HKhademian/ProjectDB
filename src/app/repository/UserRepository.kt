@@ -10,16 +10,19 @@ import app.model.User
 import java.sql.Types
 import java.util.Date
 
-fun suggestLocation(): List<String> =
+/** get User Detail from its username */
+fun getUserByUsername(username: String): User? =
 	connect {
 		val SQL = """
-			SELECT * from SuggestLocation;
+			SELECT * from User where username=?;
 		""".trimIndent()
 		val statement = it.prepareStatement(SQL)
+		statement.setString(1, username)
 		statement.executeQuery()
-			.listOf<String>()
-	} ?: emptyList()
+			.singleOf<User>()
+	}
 
+/** visit User Profile */
 fun getUserById(visitorUserId: Int, userId: Int): User? {
 	val user = connect {
 		val SQL = """
@@ -46,6 +49,8 @@ fun getUserById(visitorUserId: Int, userId: Int): User? {
 	return user
 }
 
+
+/** login by username and password */
 fun loginUser(username: String?, password: String?): User? =
 	connect {
 		val SQL = """
@@ -58,6 +63,7 @@ fun loginUser(username: String?, password: String?): User? =
 			.singleOf<User>()
 	}
 
+/** register new user by given detail */
 fun registerUser(user: User, password: String): User? =
 	connect {
 		val SQL = """
@@ -82,6 +88,7 @@ fun registerUser(user: User, password: String): User? =
 			.singleOf<User>()
 	}
 
+/** like or unlike given article or comment */
 fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 	val isLiked = (connect {
 		val SQL = if (commentId > 0) {
@@ -137,9 +144,9 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 			stmt.executeUpdate() > 0
 		} == true
 	}
-
 }
 
+/** update all user info */
 fun updateUserPersonalInfo(
 	userId: Int,
 	firstName: String?,
@@ -178,23 +185,31 @@ fun updateUserPersonalInfo(
 		stmt.executeUpdate() > 0
 	} == true
 
-//TODO: updateAvatar(int userId, byte[] avatar)
 fun updateAvatar(userId: Int, avatar: ByteArray) =
 	updateUserPersonalInfo(userId, null, null, null, null, avatar, null, null, null)
 
-//TODO: updatePersonalInfo(int userId, String firstName, String lastName, String location)
 fun updateAvatar(userId: Int, firstName: String, lastName: String, location: String) =
 	updateUserPersonalInfo(userId, firstName, lastName, null, null, null, null, null, location)
 
-//TODO: updateInfo(int userId, String info)
 fun updateInfo(userId: Int, info: String) =
 	updateUserPersonalInfo(userId, null, null, info, null, null, null, null, null)
 
-//TODO: updateAbout(int userId, String about)
 fun updateAbout(userId: Int, about: String) =
 	updateUserPersonalInfo(userId, null, null, null, about, null, null, null, null)
 
 
+/** list location suggestion */
+fun suggestLocation(): List<String> =
+	connect {
+		val SQL = """
+			SELECT * from SuggestLocation;
+		""".trimIndent()
+		val statement = it.prepareStatement(SQL)
+		statement.executeQuery()
+			.listOf<String>()
+	} ?: emptyList()
+
+/** list background suggestion */
 fun suggestBackground(): List<Background> =
 	connect {
 		val SQL = """
@@ -205,6 +220,7 @@ fun suggestBackground(): List<Background> =
 			.listOf<Background>()
 	} ?: emptyList()
 
+/** list all given user Backgrounds */
 fun listUserBackground(userId: Int): List<Background> =
 	connect {
 		val SQL = """
@@ -216,6 +232,7 @@ fun listUserBackground(userId: Int): List<Background> =
 			.listOf<Background>()
 	} ?: emptyList()
 
+/** add/edit user background data */
 fun saveUserBackground(bg: Background): Background? =
 	connect {
 		val SQL = """
@@ -240,6 +257,7 @@ fun saveUserBackground(bg: Background): Background? =
 			.singleOf<Background>()
 	}
 
+/** remove userBackground */
 fun deleteUserBackground(bgId: Int): Boolean =
 	connect {
 		val SQL = """
@@ -250,7 +268,7 @@ fun deleteUserBackground(bgId: Int): Boolean =
 		statement.executeUpdate() > 0
 	} == true
 
-
+/** list all user accomplishments */
 fun listUserAccomplishment(userId: Int): List<Accomplishment> =
 	connect {
 		val SQL = """
@@ -262,6 +280,7 @@ fun listUserAccomplishment(userId: Int): List<Accomplishment> =
 			.listOf<Accomplishment>()
 	} ?: emptyList()
 
+/** add or edit user accomplishment */
 fun saveUserAccomplishment(acc: Accomplishment): Accomplishment? =
 	connect {
 		val SQL = """
@@ -282,6 +301,7 @@ fun saveUserAccomplishment(acc: Accomplishment): Accomplishment? =
 			.singleOf<Accomplishment>()
 	}
 
+/** remove user accomplishment */
 fun deleteUserAccomplishment(accId: Int): Boolean =
 	connect {
 		val SQL = """

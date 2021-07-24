@@ -6,6 +6,7 @@ package app.repository
 import app.model.Chat
 import app.model.Message
 
+/** get chat detail for given UserId */
 fun getUserChat(chatId: Int, userId: Int): Chat? =
 	connect {
 		val SQL = """
@@ -18,6 +19,7 @@ fun getUserChat(chatId: Int, userId: Int): Chat? =
 			.singleOf<Chat>()
 	}
 
+/** List all chat details for given UserId  */
 fun listUserChats(userId: Int): List<Chat> =
 	connect {
 		val SQL = """
@@ -29,6 +31,7 @@ fun listUserChats(userId: Int): List<Chat> =
 			.listOf<Chat>()
 	} ?: emptyList()
 
+/** add new user to chat by its userId */
 fun addChatUser(chatId: Int, userId: Int, isAdmin: Boolean): Boolean =
 	connect {
 		val SQL = """
@@ -42,6 +45,8 @@ fun addChatUser(chatId: Int, userId: Int, isAdmin: Boolean): Boolean =
 		stmt.executeUpdate() > 0
 	} == true
 
+
+/** create new chat group and set given userId as admin */
 fun createChat(userId: Int, title: String): Chat? {
 	val chatId = connect {
 		val SQL = """
@@ -59,6 +64,7 @@ fun createChat(userId: Int, title: String): Chat? {
 	return if (!res) null else getUserChat(chatId, userId)
 }
 
+/** update chat detail for given UserId */
 fun updateChat(chatId: Int, userId: Int, isArchived: Boolean, isMuted: Boolean): Boolean =
 	connect {
 		val SQL = """
@@ -73,6 +79,7 @@ fun updateChat(chatId: Int, userId: Int, isArchived: Boolean, isMuted: Boolean):
 		stmt.executeUpdate() > 0
 	} == true
 
+/** update chat detail (admin only) for all */
 fun updateChat(chatId: Int, userId: Int, title: String): Boolean =
 	connect {
 		val SQL = """
@@ -89,6 +96,8 @@ fun updateChat(chatId: Int, userId: Int, title: String): Boolean =
 		stmt.executeUpdate() > 0
 	} == true
 
+
+/** delete given chat (only admin) */
 fun deleteChat(chatId: Int, userId: Int): Boolean =
 	connect {
 		val SQL = """
@@ -102,7 +111,7 @@ fun deleteChat(chatId: Int, userId: Int): Boolean =
 		stmt.executeUpdate() > 0
 	} == true
 
-
+/** get Message Detail for userId */
 fun getMessage(userId: Int, messageId: Int): Message? =
 	connect {
 		val SQL = """
@@ -115,6 +124,7 @@ fun getMessage(userId: Int, messageId: Int): Message? =
 			.singleOf<Message>()
 	}
 
+/** list messages of a chat include user specific data */
 fun listUserMessages(userId: Int, chatId: Int): List<Message> =
 	connect {
 		val SQL = """
@@ -127,18 +137,20 @@ fun listUserMessages(userId: Int, chatId: Int): List<Message> =
 			.listOf<Message>()
 	} ?: emptyList()
 
-fun listMessageStat(userId: Int, messageId: Int): Message? =
-	connect {
-		val SQL = """
-			SELECT * FROM Message_State WHERE userId=? AND messageId=?;
-		""".trimIndent()
-		val stmt = it.prepareStatement(SQL)
-		stmt.setInt(1, userId)
-		stmt.setInt(2, messageId)
-		stmt.executeQuery()
-			.singleOf<Message>()
-	}
+///** use listUserMessages */
+//fun listMessageStat(userId: Int, messageId: Int): Message? =
+//	connect {
+//		val SQL = """
+//			SELECT * FROM Message_State WHERE userId=? AND messageId=?;
+//		""".trimIndent()
+//		val stmt = it.prepareStatement(SQL)
+//		stmt.setInt(1, userId)
+//		stmt.setInt(2, messageId)
+//		stmt.executeQuery()
+//			.singleOf<Message>()
+//	}
 
+/** send message to a chat (user must be participant to chat to allow send) */
 fun sendMessage(chatId: Int, userId: Int, replyMessageId: Int, content: String): Message? =
 	connect {
 		val SQL = """
@@ -156,6 +168,7 @@ fun sendMessage(chatId: Int, userId: Int, replyMessageId: Int, content: String):
 			.singleOf<Message>()
 	}
 
+/** update message stat for given user */
 fun statMessage(userId: Int, messageId: Int, isReceived: Boolean, isSeen: Boolean): Boolean {
 	val setStat = { field: String, value: Boolean ->
 		connect {
@@ -178,6 +191,7 @@ fun statMessage(userId: Int, messageId: Int, isReceived: Boolean, isSeen: Boolea
 	return setStat("receiveTime", isReceived) && setStat("seenTime", isSeen)
 }
 
+/** remove message */
 fun deleteMessage(messageId: Int): Boolean =
 	connect {
 		val SQL = """
