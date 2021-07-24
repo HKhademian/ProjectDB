@@ -92,7 +92,7 @@ internal fun ResultSet.extractComment(): Comment =
 	).apply {
 		likeCount = extractInt("like_count") ?: -1
 		replyCount = extractInt("reply_count") ?: -1
-		home_isLiked = (extractInt("reply_count") ?: 0) != 0
+		home_isLiked = (extractInt("home_isLiked") ?: 0) != 0
 	}
 
 @PublishedApi

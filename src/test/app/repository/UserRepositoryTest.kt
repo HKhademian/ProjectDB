@@ -116,9 +116,11 @@ class UserRepositoryTest : BaseTest() {
 		println(connect {
 			it.createStatement()
 				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
-				.executeQuery("SELECT (userId||':'||articleId||':') from User_Like;")
 				.listOf<String>()
 		})
+		println(
+			getUserArticle(1, 10)?.isLiked
+		)
 
 		val res1 = toggleUserLike(1, 10, -1)
 		println(res1)
@@ -128,6 +130,9 @@ class UserRepositoryTest : BaseTest() {
 				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
 				.listOf<String>()
 		})
+		println(
+			getUserArticle(1, 10)?.isLiked
+		)
 
 		val res2 = toggleUserLike(1, 10, -1)
 		println(res2)
@@ -137,6 +142,9 @@ class UserRepositoryTest : BaseTest() {
 				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
 				.listOf<String>()
 		})
+		println(
+			getUserArticle(1, 10)?.isLiked
+		)
 	}
 
 	@Test
@@ -146,6 +154,9 @@ class UserRepositoryTest : BaseTest() {
 				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
 				.listOf<String>()
 		})
+		println(
+			getCommentById(1, 3)?.home_isLiked
+		)
 
 		val res1 = toggleUserLike(1, 10, 3)
 		println(res1)
@@ -155,6 +166,9 @@ class UserRepositoryTest : BaseTest() {
 				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
 				.listOf<String>()
 		})
+		println(
+			getCommentById(1, 3)?.home_isLiked
+		)
 
 		val res2 = toggleUserLike(1, 10, 3)
 		println(res2)
@@ -164,6 +178,9 @@ class UserRepositoryTest : BaseTest() {
 				.executeQuery("SELECT (userId||':'||articleId||':'||COALESCE(commentId, '')) from User_Like;")
 				.listOf<String>()
 		})
+		println(
+			getCommentById(1, 3)?.home_isLiked
+		)
 	}
 
 
