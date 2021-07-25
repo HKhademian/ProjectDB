@@ -1,5 +1,7 @@
 package app.controller.cells;
 
+import app.controller.OpenWindow;
+import app.controller.ProfileController;
 import app.model.Notification;
 import app.model.User;
 import app.repository.Repository;
@@ -38,9 +40,6 @@ public class NotificationCellController extends JFXListCell<Notification> {
     private Label name;
 
     @FXML
-    private Label family;
-
-    @FXML
     private Label time;
 
     @FXML
@@ -72,9 +71,11 @@ public class NotificationCellController extends JFXListCell<Notification> {
             }
             User user = Repository.getUserById(notification.getByUserId(), notification.getByUserId());
             setImage(user);
-            name.setText(user.getFirstname());
-            family.setText(user.getLastname());
-            //time.setText(notification.getTime().toString());
+            name.setText(user.getFirstname() + " " + user.getLastname());
+            setReason(notification);
+            time.setText(notification.getTime().toString());
+
+            imagePlace.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profile(user));
 
             setText(null);
             setGraphic(rootAnchorPane);
@@ -105,4 +106,32 @@ public class NotificationCellController extends JFXListCell<Notification> {
         }
     }
 
+    private void setReason(Notification notification){
+        if(notification instanceof Notification.BirthdayNotification){
+            reason.setText("BirthDay");
+        }
+        else if(notification instanceof Notification.CommentNotification){
+            reason.setText("Write comment");
+        }
+        else if(notification instanceof Notification.LikeArticleNotification){
+            reason.setText("Like your article");
+        }
+        else if(notification instanceof Notification.LikeCommentNotification){
+            reason.setText("Like your comment");
+        }
+        else if(notification instanceof Notification.ProfileVisitNotification){
+            reason.setText("Visit your profile");
+        }
+        else if(notification instanceof Notification.ReplyCommentNotification){
+            reason.setText("Reply your comment");
+        }
+        else if(notification instanceof Notification.SkillEndorseNotification){
+            reason.setText("Endorse your skill");
+        }
+    }
+
+    private void profile(User user){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Profile.fxml", new ProfileController(user, this.user), "Profile");
+    }
 }

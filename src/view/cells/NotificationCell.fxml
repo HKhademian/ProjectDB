@@ -12,9 +12,8 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Circle>
-        <Label fx:id="name" alignment="CENTER" layoutX="68.0" layoutY="168.0" prefHeight="21.0" prefWidth="124.0" text="Name" />
-        <Label fx:id="family" alignment="CENTER" layoutX="206.0" layoutY="168.0" prefHeight="21.0" prefWidth="124.0" text="Family" />
-        <Label fx:id="time" alignment="CENTER" layoutX="27.0" layoutY="198.0" prefHeight="21.0" prefWidth="344.0" text="Label" />
-      <Label fx:id="reason" alignment="CENTER" layoutX="72.0" layoutY="230.0" prefHeight="21.0" prefWidth="254.0" text="Label" />
+        <Label fx:id="name" alignment="CENTER" layoutX="74.0" layoutY="168.0" prefHeight="21.0" prefWidth="254.0" text="Name" />
+        <Label fx:id="time" alignment="CENTER" layoutX="29.0" layoutY="230.0" prefHeight="21.0" prefWidth="344.0" text="Label" />
+      <Label fx:id="reason" alignment="CENTER" layoutX="36.0" layoutY="197.0" prefHeight="21.0" prefWidth="325.0" text="Label" />
     </children>
 </AnchorPane>
