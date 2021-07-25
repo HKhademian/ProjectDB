@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.controller.cells.MessageCellController;
+import app.controller.cells.NetworkCellController;
 import app.model.Chat;
 import app.model.Message;
 import app.model.User;
@@ -33,7 +34,7 @@ public class ChatController {
     private JFXButton sendButton;
 
     @FXML
-    private JFXListView<?> memberList;
+    private JFXListView<User> memberList;
 
     @FXML
     private JFXButton addAdminButton;
@@ -51,7 +52,9 @@ public class ChatController {
         messageList.setItems(messages);
         messageList.setCellFactory(MessageCellController -> new MessageCellController(user));
 
-        //users = FXCollections.observableArrayList(Repository.li)
+        users = FXCollections.observableArrayList(Repository.listChatUsers(chat.getChatId()));
+        memberList.setItems(users);
+        memberList.setCellFactory(NetworkCellController -> new NetworkCellController(false, user));
 
         sendButton.setOnAction(event -> sendMessage());
     }
@@ -60,7 +63,7 @@ public class ChatController {
         String text = messageText.getText().trim();
         if(!text.isEmpty()) {
             Message message = Repository.sendMessage(chat.getChatId(), user.getUserId(), -1, text);
-            //System.out.println(message.getSenderUserId());
+            System.out.println(message.getSenderUserId());
             messages.add(message);
         }
     }

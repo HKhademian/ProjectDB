@@ -219,7 +219,7 @@ public class MessagingController {
             chats.add(chat1);
         }
     }
-    
+
     private void archive(){
         OpenWindow.openWindowWait("view/ArchiveChat.fxml", new ArchiveChatController(user), "Archive Chat");
     }
