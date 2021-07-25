@@ -311,21 +311,21 @@ CREATE VIEW MayKnow as
 ;
 
 CREATE VIEW MyNetwork as
-    select MN.from_userId as from_userId, MN.to_userId as to_userId, MN.type as type, count(distinct MC.mutual_userId) as mutual_count
-    from (
-         select MK.from_userId as from_userId, MK.to_userId as to_userId, 'may_know' as type
-         from MayKnow MK
-         UNION
-         select I.receiver_userId as from_userId, I.sender_userId as to_userId, 'requested' as type
-         from Invitation I
-         UNION
-         select I.sender_userId as from_userId, I.receiver_userId as to_userId, 'invited' as type
-         from Invitation I
-    ) MN
-    left join MutualConnection MC on MC.from_userId=MN.from_userId and MC.to_userId=MN.to_userId
-    where not exists(select * from Connection C where C.from_userId=MN.from_userId and C.to_userId=MN.to_userId)
-    group by MC.from_userId,MC.to_userId
-    order by MC.from_userId, count(distinct MC.mutual_userId) desc
+select MN.from_userId as from_userId, MN.to_userId as to_userId, MN.type as type, count(distinct MC.mutual_userId) as mutual_count
+from (
+    select MK.from_userId as from_userId, MK.to_userId as to_userId, 'may_know' as type
+    from MayKnow MK
+    union
+    select I.sender_userId as from_userId, I.receive_userId as to_userId, 'invited' as type
+    from Invitation I where I.status>=0
+    union
+    select I.receive_userId as from_userId, I.sender_userId as to_userId, 'requested' as type
+    from Invitation I where I.status>=0
+) MN
+left join MutualConnection MC on MC.from_userId=MN.from_userId and MC.to_userId=MN.to_userId
+--where not exists(select * from Connection C where C.from_userId=MN.from_userId and C.to_userId=MN.to_userId)
+group by MN.from_userId, MN.to_userId, MN.type
+order by MN.from_userId, count(distinct MC.mutual_userId) desc
 ;
 
 CREATE VIEW Notification as
