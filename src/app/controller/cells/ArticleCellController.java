@@ -66,8 +66,17 @@ public class ArticleCellController extends JFXListCell<Article> {
     @FXML
     private Label time;
 
+    @FXML
+    private Label likeCount;
+
+    @FXML
+    private Label commentCount;
+
 
     private FXMLLoader fxmlLoader;
+
+    private int likeNum;
+    private int commentNum;
 
     @FXML
     public void initialize() {
@@ -108,6 +117,12 @@ public class ArticleCellController extends JFXListCell<Article> {
             unlike.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> likeArticle(article));
             like.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> unLikeArticle(article));
 
+            likeNum = article.getLikeCount();
+            commentNum = article.getCommentCount();
+
+            likeCount.setText(String.valueOf(likeNum));
+            commentCount.setText(" (" + commentNum + ")");
+
             comment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
             commentLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
 
@@ -143,6 +158,7 @@ public class ArticleCellController extends JFXListCell<Article> {
     private void showComments(Article article){
         imagePlace.getScene().getWindow();
         OpenWindow.openWindowWait("view/Comments.fxml", new CommentController(user, article), "Comments");
+        commentCount.setText(" (" + article.getCommentCount() + ")");
     }
 
     private void profile(User writer){
@@ -154,12 +170,16 @@ public class ArticleCellController extends JFXListCell<Article> {
         Repository.toggleUserLike(user.getUserId(), article.getArticleId(), -1);
         like.setVisible(true);
         unlike.setVisible(false);
+        ++likeNum;
+        likeCount.setText(String.valueOf(likeNum));
     }
 
     private void unLikeArticle(Article article){
         Repository.toggleUserLike(user.getUserId(), article.getArticleId(), -1);
         like.setVisible(false);
         unlike.setVisible(true);
+        --likeNum;
+        likeCount.setText(String.valueOf(likeNum));
     }
 
 }
