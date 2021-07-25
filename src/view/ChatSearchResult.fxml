@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="789.0" prefWidth="575.0" style="-fx-background-color: #E9ECEF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <JFXListView fx:id="chatList" layoutX="110.0" layoutY="33.0" prefHeight="724.0" prefWidth="440.0" style="-fx-background-color: #F8F9FA;" />
+      <JFXButton fx:id="openChat" layoutX="14.0" layoutY="33.0" style="-fx-background-color: #000000;" text="Open chat" textFill="WHITE" />
+    </children>
+</AnchorPane>

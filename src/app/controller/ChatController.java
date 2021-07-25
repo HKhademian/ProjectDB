@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 public class ChatController {
 
@@ -37,10 +38,10 @@ public class ChatController {
     private JFXListView<User> memberList;
 
     @FXML
-    private JFXButton addAdminButton;
+    private TextField searchChat;
 
     @FXML
-    private Label errorAdmin;
+    private JFXButton searchButton;
 
     private ObservableList<Message> messages;
     private ObservableList<User> users;
@@ -56,6 +57,10 @@ public class ChatController {
         memberList.setItems(users);
         memberList.setCellFactory(NetworkCellController -> new NetworkCellController(false, user));
 
+        searchButton.setOnAction(event -> search());
+
+        sendButton.setOnAction(event -> search());
+
         sendButton.setOnAction(event -> sendMessage());
     }
 
@@ -63,8 +68,16 @@ public class ChatController {
         String text = messageText.getText().trim();
         if(!text.isEmpty()) {
             Message message = Repository.sendMessage(chat.getChatId(), user.getUserId(), -1, text);
-            System.out.println(message.getSenderUserId());
             messages.add(message);
+            messageText.setText("");
+        }
+    }
+
+    private void search(){
+        String s = searchChat.getText().trim();
+        if(!s.isEmpty()){
+            OpenWindow.openWindowWait("view/MessageSearchResult.fxml", new MessageSearchResultController(user, chat, s),
+                    "Message Search Result");
         }
     }
 }

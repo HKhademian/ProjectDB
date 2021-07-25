@@ -1,7 +1,6 @@
 package app.controller;
 
 import app.controller.cells.ChatCellController;
-import app.controller.cells.SearchResultCellController;
 import app.model.Chat;
 import app.model.User;
 import app.repository.Repository;
@@ -101,6 +100,12 @@ public class MessagingController {
     @FXML
     private Label errorLabel;
 
+    @FXML
+    private TextField searchChat;
+
+    @FXML
+    private JFXButton searchButton;
+
     private ObservableList<Chat> chats;
 
     public void initialize(){
@@ -126,6 +131,8 @@ public class MessagingController {
         unMute.setOnAction(event -> muteChat(false));
 
         seeArchive.setOnAction(event -> archive());
+
+        searchButton.setOnAction(event -> search());
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
@@ -164,6 +171,14 @@ public class MessagingController {
                 }
             }
             imagePlace.setFill(new ImagePattern(wr));
+        }
+    }
+
+    private void search(){
+        String s = searchChat.getText().trim();
+        if(!s.isEmpty()){
+            OpenWindow.openWindowWait("view/ChatSearchResult.fxml", new ChatSearchResultController(user, s),
+                    "Chat Search Result");
         }
     }
 
