@@ -5,6 +5,7 @@ package app.repository
 
 import app.model.Chat
 import app.model.Message
+import app.model.User
 
 /** get chat detail for given UserId */
 fun getUserChat(chatId: Int, userId: Int): Chat? =
@@ -29,6 +30,20 @@ fun listUserChats(userId: Int): List<Chat> =
 		stmt.setInt(1, userId)
 		stmt.executeQuery()
 			.listOf<Chat>()
+	} ?: emptyList()
+
+
+/** List all user participant in a chat */
+fun listChatUsers(chatId: Int): List<User> =
+	connect {
+		val SQL = """
+			SELECT * FROM User
+			WHERE userId in (SELECT C_U.userId from Chat_User C_U where chatId=?);
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		stmt.setInt(1, chatId)
+		stmt.executeQuery()
+			.listOf<User>()
 	} ?: emptyList()
 
 /** add new user to chat by its userId */
