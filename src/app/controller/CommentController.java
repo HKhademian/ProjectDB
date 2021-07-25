@@ -41,27 +41,11 @@ public class CommentController {
     @FXML
     public void initialize(){
 
-        List<Comment> listComment = Repository.listComments(user.getUserId(),article.getArticleId());
-        List<Comment> replyComments = new ArrayList<>();
-        comments = FXCollections.observableArrayList();
+
+        comments = FXCollections.observableArrayList(Repository.listComments(user.getUserId(),article.getArticleId()));
         commentList.setItems(comments);
-        for(Comment comment: listComment){
-            String content = comment.getContent();
-            int replyId = comment.getReplyCommentId();
-            int articleId = comment.getArticleId();
 
-            System.out.println(comment);
-            System.out.println(content + " " +replyId+ " " + articleId);
-
-            if(replyId<=0){
-                comments.add(comment);
-            }else{
-              //FIXME
-                //replyComments.add(comment);
-            }
-        }
-        commentList.setCellFactory(CellFactory -> new CommentCellController(user, article, listComment, replyComments));
-
+        commentList.setCellFactory(CellFactory -> new CommentCellController(user, article));
 
         addCommentButton.setOnAction(event -> addComment());
         addCommentIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addComment());
