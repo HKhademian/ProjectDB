@@ -79,5 +79,7 @@
          </cursor>
       </ImageView>
       <JFXButton fx:id="advanceSearch" layoutX="505.0" layoutY="20.0" style="-fx-background-color: #ADB5BD;" text="advace search" />
+      <JFXButton />
+      <JFXButton fx:id="mutualConnection" layoutX="454.0" layoutY="96.0" prefHeight="31.0" prefWidth="183.0" style="-fx-background-color: #000000;" text="See Mutual Connection" textFill="WHITE" />
     </children>
 </AnchorPane>

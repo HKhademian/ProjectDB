@@ -75,6 +75,9 @@ public class NetworkController {
     @FXML
     private JFXListView<Invitation> inviteList;
 
+    @FXML
+    private JFXButton mutualConnection;
+
     private ObservableList<User> users;
     private ObservableList<Invitation> invitations;
 
@@ -86,13 +89,14 @@ public class NetworkController {
         setImage();
 
         users = FXCollections.observableArrayList(Repository.listMyNetworkProfiles(user.getUserId()));
-        System.out.println(users.size());
         networkList.setItems(users);
-        networkList.setCellFactory(NetworkCellController -> new NetworkCellController());
+        networkList.setCellFactory(NetworkCellController -> new NetworkCellController(true, user));
 
         invitations = FXCollections.observableArrayList(Repository.listUserInvitations(user.getUserId()));
         inviteList.setItems(invitations);
         inviteList.setCellFactory(InvitationCellController -> new InvitationCellController(user));
+
+        mutualConnection.setOnAction(event -> seeMutualConnection());
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
@@ -132,6 +136,14 @@ public class NetworkController {
                 }
             }
             imagePlace.setFill(new ImagePattern(wr));
+        }
+    }
+
+    private void seeMutualConnection(){
+        User user = networkList.getSelectionModel().getSelectedItem();
+        if(user!=null){
+            OpenWindow.openWindowWait("view/MutualConnection.fxml", new MutualConnectionController(this.user, user),
+                    "Mutual Connection");
         }
     }
 

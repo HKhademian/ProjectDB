@@ -1,6 +1,8 @@
 package app.controller.cells;
 
 
+import app.controller.OpenWindow;
+import app.controller.ProfileController;
 import app.model.User;
 import com.jfoenix.controls.JFXListCell;
 import javafx.fxml.FXML;
@@ -8,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -21,6 +24,14 @@ import java.io.InputStream;
 
 public class NetworkCellController extends JFXListCell<User> {
 
+    private boolean canSeeProfile;
+    private User user;
+
+    public NetworkCellController(boolean canSeeProfile, User user) {
+        this.canSeeProfile = canSeeProfile;
+        this.user = user;
+    }
+
     @FXML
     private AnchorPane rootAnchorPane;
 
@@ -30,15 +41,10 @@ public class NetworkCellController extends JFXListCell<User> {
     @FXML
     private Label name;
 
-    @FXML
-    private Label family;
-
-
     private FXMLLoader fxmlLoader;
 
     @FXML
     public void initialize() {
-
     }
 
     public void updateItem(User user, boolean empty){
@@ -58,9 +64,8 @@ public class NetworkCellController extends JFXListCell<User> {
                 }
             }
             setImage(user);
-            name.setText(user.getFirstname());
-            family.setText(user.getLastname());
-
+            name.setText(user.getFirstname() + " " + user.getLastname());
+            imagePlace.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profile(user));
 
             setText(null);
             setGraphic(rootAnchorPane);
@@ -88,6 +93,13 @@ public class NetworkCellController extends JFXListCell<User> {
                 }
             }
             imagePlace.setFill(new ImagePattern(wr));
+        }
+    }
+
+    private void profile(User owner){
+        if(canSeeProfile){
+            imagePlace.getScene().getWindow().hide();
+            OpenWindow.openWindow("view/Profile.fxml", new ProfileController(owner, user), "Profile");
         }
     }
 
