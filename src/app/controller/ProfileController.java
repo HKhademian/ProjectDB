@@ -161,9 +161,14 @@ public class ProfileController {
     @FXML
     private ImageView editSelectedAccomplishment;
 
-
     @FXML
     private JFXButton advanceSearch;
+
+    @FXML
+    private JFXButton connect;
+
+    @FXML
+    private JFXButton message;
 
     private String nowIntro;
     private String nowAbout;
@@ -221,6 +226,7 @@ public class ProfileController {
 
         //Accomplishments
         accomplishmentsAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> addAccomplishment());
+
         accomplishments = FXCollections.observableArrayList(Repository.listUserAccomplishment(owner.getUserId()));
         accomplishmentsList.setItems(accomplishments);
         accomplishmentsList.setCellFactory(AccomplishmentCellController -> new AccomplishmentCellController(owner));
@@ -263,8 +269,15 @@ public class ProfileController {
         //Notification
         notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
 
+        //Messaging
+        messaging.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> Messaging());
+
         advanceSearch.setOnAction(event -> searchAdvance());
         iconSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> search());
+
+        connect.setOnAction(event -> sendInvite());
+
+        message.setOnAction(event -> addToChat());
 
         logout.setOnAction(event -> logOut());
 
@@ -310,7 +323,19 @@ public class ProfileController {
             changeImage.setVisible(false);
             editSelectedAccomplishment.setVisible(false);
             deleteSelectedAccomplishment.setVisible(false);
+            isInNetWork();
         }
+    }
+
+    private void isInNetWork(){
+        List<User> users = Repository.listMyNetworkProfiles(owner.getUserId());
+        for(User user1: users){
+            if(user1.getUserId() == user.getUserId()){
+                message.setVisible(true);
+                return;
+            }
+        }
+        connect.setVisible(true);
     }
 
     private void deleteSkill(){
@@ -517,7 +542,7 @@ public class ProfileController {
 
     private void addAccomplishment(){
         int len = accomplishments.size()+1;
-        OpenWindow.openWindowWait("AddAccomplishment.fxml", new AddAccomplishmentsController(owner),
+        OpenWindow.openWindowWait("view/AddAccomplishment.fxml", new AddAccomplishmentsController(owner),
                 "Add Accomplishment");
         List<Accomplishment> listAccomplishment = Repository.listUserAccomplishment(owner.getUserId());
         if(len == listAccomplishment.size()){
@@ -607,6 +632,11 @@ public class ProfileController {
         OpenWindow.openWindow("view/Notification.fxml", new NotificationController(user), "Notification");
     }
 
+    private void Messaging(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Messaging.fxml", new MessagingController(user), "Messaging");
+    }
+
     private void searchAdvance(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/AdvanceSearch.fxml", new AdvanceSearchController(user), "Advance Search");
@@ -622,4 +652,12 @@ public class ProfileController {
         }
     }
 
+    private void sendInvite(){
+        OpenWindow.openWindowWait("view/SendInvitation.fxml", new SendInvitationController(user, owner), "Send Invitation");
+    }
+
+    private void addToChat(){
+        OpenWindow.openWindowWait("view/AddToChat.fxml", new AddToChatController(user, owner),
+                "Add To Chat");
+    }
 }

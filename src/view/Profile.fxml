@@ -258,5 +258,11 @@
          </cursor>
       </ImageView>
       <JFXButton fx:id="advanceSearch" layoutX="505.0" layoutY="21.0" style="-fx-background-color: #ADB5BD;" text="advace search" />
+      <JFXButton fx:id="connect" layoutX="22.0" layoutY="836.0" prefHeight="30.0" prefWidth="139.0" style="-fx-background-color: #000000;" text="Connect" textFill="WHITE" visible="false" />
+      <JFXButton fx:id="message" layoutX="22.0" layoutY="836.0" prefHeight="30.0" prefWidth="139.0" style="-fx-background-color: #000000#000000;" text="Message" textFill="WHITE" visible="false">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
    </children>
 </AnchorPane>

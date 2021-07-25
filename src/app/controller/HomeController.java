@@ -111,6 +111,9 @@ public class HomeController {
         //Notification
         notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
 
+        //Messaging
+        messaging.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> Messaging());
+
         advanceSearch.setOnAction(event -> searchAdvance());
         iconSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> search());
 
@@ -177,6 +180,11 @@ public class HomeController {
     private void notificationPage(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/Notification.fxml", new NotificationController(user), "Notification");
+    }
+
+    private void Messaging(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Messaging.fxml", new MessagingController(user), "Messaging");
     }
 
     private void searchAdvance(){

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="298.0" prefWidth="565.0" style="-fx-background-color: #c4d6e7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Circle fx:id="imagePlace" fill="#c9c9c9" layoutX="49.0" layoutY="60.0" radius="42.0" stroke="#c9c9c9" strokeType="INSIDE">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Circle>
+        <Label fx:id="name" alignment="CENTER" layoutX="114.0" layoutY="39.0" prefHeight="21.0" prefWidth="280.0" text="Name" />
+        <TextArea fx:id="messageText" editable="false" layoutX="14.0" layoutY="116.0" prefHeight="149.0" prefWidth="536.0" style="-fx-background-color: #F8F9FA;" />
+        <Label fx:id="time" alignment="CENTER" layoutX="111.0" layoutY="68.0" prefHeight="21.0" prefWidth="286.0" text="Label" />
+    </children>
+</AnchorPane>

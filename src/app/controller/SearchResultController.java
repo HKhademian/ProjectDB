@@ -88,8 +88,6 @@ public class SearchResultController {
         Location.setText(user.getLocation());
         setImage();
 
-        //System.out.println(users.size());
-
         userList = FXCollections.observableArrayList(users);
         resultList.setItems(userList);
         resultList.setCellFactory(CellController -> new SearchResultCellController(user));
@@ -105,6 +103,9 @@ public class SearchResultController {
 
         //Notification
         notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
+
+        //Messaging
+        messaging.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> Messaging());
 
         advanceSearch.setOnAction(event -> searchAdvance());
 
@@ -163,6 +164,11 @@ public class SearchResultController {
     private void searchAdvance(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/AdvanceSearch.fxml", new AdvanceSearchController(user), "Advance Search");
+    }
+
+    private void Messaging(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Messaging.fxml", new MessagingController(user), "Messaging");
     }
 
 }

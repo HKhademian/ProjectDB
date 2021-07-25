@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="-Infinity" prefHeight="312.0" prefWidth="547.0" style="-fx-background-color: #E9ECEF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <JFXButton fx:id="cancelButton" layoutX="314.0" layoutY="205.0" prefHeight="38.0" prefWidth="95.0" style="-fx-background-color: #ADB5BD;" text="Cancel">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <JFXButton fx:id="createButton" layoutX="151.0" layoutY="205.0" prefHeight="38.0" prefWidth="95.0" style="-fx-background-color: #000000;" text="Create" textFill="#fffdfd">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <Label layoutX="85.0" layoutY="65.0" prefHeight="21.0" prefWidth="254.0" text="write name of chat" />
+        <Label fx:id="emptyError" layoutX="85.0" layoutY="135.0" prefHeight="21.0" prefWidth="232.0" text="Please first write name" textFill="#dd2424" />
+      <TextField fx:id="title" layoutX="85.0" layoutY="93.0" prefHeight="31.0" prefWidth="331.0" style="-fx-background-color: #F8F9FA;" />
+    </children>
+</AnchorPane>

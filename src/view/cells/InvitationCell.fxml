@@ -14,8 +14,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Circle>
-        <Label fx:id="name" alignment="CENTER" layoutX="60.0" layoutY="168.0" prefHeight="21.0" prefWidth="124.0" text="Name" />
-        <Label fx:id="family" alignment="CENTER" layoutX="184.0" layoutY="168.0" prefHeight="21.0" prefWidth="124.0" text="Family" />
+        <Label fx:id="name" layoutX="60.0" layoutY="168.0" prefHeight="21.0" prefWidth="252.0" text="Name" />
       <Label fx:id="fromOrTo" layoutX="14.0" layoutY="168.0" text="from" />
       <JFXButton fx:id="acceptButton" layoutX="279.0" layoutY="236.0" prefHeight="38.0" prefWidth="70.0" style="-fx-background-color: #ADB5BD;" text="Accept">
          <cursor>

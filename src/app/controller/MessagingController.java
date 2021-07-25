@@ -1,7 +1,8 @@
 package app.controller;
 
-import app.controller.cells.NotificationCellController;
-import app.model.Notification;
+import app.controller.cells.ChatCellController;
+import app.controller.cells.SearchResultCellController;
+import app.model.Chat;
 import app.model.User;
 import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
@@ -9,6 +10,7 @@ import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -22,12 +24,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
-public class NotificationController {
+public class MessagingController {
 
     private User user;
 
-    public NotificationController(User user) {
+    public MessagingController(User user) {
         this.user = user;
     }
 
@@ -47,12 +50,6 @@ public class NotificationController {
     private TextField searchBox;
 
     @FXML
-    private ImageView iconSearch;
-
-    @FXML
-    private JFXButton advanceSearch;
-
-    @FXML
     private JFXButton logout;
 
     @FXML
@@ -65,12 +62,27 @@ public class NotificationController {
     private ImageView messaging;
 
     @FXML
+    private ImageView notification;
+
+    @FXML
     private ImageView profile;
 
     @FXML
-    private JFXListView<Notification> notificationList;
+    private JFXButton advanceSearch;
 
-    private ObservableList<Notification> notifications;
+    @FXML
+    private JFXListView<Chat> chatList;
+
+    @FXML
+    private Label createChatLabel;
+
+    @FXML
+    private ImageView createChatIcon;
+
+    @FXML
+    private JFXButton openChat;
+
+    private ObservableList<Chat> chats;
 
     public void initialize(){
 
@@ -79,9 +91,14 @@ public class NotificationController {
         Location.setText(user.getLocation());
         setImage();
 
-        notifications = FXCollections.observableArrayList(Repository.getUserNotification(user.getUserId()));
-        notificationList.setItems(notifications);
-        notificationList.setCellFactory(NotificationCellController -> new NotificationCellController(user));
+        chats = FXCollections.observableArrayList(Repository.listUserChats(user.getUserId()));
+        chatList.setItems(chats);
+        chatList.setCellFactory(ChatCellController -> new ChatCellController(user));
+
+        createChatIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> createChat());
+        createChatLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> createChat());
+
+        openChat.setOnAction(event -> chatOpen());
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
@@ -92,11 +109,10 @@ public class NotificationController {
         //MyNetwork
         network.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> myNetwork());
 
-        //Messaging
-        messaging.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> Messaging());
+        //Notification
+        notification.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationPage());
 
         advanceSearch.setOnAction(event -> searchAdvance());
-        iconSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> search());
 
         logout.setOnAction(event -> logOut());
     }
@@ -124,6 +140,27 @@ public class NotificationController {
         }
     }
 
+    private void createChat(){
+        int len = chats.size()+1;
+        OpenWindow.openWindowWait("view/CreateChat.fxml", new CreateChatController(user), "Create Chat");
+        List<Chat> listChat = Repository.listUserChats(user.getUserId());
+        if(listChat.size() == len){
+            for(Chat chat: listChat){
+                if(!chats.contains(chat)){
+                    chats.add(chat);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void chatOpen(){
+        Chat chat = chatList.getSelectionModel().getSelectedItem();
+        if(chat!=null){
+            OpenWindow.openWindowWait("view/Chat.fxml", new ChatController(user, chat), "Chat");
+        }
+    }
+
     private void logOut(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/Login.fxml", new LoginController(), "Login");
@@ -145,24 +182,13 @@ public class NotificationController {
         OpenWindow.openWindow("view/Network.fxml", new NetworkController(user), "MyNetwork");
     }
 
-    private void Messaging(){
+    private void notificationPage(){
         imagePlace.getScene().getWindow().hide();
-        OpenWindow.openWindow("view/Messaging.fxml", new MessagingController(user), "Messaging");
+        OpenWindow.openWindow("view/Notification.fxml", new NotificationController(user), "Notification");
     }
 
     private void searchAdvance(){
         imagePlace.getScene().getWindow().hide();
         OpenWindow.openWindow("view/AdvanceSearch.fxml", new AdvanceSearchController(user), "Advance Search");
     }
-
-    private void search(){
-        String s = searchBox.getText().trim();
-        if(!s.isEmpty()){
-            imagePlace.getScene().getWindow().hide();
-            OpenWindow.openWindow("view/SearchResult.fxml", new SearchResultController(user,
-                            Repository.searchProfiles(s, null, null, null, null)),
-                    "Search Result");
-        }
-    }
 }
-

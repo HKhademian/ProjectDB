@@ -135,7 +135,9 @@ public class AdvanceSearchController {
         language.setItems(languagesList);
         new ComboBoxAutoComplete(language);
 
-        searchButton.setOnAction(event -> search());
+        searchButton.setOnAction(event -> searchAdvance());
+
+        searchIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> search());
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
@@ -148,6 +150,9 @@ public class AdvanceSearchController {
 
         //MyNetwork
         network.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> myNetwork());
+
+        //Messaging
+        messaging.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> Messaging());
 
         logout.setOnAction(event -> logOut());
     }
@@ -201,7 +206,12 @@ public class AdvanceSearchController {
         OpenWindow.openWindow("view/Network.fxml", new NetworkController(user), "MyNetwork");
     }
 
-    private void search(){
+    private void Messaging(){
+        imagePlace.getScene().getWindow().hide();
+        OpenWindow.openWindow("view/Messaging.fxml", new MessagingController(user), "Messaging");
+    }
+
+    private void searchAdvance(){
         String n = nameSearch.getText().trim();
         String lc = locationList.getSelectionModel().getSelectedItem();
         String s = skill.getSelectionModel().getSelectedItem();
@@ -226,5 +236,15 @@ public class AdvanceSearchController {
         OpenWindow.openWindow("view/SearchResult.fxml", new SearchResultController(user,
                 Repository.searchProfiles(n, lc, idSkill, langCode ,b)),"Search Result");
 
+    }
+
+    private void search(){
+        String s = searchBox.getText().trim();
+        if(!s.isEmpty()){
+            imagePlace.getScene().getWindow().hide();
+            OpenWindow.openWindow("view/SearchResult.fxml", new SearchResultController(user,
+                            Repository.searchProfiles(s, null, null, null, null)),
+                    "Search Result");
+        }
     }
 }

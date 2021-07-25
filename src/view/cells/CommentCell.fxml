@@ -29,7 +29,7 @@
         <Label fx:id="nameLabel" layoutX="76.0" layoutY="14.0" prefHeight="21.0" prefWidth="140.0" text="name" />
         <Label fx:id="dateLabel" alignment="CENTER" layoutX="74.0" layoutY="35.0" prefHeight="21.0" prefWidth="264.0" text="date" />
         <JFXListView fx:id="replyCommentList" layoutX="554.0" layoutY="12.0" prefHeight="287.0" prefWidth="559.0" style="-fx-background-color: #F8F9FA;" />
-      <ImageView fx:id="notLikeImage" fitHeight="31.0" fitWidth="53.0" layoutX="106.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="notLikeImage" fitHeight="31.0" fitWidth="53.0" layoutX="106.0" layoutY="227.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/like.png" />
          </image>
