@@ -116,7 +116,7 @@ internal fun ResultSet.extractLanguage(): Language =
 @PublishedApi
 internal fun ResultSet.extractNotification(): Notification {
 	val byUserId = extractInt("by_userId") ?: 0
-	val time = extractDate("time")
+	val time = extractDate("time") ?: Date(0)
 	val targetId = extractInt("targetId") ?: 0
 	val event = extractString("event")
 
