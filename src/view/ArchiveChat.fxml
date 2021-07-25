@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="868.0" prefWidth="696.0" style="-fx-background-color: #E9ECEF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="170.0" layoutY="57.0" prefHeight="21.0" prefWidth="89.0" text="Chats" />
+        <JFXListView fx:id="chatList" layoutX="170.0" layoutY="78.0" prefHeight="724.0" prefWidth="440.0" style="-fx-background-color: #F8F9FA;" />
+        <JFXButton fx:id="openChat" layoutX="57.0" layoutY="86.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="Open Chat" textFill="WHITE" />
+        <JFXButton fx:id="mute" layoutX="57.0" layoutY="222.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="Muted Chat" textFill="WHITE" />
+        <JFXButton fx:id="unArchive" layoutX="57.0" layoutY="139.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="UnArchive" textFill="WHITE" />
+        <JFXButton fx:id="unMute" layoutX="57.0" layoutY="260.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="UnMuted" textFill="WHITE" />
+        <Label fx:id="errorLabel" layoutX="170.0" layoutY="809.0" prefHeight="21.0" prefWidth="440.0" text="Label" textFill="#f23b3b" visible="false" />
+    </children>
+</AnchorPane>

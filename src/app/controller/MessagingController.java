@@ -96,6 +96,9 @@ public class MessagingController {
     private JFXButton unMute;
 
     @FXML
+    private JFXButton seeArchive;
+
+    @FXML
     private Label errorLabel;
 
     private ObservableList<Chat> chats;
@@ -121,6 +124,8 @@ public class MessagingController {
 
         mute.setOnAction(event -> muteChat(true));
         unMute.setOnAction(event -> muteChat(false));
+
+        seeArchive.setOnAction(event -> archive());
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
@@ -194,7 +199,8 @@ public class MessagingController {
             }
             else errorLabel.setVisible(false);
             chats.remove(chat);
-            chats.add(chat);
+            Chat chat1 = Repository.getUserChat(chat.getChatId(), user.getUserId());
+            chats.add(chat1);
         }
     }
 
@@ -209,8 +215,13 @@ public class MessagingController {
             }
             else errorLabel.setVisible(false);
             chats.remove(chat);
-            chats.add(chat);
+            Chat chat1 = Repository.getUserChat(chat.getChatId(), user.getUserId());
+            chats.add(chat1);
         }
+    }
+    
+    private void archive(){
+        OpenWindow.openWindowWait("view/ArchiveChat.fxml", new ArchiveChatController(user), "Archive Chat");
     }
 
 

@@ -96,5 +96,6 @@
       <JFXButton fx:id="unArchive" layoutX="298.0" layoutY="197.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="UnArchive" textFill="WHITE" />
       <JFXButton fx:id="unMute" layoutX="298.0" layoutY="285.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="UnMuted" textFill="WHITE" />
       <Label fx:id="errorLabel" layoutX="411.0" layoutY="834.0" prefHeight="21.0" prefWidth="440.0" text="Label" textFill="#f23b3b" visible="false" />
+      <JFXButton fx:id="seeArchive" layoutX="882.0" layoutY="103.0" style="-fx-background-color: #000000;" text="See Archive Chat" textFill="WHITE" />
     </children>
 </AnchorPane>
