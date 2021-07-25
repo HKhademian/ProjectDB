@@ -105,7 +105,7 @@ fun toggleUserLike(userId: Int, articleId: Int, commentId: Int): Boolean {
 		stmt.setInt(2, articleId)
 		if (commentId > 0) stmt.setInt(3, commentId)
 		stmt.executeQuery()
-			.extract<Int>()
+			.singleOf<Int>()
 	} ?: 0) > 0
 
 	return if (isLiked) {

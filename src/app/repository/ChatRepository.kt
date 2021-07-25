@@ -56,7 +56,7 @@ fun createChat(userId: Int, title: String): Chat? {
 		stmt.setLong(1, System.currentTimeMillis())
 		stmt.setString(2, title)
 		stmt.executeQuery()
-			.extract<Int>()
+			.singleOf<Int>()
 	} ?: return null
 
 	val res = addChatUser(chatId, userId, true)
