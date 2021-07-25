@@ -195,12 +195,12 @@ internal fun ResultSet.extractMessage(): Message =
 	Message(
 		extractInt("messageId") ?: 0,
 		extractInt("chatId") ?: 0,
-		extractInt("userId") ?: 0,
+		extractInt("sender_userId") ?: 0,
 		extractInt("reply_messageId") ?: 0,
 		extractString("content") ?: "",
 		extractDate("time") ?: Date(0),
-		extractDate("received_time") ?: Date(0),
-		extractDate("seen_time") ?: Date(0),
+		extractDate("receiveTime") ?: Date(0),
+		extractDate("seenTime") ?: Date(0),
 	)
 
 
