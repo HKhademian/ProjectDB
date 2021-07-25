@@ -65,7 +65,6 @@ public class ArchiveChatController {
     private void chatOpen(){
         Chat chat = chatList.getSelectionModel().getSelectedItem();
         if(chat!=null){
-            mute.getScene().getWindow().hide();
             OpenWindow.openWindowWait("view/Chat.fxml", new ChatController(user, chat), "Chat");
         }
     }
