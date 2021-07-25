@@ -103,6 +103,19 @@ fun acceptInvitation(senderUserId: Int, receiverUserId: Int, isAccepted: Boolean
 		true
 	} == true
 
+fun listConnection(from_userId: Int): List<User> =
+	connect {
+		val SQL = """
+			select U.* from User U
+			WHERE U.userId IN (select C.to_userId from Connection C WHERE C.from_userId=?);
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		stmt.setInt(1, from_userId)
+		stmt.executeQuery()
+			.listOf<User>()
+	} ?: emptyList()
+
+
 fun listMyNetworkProfiles(userId: Int): List<User> =
 	connect {
 		val SQL = """
