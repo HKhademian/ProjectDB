@@ -412,6 +412,7 @@ CREATE VIEW UserMessage as
     JOIN Chat C ON M.chatId = C.chatId
     JOIN Chat_User CU ON U.userId = CU.userId
     LEFT JOIN Message_State MS ON MS.messageId = M.messageId AND MS.userId = U.userId
+    GROUP BY U.userId, M.messageId
 ;
 
 CREATE VIEW UserChat as

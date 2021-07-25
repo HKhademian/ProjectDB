@@ -6,6 +6,7 @@ package app.repository
 import app.model.Chat
 import app.model.Message
 import app.model.User
+import java.sql.Types
 
 /** get chat detail for given UserId */
 fun getUserChat(chatId: Int, userId: Int): Chat? =
@@ -174,7 +175,9 @@ fun sendMessage(chatId: Int, userId: Int, replyMessageId: Int, content: String):
 			RETURNING *;
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
-		stmt.setInt(1, replyMessageId)
+		if (replyMessageId > 0)
+			stmt.setInt(1, replyMessageId)
+		else stmt.setNull(1, Types.INTEGER)
 		stmt.setString(2, content)
 		stmt.setLong(3, System.currentTimeMillis())
 		stmt.setInt(4, chatId)
