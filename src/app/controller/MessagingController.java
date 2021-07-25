@@ -82,6 +82,22 @@ public class MessagingController {
     @FXML
     private JFXButton openChat;
 
+
+    @FXML
+    private JFXButton addToArchive;
+
+    @FXML
+    private JFXButton mute;
+
+    @FXML
+    private JFXButton unArchive;
+
+    @FXML
+    private JFXButton unMute;
+
+    @FXML
+    private Label errorLabel;
+
     private ObservableList<Chat> chats;
 
     public void initialize(){
@@ -99,6 +115,12 @@ public class MessagingController {
         createChatLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> createChat());
 
         openChat.setOnAction(event -> chatOpen());
+
+        addToArchive.setOnAction(event -> archiveChat(true));
+        unArchive.setOnAction(event -> archiveChat(false));
+
+        mute.setOnAction(event -> muteChat(true));
+        unMute.setOnAction(event -> muteChat(false));
 
         //Profile
         profile.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> profilePage());
@@ -160,6 +182,37 @@ public class MessagingController {
             OpenWindow.openWindowWait("view/Chat.fxml", new ChatController(user, chat), "Chat");
         }
     }
+
+    private void archiveChat(boolean b){
+        Chat chat = chatList.getSelectionModel().getSelectedItem();
+        if(chat!=null){
+            boolean res = Repository.updateChat(chat.getChatId(), user.getUserId(), b, chat.isMuted());
+            if(!res){
+                if(b)errorLabel.setText("You before archive this chat");
+                else errorLabel.setText("this chat is not archived");
+                errorLabel.setVisible(true);
+            }
+            else errorLabel.setVisible(false);
+            chats.remove(chat);
+            chats.add(chat);
+        }
+    }
+
+    private void muteChat(boolean b){
+        Chat chat = chatList.getSelectionModel().getSelectedItem();
+        if(chat!=null){
+            boolean res = Repository.updateChat(chat.getChatId(), user.getUserId(), chat.isArchived(), b);
+            if(!res){
+                if(b) errorLabel.setText("You before mute this chat");
+                else errorLabel.setText("this chat is not muted");
+                errorLabel.setVisible(true);
+            }
+            else errorLabel.setVisible(false);
+            chats.remove(chat);
+            chats.add(chat);
+        }
+    }
+
 
     private void logOut(){
         imagePlace.getScene().getWindow().hide();

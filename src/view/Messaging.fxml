@@ -90,6 +90,11 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </ImageView>
-        <JFXButton fx:id="openChat" layoutX="312.0" layoutY="111.0" style="-fx-background-color: #000000;" text="Open Chat" textFill="WHITE" />
+        <JFXButton fx:id="openChat" layoutX="298.0" layoutY="111.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="Open Chat" textFill="WHITE" />
+      <JFXButton fx:id="addToArchive" layoutX="298.0" layoutY="158.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="Archive Chat" textFill="WHITE" />
+      <JFXButton fx:id="mute" layoutX="298.0" layoutY="247.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="Muted Chat" textFill="WHITE" />
+      <JFXButton fx:id="unArchive" layoutX="298.0" layoutY="197.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="UnArchive" textFill="WHITE" />
+      <JFXButton fx:id="unMute" layoutX="298.0" layoutY="285.0" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: #000000;" text="UnMuted" textFill="WHITE" />
+      <Label fx:id="errorLabel" layoutX="411.0" layoutY="834.0" prefHeight="21.0" prefWidth="440.0" text="Label" textFill="#f23b3b" visible="false" />
     </children>
 </AnchorPane>

@@ -27,6 +27,12 @@ public class ChatCellController extends JFXListCell<Chat> {
     @FXML
     private Label chatName;
 
+    @FXML
+    private Label isArchive;
+
+    @FXML
+    private Label isMuted;
+
     private FXMLLoader fxmlLoader;
 
     @FXML
@@ -52,6 +58,9 @@ public class ChatCellController extends JFXListCell<Chat> {
             }
 
             chatName.setText(chat.getTitle());
+
+            if(chat.isMuted()) isMuted.setVisible(true);
+            if(chat.isArchived()) isArchive.setVisible(true);
 
             setText(null);
             setGraphic(rootAnchorPane);

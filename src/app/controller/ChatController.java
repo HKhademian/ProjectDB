@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
 public class ChatController {
@@ -31,7 +32,17 @@ public class ChatController {
     @FXML
     private JFXButton sendButton;
 
+    @FXML
+    private JFXListView<?> memberList;
+
+    @FXML
+    private JFXButton addAdminButton;
+
+    @FXML
+    private Label errorAdmin;
+
     private ObservableList<Message> messages;
+    private ObservableList<User> users;
 
     @FXML
     public void initialize() {
@@ -40,7 +51,9 @@ public class ChatController {
         messageList.setItems(messages);
         messageList.setCellFactory(MessageCellController -> new MessageCellController(user));
 
-        //sendButton.setOnAction(event -> sendMessage());
+        //users = FXCollections.observableArrayList(Repository.li)
+
+        sendButton.setOnAction(event -> sendMessage());
     }
 
     private void sendMessage(){
