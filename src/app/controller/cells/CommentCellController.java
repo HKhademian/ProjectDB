@@ -34,11 +34,13 @@ public class CommentCellController extends JFXListCell<Comment> {
 
     private User user;
     private Article article;
+    private List<Comment> allComments;
     private List<Comment> replyComments;
 
-    public CommentCellController(User user, Article article, List<Comment> replyComments) {
+    public CommentCellController(User user, Article article, List<Comment> allComments, List<Comment> replyComments) {
         this.user = user;
         this.article = article;
+        this.allComments = allComments;
         this.replyComments = replyComments;
     }
 
@@ -94,7 +96,7 @@ public class CommentCellController extends JFXListCell<Comment> {
             setGraphic(null);
         } else {
             if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/cells/CommentCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("view/cells/CommentCell.fxml"));
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
@@ -109,7 +111,7 @@ public class CommentCellController extends JFXListCell<Comment> {
                     replyComment.add(comment);
                 }
             }
-            replyCommentList.setCellFactory(CommentCellController -> new CommentCellController(user, article, replyComments));
+            replyCommentList.setCellFactory(CommentCellController -> new CommentCellController(user, article,allComments, replyComments));
 
             User sender = Repository.getUserById(comment.getUserId(), comment.getUserId());
             setImage(sender);

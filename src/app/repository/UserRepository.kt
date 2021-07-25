@@ -23,8 +23,8 @@ fun getUserByUsername(username: String): User? =
 	}
 
 /** visit User Profile */
-fun getUserById(visitorUserId: Int, userId: Int): User? {
-	val user = connect {
+fun getUserById(visitorUserId: Int, userId: Int): User? =
+	connect {
 		val SQL = """
 			SELECT * from User where userId=?;
 		""".trimIndent()
@@ -32,8 +32,11 @@ fun getUserById(visitorUserId: Int, userId: Int): User? {
 		statement.setInt(1, userId)
 		statement.executeQuery()
 			.singleOf<User>()
-	} ?: return null
+	}
 
+/** visit User Profile */
+fun visitUserProfileById(visitorUserId: Int, userId: Int): User? {
+	val user = getUserById(visitorUserId, userId) ?: return null
 	if (visitorUserId > 0 && visitorUserId != userId) connect {
 		val SQL = """
 			INSERT INTO Event_ProfileVisit (by_userId, userId, time, notified)

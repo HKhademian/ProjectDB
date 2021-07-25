@@ -45,18 +45,22 @@ public class CommentController {
         List<Comment> replyComments = new ArrayList<>();
         comments = FXCollections.observableArrayList();
         commentList.setItems(comments);
-        Integer id;
         for(Comment comment: listComment){
-            id = comment.getReplyCommentId();
-            //System.out.println(comment.getContent() + " " +comment.getReplyCommentId()+
-             //       " " + comment.getArticleId());
-            if(id != null){
+            String content = comment.getContent();
+            int replyId = comment.getReplyCommentId();
+            int articleId = comment.getArticleId();
+
+            System.out.println(comment);
+            System.out.println(content + " " +replyId+ " " + articleId);
+
+            if(replyId<=0){
                 comments.add(comment);
             }else{
-                replyComments.add(comment);
+              //FIXME
+                //replyComments.add(comment);
             }
         }
-        commentList.setCellFactory(CellFactory -> new CommentCellController(user, article, replyComments));
+        commentList.setCellFactory(CellFactory -> new CommentCellController(user, article, listComment, replyComments));
 
 
         addCommentButton.setOnAction(event -> addComment());

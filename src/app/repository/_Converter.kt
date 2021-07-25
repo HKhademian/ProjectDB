@@ -86,7 +86,7 @@ internal fun ResultSet.extractComment(): Comment =
 	Comment(
 		extractInt("commentId") ?: 0,
 		extractInt("articleId") ?: 0,
-		extractInt("replyCommentId") ?: 0,
+		extractInt("reply_commentId") ?: 0,
 		extractInt("userId") ?: 0,
 		extractString("content") ?: "",
 		extractDate("time") ?: Date(0),
