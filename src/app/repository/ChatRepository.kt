@@ -239,13 +239,13 @@ fun searchChat(userId: Int, search: String): List<Chat> =
 fun searchChat(userId: Int, chatId: Int, search: String): List<Message> =
 	connect {
 		val SQL = """
-			SELECT * FROM UserMessage UM WHERE UM.userId=? AND (? OR UM.chatId=?) AND UM.content like '%'||?||'%'
+			SELECT * FROM UserMessage UM WHERE UM.userId=? AND (? OR UM.chatId=?) AND UM.content like '%'||?||'%';
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
-		stmt.setInt(1, if (chatId > 0) 0 else 1)
-		stmt.setInt(2, chatId)
-		stmt.setString(3, search)
+		stmt.setInt(2, if (chatId > 0) 0 else 1)
+		stmt.setInt(3, chatId)
+		stmt.setString(4, search)
 		stmt.executeQuery()
 			.listOf<Message>()
 	} ?: emptyList()
