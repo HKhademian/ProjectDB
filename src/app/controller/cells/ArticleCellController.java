@@ -3,6 +3,7 @@ package app.controller.cells;
 import app.controller.CommentController;
 import app.controller.OpenWindow;
 import app.controller.ProfileController;
+import app.controller.ShareArticleController;
 import app.model.Article;
 import app.model.User;
 import app.repository.Repository;
@@ -126,6 +127,9 @@ public class ArticleCellController extends JFXListCell<Article> {
             comment.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
             commentLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showComments(article));
 
+            share.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> sharePost(article));
+            shareLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> sharePost(article));
+
             setText(null);
             setGraphic(rootAnchorPane);
 
@@ -153,6 +157,11 @@ public class ArticleCellController extends JFXListCell<Article> {
             }
             imagePlace.setFill(new ImagePattern(wr));
         }
+    }
+
+    private void sharePost(Article article){
+        OpenWindow.openWindowWait("view/ShareArticle.fxml", new ShareArticleController(article.getArticleId()),
+                "Share Article");
     }
 
     private void showComments(Article article){
