@@ -59,8 +59,10 @@ public class AddCommentController {
         if(comment==null) {
             Repository.sendCommentOn(user.getUserId(), article.getArticleId(), -1, t);
         }else{
-            //System.out.println(comment.getCommentId());
-            Repository.sendCommentOn(user.getUserId(), article.getArticleId(), comment.getCommentId(), t);
+            Comment a = Repository.sendCommentOn(user.getUserId(), article.getArticleId(), comment.getCommentId(), t);
+            System.out.println(a.getContent());
+            System.out.println(a.getReplyCommentId());
+            System.out.println("c = " + comment.getCommentId());
         }
         sendButton.getScene().getWindow().hide();
     }

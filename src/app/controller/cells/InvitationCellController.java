@@ -40,9 +40,6 @@ public class InvitationCellController extends JFXListCell<Invitation> {
     private Label name;
 
     @FXML
-    private Label family;
-
-    @FXML
     private Label fromOrTo;
 
     @FXML
@@ -91,13 +88,11 @@ public class InvitationCellController extends JFXListCell<Invitation> {
             if(sender.getUserId() == owner.getUserId()){
                 setVisibleButton(false);
                 fromOrTo.setText("to : ");
-                name.setText(receiver.getFirstname());
-                family.setText(receiver.getLastname());
+                name.setText(receiver.getFirstname() + " " + receiver.getLastname());
                 setImage(receiver);
             }else{
                 fromOrTo.setText("from : ");
-                name.setText(sender.getFirstname());
-                family.setText(sender.getLastname());
+                name.setText(sender.getFirstname() + " " + sender.getLastname());
                 setImage(sender);
             }
             if(invitation.getStatus() == 1){

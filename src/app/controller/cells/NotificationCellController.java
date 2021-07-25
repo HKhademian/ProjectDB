@@ -69,16 +69,15 @@ public class NotificationCellController extends JFXListCell<Notification> {
                     e.printStackTrace();
                 }
 
-                User user = Repository.getUserById(notification.getByUserId(), notification.getByUserId());
-                setImage(user);
-                name.setText(user.getFirstname());
-                family.setText(user.getLastname());
-                //time.setText(notification.getTime().toString());
-
-                setText(null);
-                setGraphic(rootAnchorPane);
-
             }
+            User user = Repository.getUserById(notification.getByUserId(), notification.getByUserId());
+            setImage(user);
+            name.setText(user.getFirstname());
+            family.setText(user.getLastname());
+            //time.setText(notification.getTime().toString());
+
+            setText(null);
+            setGraphic(rootAnchorPane);
 
         }
     }

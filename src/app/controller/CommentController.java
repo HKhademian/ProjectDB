@@ -49,7 +49,7 @@ public class CommentController {
         for(Comment comment: listComment){
             id = comment.getReplyCommentId();
             //System.out.println(comment.getContent() + " " +comment.getReplyCommentId()+
-            //        " " + comment.getArticleId());
+             //       " " + comment.getArticleId());
             if(id != null){
                 comments.add(comment);
             }else{

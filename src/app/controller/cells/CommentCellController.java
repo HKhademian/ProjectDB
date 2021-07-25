@@ -79,6 +79,8 @@ public class CommentCellController extends JFXListCell<Comment> {
     private FXMLLoader fxmlLoader;
     private ObservableList<Comment> replyComment;
 
+    private int likeCount;
+
     @FXML
     public void initialize(){
 
@@ -123,14 +125,8 @@ public class CommentCellController extends JFXListCell<Comment> {
                 notLikeImage.setVisible(true);
                 likeImage.setVisible(false);
             }
-
-            likeCountLabel.setText(String.valueOf(comment.getLikeCount()));
-
-            /*System.out.println("================================================");
-            System.out.println(comment.getContent());
-            System.out.println("islike : "+comment.getHome_isLiked());
-            System.out.println("like count : "+comment.getLikeCount());
-            System.out.println("================================================");*/
+            likeCount = comment.getLikeCount();
+            likeCountLabel.setText(String.valueOf(likeCount));
 
             replyButton.setOnAction(event -> replyComment(comment));
 
@@ -167,22 +163,17 @@ public class CommentCellController extends JFXListCell<Comment> {
     }
 
     private void likeComment(Comment comment){
-        //comment.setHome_isLiked(true);
         boolean d = Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
-        //System.out.println("like : "+d);
         notLikeImage.setVisible(false);
         likeImage.setVisible(true);
-        likeCountLabel.setText(String.valueOf(comment.getLikeCount()));
+        likeCountLabel.setText(String.valueOf(likeCount+1));
     }
 
     private void notLikeComment(Comment comment){
-        //comment.setHome_isLiked(false);
-        //System.out.println(comment.getCommentId());
         boolean d = Repository.toggleUserLike(user.getUserId(), article.getArticleId(), comment.getCommentId());
-        //System.out.println("not like : "+d);
         likeImage.setVisible(false);
         notLikeImage.setVisible(true);
-        likeCountLabel.setText(String.valueOf(comment.getLikeCount()));
+        likeCountLabel.setText(String.valueOf(likeCount-1));
     }
 
     private void replyComment(Comment comment){
