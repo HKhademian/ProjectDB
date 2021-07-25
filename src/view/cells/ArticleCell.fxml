@@ -28,7 +28,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <Label layoutX="59.0" layoutY="476.0" text="Like" />
+      <Label fx:id="likeCount" layoutX="59.0" layoutY="476.0" text="Like" />
       <ImageView fx:id="comment" fitHeight="38.0" fitWidth="40.0" layoutX="127.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/comment.png" />
@@ -37,7 +37,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="share" fitHeight="39.0" fitWidth="31.0" layoutX="258.0" layoutY="471.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="share" fitHeight="39.0" fitWidth="31.0" layoutX="306.0" layoutY="471.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/share.png" />
          </image>
@@ -45,12 +45,12 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <Label fx:id="commentLabel" layoutX="173.0" layoutY="476.0" text="Comment">
+      <Label fx:id="commentLabel" layoutX="173.0" layoutY="476.0" prefHeight="21.0" prefWidth="71.0" text="Comment">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Label>
-      <Label fx:id="shareLabel" layoutX="298.0" layoutY="477.0" text="Share">
+      <Label fx:id="shareLabel" layoutX="345.0" layoutY="476.0" prefHeight="21.0" prefWidth="38.0" text="Share">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -61,5 +61,6 @@
          </cursor>
       </Circle>
       <Label fx:id="time" layoutX="92.0" layoutY="30.0" prefHeight="21.0" prefWidth="347.0" textFill="#7213ee" />
+      <Label fx:id="commentCount" layoutX="240.0" layoutY="477.0" prefHeight="21.0" prefWidth="38.0" text="Label" />
     </children>
 </AnchorPane>
