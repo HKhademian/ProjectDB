@@ -184,4 +184,10 @@ class UserRepositoryTest : BaseTest() {
 	}
 
 
+	@Test
+	fun `51- test listMutual`() {
+		val res = listMutual(1, 2)
+		println(res)
+	}
+
 }

@@ -314,3 +314,17 @@ fun deleteUserAccomplishment(accId: Int): Boolean =
 		statement.setInt(1, accId)
 		statement.executeUpdate() > 0
 	} == true
+
+/** list all mutual connections */
+fun listMutual(from_userId: Int, to_userId: Int): List<User> =
+	connect {
+		val SQL = """
+			SELECT * from User
+			where userId in (SELECT mutual_userId from MutualConnection where from_userId=? AND to_userId=?);
+		""".trimIndent()
+		val statement = it.prepareStatement(SQL)
+		statement.setInt(1, from_userId)
+		statement.setInt(2, to_userId)
+		statement.executeQuery()
+			.listOf<User>()
+	} ?: emptyList()
