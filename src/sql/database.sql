@@ -233,7 +233,7 @@ CREATE VIEW ArticleStat as
     left join (
         select A.articleId as articleId , count(C.commentId) as comment_count
         from Article A
-        left join Comment C on A.articleId=C.articleId and C.reply_commentId is null
+        left join Comment C on A.articleId=C.articleId -- and C.reply_commentId is null
         group by A.articleId
     ) ACC on A.articleId = ACC.articleId
     left join (
