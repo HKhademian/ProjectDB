@@ -25,6 +25,6 @@
             </cursor>
         </JFXButton>
         <Label layoutX="28.0" layoutY="31.0" prefHeight="21.0" prefWidth="254.0" text="write your invitation message" />
-        <Label fx:id="emptyError" layoutX="16.0" layoutY="260.0" prefHeight="21.0" prefWidth="232.0" text="Please first write something" textFill="#dd2424" />
+        <Label fx:id="errorLabel" layoutX="16.0" layoutY="260.0" prefHeight="21.0" prefWidth="374.0" textFill="#dd2424" visible="false" />
     </children>
 </AnchorPane>

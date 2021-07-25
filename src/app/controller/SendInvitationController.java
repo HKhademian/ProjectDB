@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.Invitation;
 import app.model.User;
 import app.repository.Repository;
 import com.jfoenix.controls.JFXButton;
@@ -27,12 +28,10 @@ public class SendInvitationController {
     private JFXButton sendButton;
 
     @FXML
-    private Label emptyError;
+    private Label errorLabel;
 
     @FXML
     public void initialize() {
-
-        emptyError.setVisible(false);
 
         sendButton.setOnAction(event -> {send();});
 
@@ -43,10 +42,13 @@ public class SendInvitationController {
     private void send(){
         String t = text.getText().trim();
         if(t.isEmpty()){
-            emptyError.setVisible(true);
+            errorLabel.setText("Please first write something");
             return;
         }
-        Repository.sendInvitation(sender.getUserId(), receiver.getUserId(), t);
+        Invitation res = Repository.sendInvitation(sender.getUserId(), receiver.getUserId(), t);
+        if(res==null){
+            errorLabel.setText("You send invitation before");
+        }
         sendButton.getScene().getWindow().hide();
     }
 }

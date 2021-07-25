@@ -323,12 +323,12 @@ public class ProfileController {
             changeImage.setVisible(false);
             editSelectedAccomplishment.setVisible(false);
             deleteSelectedAccomplishment.setVisible(false);
-            isInNetWork();
+            isConnected();
         }
     }
 
-    private void isInNetWork(){
-        List<User> users = Repository.listMyNetworkProfiles(owner.getUserId());
+    private void isConnected(){
+        List<User> users = Repository.listConnection(owner.getUserId());
         for(User user1: users){
             if(user1.getUserId() == user.getUserId()){
                 message.setVisible(true);
