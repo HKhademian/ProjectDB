@@ -43,11 +43,11 @@ fun <T> connect(action: ConnectionAction<Connection, T>): T? {
 }
 
 
-fun <T> connect(sql: String, action: ConnectionAction<PreparedStatement, T>): T? =
-	connect {
-		val stmt = it.prepareStatement(sql)
-		action(stmt)
-	}
+//fun <T> connect(sql: String, action: ConnectionAction<PreparedStatement, T>): T? =
+//	connect {
+//		val stmt = it.prepareStatement(sql)
+//		action(stmt)
+//	}
 
 fun scalarQuery(sql: String): String? =
 	connect<String> {

@@ -1,4 +1,4 @@
-@file:JvmName("ChatRepository")
+@file:JvmName("Repository")
 @file:JvmMultifileClass
 
 package app.repository
@@ -202,3 +202,29 @@ fun deleteMessage(messageId: Int): Boolean =
 		stmt.executeUpdate() > 0
 	} == true
 
+
+/** list chat where have messages matching search */
+fun searchChat(userId: Int, search: String): List<Chat> =
+	connect {
+		val SQL = """
+			SELECT 0;
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		stmt.setInt(1, userId)
+		stmt.setString(2, search)
+		stmt.executeQuery()
+			.listOf<Chat>()
+	} ?: emptyList()
+
+/** list message in a chat (or all) have matching search */
+fun searchChat(userId: Int, chatId: Int, search: String): List<Message> =
+	connect {
+		val SQL = """
+			SELECT 0;
+		""".trimIndent()
+		val stmt = it.prepareStatement(SQL)
+		stmt.setInt(1, userId)
+		stmt.setString(2, search)
+		stmt.executeQuery()
+			.listOf<Message>()
+	} ?: emptyList()
