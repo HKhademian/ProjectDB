@@ -34,14 +34,10 @@ public class CommentCellController extends JFXListCell<Comment> {
 
     private User user;
     private Article article;
-    private List<Comment> allComments;
-    private List<Comment> replyComments;
 
-    public CommentCellController(User user, Article article, List<Comment> allComments, List<Comment> replyComments) {
+    public CommentCellController(User user, Article article) {
         this.user = user;
         this.article = article;
-        this.allComments = allComments;
-        this.replyComments = replyComments;
     }
 
     @FXML
@@ -63,9 +59,6 @@ public class CommentCellController extends JFXListCell<Comment> {
     private Label dateLabel;
 
     @FXML
-    private JFXListView<Comment> replyCommentList;
-
-    @FXML
     private ImageView notLikeImage;
 
     @FXML
@@ -74,12 +67,8 @@ public class CommentCellController extends JFXListCell<Comment> {
     @FXML
     private Label likeCountLabel;
 
-    @FXML
-    private Label familyLabel;
-
 
     private FXMLLoader fxmlLoader;
-    private ObservableList<Comment> replyComment;
 
     private int likeCount;
 
@@ -104,21 +93,23 @@ public class CommentCellController extends JFXListCell<Comment> {
                     e.printStackTrace();
                 }
             }
-            replyComment = FXCollections.observableArrayList();
-            replyCommentList.setItems(replyComment);
-            for(Comment comment1: replyComments){
-                if(comment1.getReplyCommentId() == comment.getCommentId()){
-                    replyComment.add(comment);
-                }
-            }
-            replyCommentList.setCellFactory(CommentCellController -> new CommentCellController(user, article,allComments, replyComments));
 
             User sender = Repository.getUserById(comment.getUserId(), comment.getUserId());
             setImage(sender);
-            nameLabel.setText(sender.getFirstname());
-            familyLabel.setText(sender.getLastname());
+            nameLabel.setText(sender.getFirstname() + " " + sender.getLastname());
             dateLabel.setText(comment.getTime().toString());
-            commentText.setText(comment.getContent());
+            String content = "";
+            System.out.println(comment.getReplyCommentId());
+            if(comment.getReplyCommentId()>0){
+                Comment comment1 = Repository.getCommentById(user.getUserId(), comment.getReplyCommentId());
+                if(comment1.getContent().length() > 10){
+                    content = "..." + comment1.getContent().substring(0, 10) + '\n';
+                }else content = "..." + comment1.getContent() + "\n";
+                content += comment.getContent();
+            }
+            else content = comment.getContent();
+
+            commentText.setText(content);
 
             if(comment.getHome_isLiked()){
                 notLikeImage.setVisible(false);
