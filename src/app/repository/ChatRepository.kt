@@ -222,7 +222,8 @@ fun deleteMessage(messageId: Int): Boolean =
 fun searchChat(userId: Int, search: String): List<Chat> =
 	connect {
 		val SQL = """
-			SELECT 0;
+			SELECT * FROM UserChat UC
+			WHERE UC.userId=? AND UC.chatId in (SELECT chatId FROM Message M WHERE M.content like '%'||?||'%');
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
@@ -235,11 +236,13 @@ fun searchChat(userId: Int, search: String): List<Chat> =
 fun searchChat(userId: Int, chatId: Int, search: String): List<Message> =
 	connect {
 		val SQL = """
-			SELECT 0;
+			SELECT * FROM UserMessage UM WHERE UM.userId=? AND (? OR UM.chatId=?) AND UM.content like '%'||?||'%'
 		""".trimIndent()
 		val stmt = it.prepareStatement(SQL)
 		stmt.setInt(1, userId)
-		stmt.setString(2, search)
+		stmt.setInt(1, if (chatId > 0) 0 else 1)
+		stmt.setInt(2, chatId)
+		stmt.setString(3, search)
 		stmt.executeQuery()
 			.listOf<Message>()
 	} ?: emptyList()
